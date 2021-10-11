@@ -2,7 +2,17 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="HotelReservationSystem-PU" transaction-type="JTA">
     <jta-data-source>jdbc/hotelReservationSystem</jta-data-source>
-    <class>entity.Record</class>
+    <class>entity.Employee</class>
+    <class>entity.GuestRelationOfficer</class>
+    <class>entity.OperationManager</class>
+    <class>entity.SalesManager</class>
+    <class>entity.SystemAdministrator</class>
+    <class>entity.employee.Employee</class>
+    <class>entity.employee.GuestRelationOfficer</class>
+    <class>entity.employee.OperationManager</class>
+    <class>entity.employee.Partner</class>
+    <class>entity.employee.SalesManager</class>
+    <class>entity.employee.SystemAdministrator</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
