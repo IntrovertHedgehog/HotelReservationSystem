@@ -5,11 +5,9 @@
  */
 package entity.business;
 
-import entity.user.PartnerCustomer;
-import entity.user.PartnerReservationManager;
+import entity.user.DirectCustomer;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,26 +20,27 @@ import javax.persistence.ManyToOne;
  * @author Winter
  */
 @Entity
-public class PartnerReservation extends Reservation implements Serializable {
-    
+public class DirectReservation extends Reservation implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
-    private PartnerCustomer customer;
+    private DirectCustomer customer;
 
-    public PartnerReservation() {
+    public DirectReservation() {
         super();
     }
 
-    public PartnerReservation(PartnerCustomer customer, RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate) {
+    public DirectReservation(DirectCustomer customer, RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate) {
         super(roomType, checkInDate, checkOutDate);
         this.customer = customer;
     }
-
+    
+    
     /**
-     * @return the partner
+     * @return the guest
      */
-    public PartnerCustomer getCustomer() {
+    public DirectCustomer getCustomer() {
         return customer;
     }
 
