@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.employee;
+package entity.user;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -25,13 +25,12 @@ public abstract class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
     private Long employeeId;
-    @Column(nullable = false, length = 64)
+    @Column(length = 32)
     private String name;
     @Column(nullable = false, unique = true, length = 32)
     private String username;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     public Employee() {
@@ -64,25 +63,16 @@ public abstract class Employee implements Serializable {
         return username;
     }
 
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String username, String password) {
+        if (this.password.equals(password)) {
+            this.username = username;
+        }
     }
 
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String newPassword, String oldPassword) {
+        if (this.password.equals(oldPassword)) {
+            this.password = newPassword;
+        }
     }
 
 

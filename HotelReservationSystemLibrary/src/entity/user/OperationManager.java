@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.employee;
+package entity.user;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -13,20 +13,19 @@ import javax.persistence.Entity;
  * @author Winter
  */
 @Entity
-public class SalesManager extends Employee implements Serializable {
+public class OperationManager extends Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SalesManager() {
+    public OperationManager() {
     }
 
-    public SalesManager(String name, String username, String password) {
+    public OperationManager(String name, String username, String password) {
         super(name, username, password);
     }
-
+    
     @Override
     public String toString() {
-        return "Sales Manager -> " + super.toString();
+        return "Operation Manager -> " + super.toString();
     }
-    
 }

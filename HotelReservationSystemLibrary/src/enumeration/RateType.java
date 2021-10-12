@@ -9,6 +9,6 @@ package enumeration;
  *
  * @author Winter
  */
-public enum BedType {
-    
+public enum RateType {
+    PUBLISHED, NORMAL, PEAK, PROMOTION;
 }

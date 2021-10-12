@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.employee;
+package entity.user;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -11,30 +11,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  *
  * @author Winter
  */
 @Entity
-public class Partner implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class PartnerEmployee implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
     private Long partnerId;
     @Column(nullable = false, length = 64)
     private String name;
     @Column(nullable = false, unique = true, length = 32)
     private String username;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
-    public Partner() {
+    public PartnerEmployee() {
     }
 
-    public Partner(String name, String username, String password) {
+    public PartnerEmployee(String name, String username, String password) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -61,28 +63,17 @@ public class Partner implements Serializable {
         return username;
     }
 
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String username, String password) {
+        if (this.password.equals(password)) {
+            this.username = username;
+        }
     }
 
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
+    public void setPassword(String newPassword, String oldPassword) {
+        if (this.password.equals(oldPassword)) {
+            this.password = newPassword;
+        }
     }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    
 
     @Override
     public int hashCode() {
@@ -94,10 +85,10 @@ public class Partner implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Partner)) {
+        if (!(object instanceof PartnerEmployee)) {
             return false;
         }
-        Partner other = (Partner) object;
+        PartnerEmployee other = (PartnerEmployee) object;
         if ((this.partnerId == null && other.partnerId != null) || (this.partnerId != null && !this.partnerId.equals(other.partnerId))) {
             return false;
         }
