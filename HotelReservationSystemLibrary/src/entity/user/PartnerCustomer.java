@@ -47,6 +47,13 @@ public class PartnerCustomer implements Serializable {
         this.passport = passport;
         this.name = name;
     }
+
+    /**
+     * @return the partner
+     */
+    public PartnerReservationManager getPartner() {
+        return partner;
+    }
     
     /**
      * @return the passport
@@ -60,6 +67,10 @@ public class PartnerCustomer implements Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    public List<PartnerReservation> getReservations() {
+        return reservations;
     }
 
     @Override

@@ -34,11 +34,14 @@ public class PartnerReservationManager implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
+    @OneToMany(mappedBy = "partner")
+    private List<PartnerCustomer> customers;
     @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY)
     private List<PartnerReservation> reservations;
 
     public PartnerReservationManager() {
         reservations = new ArrayList<>();
+        customers = new ArrayList<>();
     }
 
     public PartnerReservationManager(String name, String username, String password) {
@@ -82,12 +85,19 @@ public class PartnerReservationManager implements Serializable {
     }
     
     /**
+     * @return the customers
+     */
+    public List<PartnerCustomer> getCustomers() {
+        return customers;
+    }
+    
+    /**
      * @return the reservations
      */
     public List<PartnerReservation> getReservations() {
         return reservations;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

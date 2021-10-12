@@ -23,7 +23,7 @@ public enum BedSize {
         this.length = length;
     }
     
-    public String dimension() {
+    public String getDimension() {
         return width + " X " + length;
     }
 
