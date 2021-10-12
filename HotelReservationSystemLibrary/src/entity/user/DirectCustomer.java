@@ -5,7 +5,7 @@
  */
 package entity.user;
 
-import entity.business.Reservation;
+import entity.business.DirectReservation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class DirectCustomer implements Serializable {
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Reservation> reservations;
+    private List<DirectReservation> reservations;
 
     public DirectCustomer() {
         reservations = new ArrayList<>();
@@ -87,7 +87,7 @@ public class DirectCustomer implements Serializable {
         }
     }
     
-    public List<Reservation> getReservations() {
+    public List<DirectReservation> getReservations() {
         return reservations;
     }
     
