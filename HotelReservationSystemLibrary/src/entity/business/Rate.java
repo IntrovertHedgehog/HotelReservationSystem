@@ -27,8 +27,6 @@ public class Rate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RateId;
-    @Column(nullable = false, length = 32)
-    private String name;
     @Column(nullable = false)
     private RateType rateType;
     @Column(nullable = false)
@@ -44,8 +42,7 @@ public class Rate implements Serializable {
     public Rate() {
     }
 
-    public Rate(String name, RoomType roomType, RateType rateType, Double ratePerNight, LocalDate periodStart, LocalDate periodEnd) {
-        this.name = name;
+    public Rate(RoomType roomType, RateType rateType, Double ratePerNight, LocalDate periodStart, LocalDate periodEnd) {
         this.roomType = roomType;
         this.rateType = rateType;
         this.ratePerNight = ratePerNight;
@@ -62,20 +59,6 @@ public class Rate implements Serializable {
         int hash = 0;
         hash += (RateId != null ? RateId.hashCode() : 0);
         return hash;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**

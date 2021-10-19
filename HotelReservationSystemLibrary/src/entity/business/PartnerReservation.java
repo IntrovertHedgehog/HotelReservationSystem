@@ -6,9 +6,10 @@
 package entity.business;
 
 import entity.user.Occupant;
-import entity.user.PartnerCustomer;
+import entity.user.Partner;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,40 +24,28 @@ public class PartnerReservation extends Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
-    private PartnerCustomer customer;
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false, updatable = false)
-    private Occupant occupant;
+    private Partner partner;
     
     public PartnerReservation() {
         super();
     }
 
-    public PartnerReservation(PartnerCustomer customer, RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate) {
-        super(roomType, checkInDate, checkOutDate);
-        this.customer = customer;
+    public PartnerReservation(RoomType roomType, Occupant occupant, Partner partner, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
+        super(roomType, occupant, rates, checkInDate, checkOutDate);
+        this.partner = partner;
     }
 
-    public Occupant getOccupant() {
-        return occupant;
-    }
-
-    public void setOccupant(Occupant occupant) {
-        this.occupant = occupant;
-    }
-
-    
     /**
      * @return the partner
      */
-    public PartnerCustomer getCustomer() {
-        return customer;
+    public Partner getPartner() {
+        return partner;
     }
 
     @Override
     public String toString() {
         return String.format("Reservation | id = %d | guest passport = %s | room type = %s | period = %s - %s",
-                getReservationId(), customer.getPassport(), getRoomType().getName(), getCheckInDate().toString(), getCheckOutDate().toString());
+                getReservationId(), super.getOccupant().getPassport(), getRoomType().getName(), getCheckInDate().toString(), getCheckOutDate().toString());
     }
     
 }

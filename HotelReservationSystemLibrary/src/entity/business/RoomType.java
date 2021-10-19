@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,9 +43,9 @@ public class RoomType implements Serializable {
     private BedSize bedsize;
     @Column(nullable = false)
     private Long capacity;
-    @Column(length = 64)
+    @Column(length = 128)
     private String amenities;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "roomType")
+    @OneToMany(mappedBy = "roomType")
     private List<Rate> rates;
 
     

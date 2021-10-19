@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
  * @author Winter
  */
 @Entity
-public class PartnerReservationManager implements Serializable {
+public class Partner implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,17 +34,14 @@ public class PartnerReservationManager implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
-    @OneToMany(mappedBy = "partner")
-    private List<PartnerCustomer> customers;
     @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY)
     private List<PartnerReservation> reservations;
 
-    public PartnerReservationManager() {
+    public Partner() {
         reservations = new ArrayList<>();
-        customers = new ArrayList<>();
     }
 
-    public PartnerReservationManager(String name, String username, String password) {
+    public Partner(String name, String username, String password) {
         this();
         this.name = name;
         this.username = username;
@@ -85,13 +82,6 @@ public class PartnerReservationManager implements Serializable {
     }
     
     /**
-     * @return the customers
-     */
-    public List<PartnerCustomer> getCustomers() {
-        return customers;
-    }
-    
-    /**
      * @return the reservations
      */
     public List<PartnerReservation> getReservations() {
@@ -108,10 +98,10 @@ public class PartnerReservationManager implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PartnerReservationManager)) {
+        if (!(object instanceof Partner)) {
             return false;
         }
-        PartnerReservationManager other = (PartnerReservationManager) object;
+        Partner other = (Partner) object;
         if ((this.partnerId == null && other.partnerId != null) || (this.partnerId != null && !this.partnerId.equals(other.partnerId))) {
             return false;
         }

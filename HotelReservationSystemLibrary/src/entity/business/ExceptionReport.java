@@ -24,19 +24,24 @@ public abstract class ExceptionReport implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
     @OneToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Reservation reservation;
     @OneToOne
     private Allocation allocation;
+    
 
     public ExceptionReport() {
     }
+    
+    public ExceptionReport(Reservation reservation) {
+        this.reservation = reservation;
+    }
 
     public ExceptionReport(Reservation reservation, Allocation allocation) {
-        this.reservation = reservation;
+        this(reservation);
         this.allocation = allocation;
     }
     
@@ -44,7 +49,6 @@ public abstract class ExceptionReport implements Serializable {
         return reportId;
     }
 
-    
     /**
      * @return the reservation
      */
@@ -88,7 +92,7 @@ public abstract class ExceptionReport implements Serializable {
 
     @Override
     public String toString() {
-        return "Exception Report | id= " + reportId + " | reservation id= " + reservation.getReservationId() + " | allocation id= " + allocation.getAllocationId();
+        return "Exception Report | id= " + reportId + " | reservation id= " + getReservation().getReservationId() + " | allocation id= " + allocation.getAllocationId();
     }
     
 }

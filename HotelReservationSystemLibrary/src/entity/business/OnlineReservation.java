@@ -7,6 +7,8 @@ package entity.business;
 
 import entity.user.Guest;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,15 +21,14 @@ import javax.persistence.ManyToOne;
 public class OnlineReservation extends Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false, updatable = false)
-    private Guest customer;
     
     public OnlineReservation() {
         super();
     }
-    
 
+    public OnlineReservation(RoomType roomType, Guest guest, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
+        super(roomType, guest, rates, checkInDate, checkOutDate);
+    }
 
     @Override
     public String toString() {

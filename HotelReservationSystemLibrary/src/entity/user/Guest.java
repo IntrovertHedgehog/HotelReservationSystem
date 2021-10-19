@@ -75,6 +75,6 @@ public class Guest extends Occupant implements Serializable {
     
     @Override
     public String toString() {
-        return "Direct Customer -> " + super.toString();
+        return "Guest -> " + super.toString();
     }
 }

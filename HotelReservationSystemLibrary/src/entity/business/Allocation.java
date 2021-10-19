@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -26,29 +27,35 @@ public class Allocation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long allocationId;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Room room;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
-    private Occupant guest;
+    private Occupant occupant;
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Reservation reservation;
     @Column(nullable = false, updatable = false)
     private LocalDate checkInDate;
     @Column(nullable = false, updatable = false)
     private LocalDate checkOutDate;
+    @Column(updatable = false)
     private LocalTime checkInTime;
+    @Column(updatable = false)
     private LocalTime checkOutTime;
 
     public Allocation() {
     }
 
-    public Allocation(Room room, Occupant guest, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Allocation(Room room, Occupant occupant, Reservation reservation, LocalDate checkInDate, LocalDate checkOutDate) {
         this.room = room;
-        this.guest = guest;
+        this.occupant = occupant;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        this.reservation = reservation;
     }
 
     public Long getAllocationId() {
@@ -63,10 +70,14 @@ public class Allocation implements Serializable {
     }
 
     /**
-     * @return the guest
+     * @return the occupant
      */
-    public Occupant getGuest() {
-        return guest;
+    public Occupant getOccupant() {
+        return occupant;
+    }
+    
+    public Reservation getReservation() {
+        return reservation;
     }
 
     /**

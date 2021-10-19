@@ -99,7 +99,7 @@ public class Occupant implements Serializable {
 
     @Override
     public String toString() {
-        return "Guest | passport= " + getPassport();
+        return "Occupant | passport= " + getPassport();
     }
     
 }

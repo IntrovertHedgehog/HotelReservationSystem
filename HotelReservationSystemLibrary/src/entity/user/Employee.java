@@ -9,6 +9,8 @@ import enumeration.EmployeeType;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,16 +35,18 @@ public abstract class Employee implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EmployeeType employeeType;
     
     public Employee() {
     }
 
-    public Employee(String name, String username, String password) {
+    public Employee(String name, String username, String password, EmployeeType employeeType) {
         this.name = name;
         this.username = username;
         this.password = password;
+        this.employeeType = employeeType;
     }
 
     
@@ -77,6 +81,10 @@ public abstract class Employee implements Serializable {
         if (this.password.equals(oldPassword)) {
             this.password = newPassword;
         }
+    }
+    
+    public EmployeeType getEmployeeType() {
+        return this.employeeType;
     }
 
 

@@ -5,6 +5,7 @@
  */
 package entity.business;
 
+import entity.user.Occupant;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -34,6 +36,9 @@ public abstract class Reservation implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private RoomType roomType;
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Occupant occupant;
     @Column(nullable = false, updatable = false)
     private LocalDate checkInDate;
     @Column(nullable = false, updatable = false)
@@ -43,17 +48,19 @@ public abstract class Reservation implements Serializable {
     @JoinColumn(nullable = false)
     private List<Rate> rates;
     
-    @ManyToOne
-    @JoinColumn(nullable = false)
+    @OneToOne(mappedBy = "reservation")
+    @JoinColumn
     private Allocation allocation;
     
     public Reservation() {
     }
 
-    public Reservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Reservation(RoomType roomType, Occupant occupant, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
         this.roomType = roomType;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        this.occupant = occupant;
+        this.rates = rates;
     }
 
     
@@ -61,15 +68,18 @@ public abstract class Reservation implements Serializable {
         return rates;
     }
 
-    public void setRates(List<Rate> rates) {
-        this.rates = rates;
-    }
-
     /**
      * @return the roomType
      */
     public RoomType getRoomType() {
         return roomType;
+    }
+
+    /**
+     * @return the occupant
+     */
+    public Occupant getOccupant() {
+        return occupant;
     }
 
     /**
@@ -85,11 +95,23 @@ public abstract class Reservation implements Serializable {
     public LocalDate getCheckOutDate() {
         return checkOutDate;
     }
-    
-    
 
     public Long getReservationId() {
         return ReservationId;
+    }
+
+    /**
+     * @return the allocation
+     */
+    public Allocation getAllocation() {
+        return allocation;
+    }
+
+    /**
+     * @param allocation the allocation to set
+     */
+    public void setAllocation(Allocation allocation) {
+        this.allocation = allocation;
     }
 
     @Override

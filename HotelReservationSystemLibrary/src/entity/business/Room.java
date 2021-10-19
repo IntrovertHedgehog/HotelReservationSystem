@@ -34,7 +34,7 @@ public class Room implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private RoomType roomType;
 
@@ -83,11 +83,16 @@ public class Room implements Serializable {
         return status;
     }
 
-    /**
-     * @param status the status to set
-     */
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setAvailable() {
+        this.status = Status.AVAILABLE;
+    }
+
+    public void setUnavailable() {
+        this.status = Status.UNAVAILABLE;
+    }
+
+    public void setDisabled() {
+        this.status = Status.DISABLE;
     }
 
     private RoomId getRoomId() {
