@@ -10,23 +10,15 @@ import javax.persistence.Entity;
 
 /**
  *
- * @author Winter
+ * @author brianlim
  */
 @Entity
-public class SalesManager extends Employee implements Serializable {
+public class OnlineDirectCustomer extends Guest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SalesManager() {
-    }
 
-    public SalesManager(String name, String username, String password) {
-        super(name, username, password);
-    }
-
-    @Override
-    public String toString() {
-        return "Sales Manager -> " + super.toString();
-    }
+    
+   
     
 }

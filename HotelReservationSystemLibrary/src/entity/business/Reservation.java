@@ -7,6 +7,7 @@ package entity.business;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -37,6 +39,14 @@ public abstract class Reservation implements Serializable {
     @Column(nullable = false, updatable = false)
     private LocalDate checkOutDate;
 
+    @ManyToMany
+    @JoinColumn(nullable = false)
+    private List<Rate> rates;
+    
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Allocation allocation;
+    
     public Reservation() {
     }
 
@@ -44,6 +54,15 @@ public abstract class Reservation implements Serializable {
         this.roomType = roomType;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+    }
+
+    
+    public List<Rate> getRates() {
+        return rates;
+    }
+
+    public void setRates(List<Rate> rates) {
+        this.rates = rates;
     }
 
     /**

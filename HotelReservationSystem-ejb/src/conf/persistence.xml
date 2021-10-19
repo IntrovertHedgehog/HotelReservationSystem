@@ -13,6 +13,24 @@
     <class>entity.employee.Partner</class>
     <class>entity.employee.SalesManager</class>
     <class>entity.employee.SystemAdministrator</class>
+    <class>entity.business.Allocation</class>
+    <class>entity.business.DirectReservation</class>
+    <class>entity.business.ExceptionReport</class>
+    <class>entity.business.PartnerReservation</class>
+    <class>entity.business.Rate</class>
+    <class>entity.business.Reservation</class>
+    <class>entity.business.Room</class>
+    <class>entity.business.RoomType</class>
+    <class>entity.user.DirectCustomer</class>
+    <class>entity.user.Employee</class>
+    <class>entity.user.Guest</class>
+    <class>entity.user.GuestRelationOfficer</class>
+    <class>entity.user.OnlineDirectCustomer</class>
+    <class>entity.user.OperationManager</class>
+    <class>entity.user.PartnerCustomer</class>
+    <class>entity.user.PartnerReservationManager</class>
+    <class>entity.user.SalesManager</class>
+    <class>entity.user.SystemAdministrator</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

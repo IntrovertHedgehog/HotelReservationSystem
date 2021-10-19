@@ -5,7 +5,7 @@
  */
 package entity.business;
 
-import entity.user.Guest;
+import entity.user.Occupant;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,7 +33,7 @@ public class Allocation implements Serializable {
     private Room room;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
-    private Guest guest;
+    private Occupant guest;
     @Column(nullable = false, updatable = false)
     private LocalDate checkInDate;
     @Column(nullable = false, updatable = false)
@@ -44,7 +44,7 @@ public class Allocation implements Serializable {
     public Allocation() {
     }
 
-    public Allocation(Room room, Guest guest, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Allocation(Room room, Occupant guest, LocalDate checkInDate, LocalDate checkOutDate) {
         this.room = room;
         this.guest = guest;
         this.checkInDate = checkInDate;
@@ -65,7 +65,7 @@ public class Allocation implements Serializable {
     /**
      * @return the guest
      */
-    public Guest getGuest() {
+    public Occupant getGuest() {
         return guest;
     }
 

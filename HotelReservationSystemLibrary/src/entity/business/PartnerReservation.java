@@ -5,6 +5,7 @@
  */
 package entity.business;
 
+import entity.user.Occupant;
 import entity.user.PartnerCustomer;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -23,7 +24,10 @@ public class PartnerReservation extends Reservation implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private PartnerCustomer customer;
-
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Occupant occupant;
+    
     public PartnerReservation() {
         super();
     }
@@ -33,6 +37,15 @@ public class PartnerReservation extends Reservation implements Serializable {
         this.customer = customer;
     }
 
+    public Occupant getOccupant() {
+        return occupant;
+    }
+
+    public void setOccupant(Occupant occupant) {
+        this.occupant = occupant;
+    }
+
+    
     /**
      * @return the partner
      */

@@ -5,7 +5,8 @@
  */
 package entity.user;
 
-import entity.business.DirectReservation;
+import entity.business.Allocation;
+import entity.business.Reservation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import javax.persistence.OneToMany;
  * @author Winter
  */
 @Entity
-public class DirectCustomer implements Serializable {
+public class Occupant implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,23 +29,27 @@ public class DirectCustomer implements Serializable {
     private String passport;
     @Column(length = 32)
     private String name;
-    @Column(nullable = false, unique = true, length = 32)
-    private String username;
-    @Column(nullable = false)
-    private String password;
+    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY)
+    private List<Allocation> allocations;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<DirectReservation> reservations;
-
-    public DirectCustomer() {
+    private List<Reservation> reservations;
+    
+    public Occupant() {
+        allocations = new ArrayList<>();
         reservations = new ArrayList<>();
     }
 
-    public DirectCustomer(String passport, String name, String username, String password) {
+    public Occupant(String passport, String name) {
         this();
         this.passport = passport;
         this.name = name;
-        this.username = username;
-        this.password = password;
+    }
+
+    /**
+     * @return all the reservations of occupant
+     */
+    public List<Reservation> getReservations() {
+        return reservations;
     }
     
     /**
@@ -53,7 +58,7 @@ public class DirectCustomer implements Serializable {
     public String getPassport() {
         return passport;
     }
-
+    
     /**
      * @return the name
      */
@@ -67,30 +72,11 @@ public class DirectCustomer implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    /**
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
+
+    public List<Allocation> getAllocations() {
+        return allocations;
     }
 
-    public void setUsername(String username, String password) {
-        if (this.password.equals(password)) {
-            this.username = username;
-        }
-    }
-
-    public void setPassword(String newPassword, String oldPassword) {
-        if (this.password.equals(oldPassword)) {
-            this.password = newPassword;
-        }
-    }
-    
-    public List<DirectReservation> getReservations() {
-        return reservations;
-    }
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -101,18 +87,19 @@ public class DirectCustomer implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the guestId fields are not set
-        if (!(object instanceof DirectCustomer)) {
+        if (!(object instanceof Occupant)) {
             return false;
         }
-        DirectCustomer other = (DirectCustomer) object;
+        Occupant other = (Occupant) object;
         if ((this.getPassport() == null && other.getPassport() != null) || (this.getPassport() != null && !this.passport.equals(other.passport))) {
             return false;
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return "Direct Customer -> " + super.toString();
+        return "Guest | passport= " + getPassport();
     }
+    
 }

@@ -5,7 +5,8 @@
  */
 package entity.business;
 
-import entity.user.DirectCustomer;
+import entity.user.Guest;
+import entity.user.Occupant;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Entity;
@@ -17,18 +18,18 @@ import javax.persistence.ManyToOne;
  * @author Winter
  */
 @Entity
-public class DirectReservation extends Reservation implements Serializable {
+public class WalkInReservation extends Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
-    private DirectCustomer customer;
+    private Occupant customer;
 
-    public DirectReservation() {
+    public WalkInReservation() {
         super();
     }
 
-    public DirectReservation(DirectCustomer customer, RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate) {
+    public WalkInReservation(Guest customer, RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate) {
         super(roomType, checkInDate, checkOutDate);
         this.customer = customer;
     }
@@ -37,7 +38,7 @@ public class DirectReservation extends Reservation implements Serializable {
     /**
      * @return the guest
      */
-    public DirectCustomer getCustomer() {
+    public Occupant getCustomer() {
         return customer;
     }
 

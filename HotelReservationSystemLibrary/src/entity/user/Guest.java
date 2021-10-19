@@ -5,67 +5,54 @@
  */
 package entity.user;
 
-import entity.business.Allocation;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 /**
  *
  * @author Winter
  */
 @Entity
-public class Guest implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Column(length = 16)
-    private String passport;
-    @Column(length = 32)
-    private String name;
-    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY)
-    private List<Allocation> allocations;
+public class Guest extends Occupant implements Serializable {
+    private static final long serialVersionUID = 1L;    
+    @Column(nullable = false, unique = true, length = 32)
+    private String username;
+    @Column(nullable = false)
+    private String password;
+    
 
     public Guest() {
-        allocations = new ArrayList<>();
+        super();
     }
 
-    public Guest(String passport, String name) {
+    public Guest(String username, String password) {
         this();
-        this.passport = passport;
-        this.name = name;
-    }
-
-    /**
-     * @return the passport
-     */
-    public String getPassport() {
-        return passport;
+        this.username = username;
+        this.password = password;
     }
     
     /**
-     * @return the name
+     * @return the username
      */
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username, String password) {
+        if (this.password.equals(password)) {
+            this.username = username;
+        }
     }
 
-    public List<Allocation> getAllocations() {
-        return allocations;
+    public void setPassword(String newPassword, String oldPassword) {
+        if (this.password.equals(oldPassword)) {
+            this.password = newPassword;
+        }
     }
-
+    
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -80,15 +67,14 @@ public class Guest implements Serializable {
             return false;
         }
         Guest other = (Guest) object;
-        if ((this.getPassport() == null && other.getPassport() != null) || (this.getPassport() != null && !this.passport.equals(other.passport))) {
+        if ((this.getPassport() == null && other.getPassport() != null) || (this.getPassport() != null && !super.getPassport().equals(other.getPassport()))) {
             return false;
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
-        return "Guest | passport= " + getPassport();
+        return "Direct Customer -> " + super.toString();
     }
-    
 }

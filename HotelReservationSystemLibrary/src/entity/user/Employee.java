@@ -5,6 +5,7 @@
  */
 package entity.user;
 
+import enumeration.EmployeeType;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +33,9 @@ public abstract class Employee implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
-
+    @Column(nullable = false)
+    private EmployeeType employeeType;
+    
     public Employee() {
     }
 
@@ -42,6 +45,7 @@ public abstract class Employee implements Serializable {
         this.password = password;
     }
 
+    
     /**
      * @return the name
      */
