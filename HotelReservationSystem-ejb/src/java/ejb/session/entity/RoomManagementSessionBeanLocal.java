@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.task;
+package ejb.session.entity;
 
 import javax.ejb.Local;
 
@@ -12,6 +12,6 @@ import javax.ejb.Local;
  * @author Winter
  */
 @Local
-public interface RoomAllocationSessionBeanLocal {
+public interface RoomManagementSessionBeanLocal {
     
 }

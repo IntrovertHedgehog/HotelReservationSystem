@@ -12,6 +12,6 @@ import javax.ejb.Local;
  * @author Winter
  */
 @Local
-public interface EmployeeEntitySessionBeanLocal {
+public interface AllocationManagementSessionBeanLocal {
     
 }

@@ -10,9 +10,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 /**
  *
  * @author brianlim

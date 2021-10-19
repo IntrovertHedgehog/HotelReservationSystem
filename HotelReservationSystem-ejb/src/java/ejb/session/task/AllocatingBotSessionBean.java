@@ -12,7 +12,7 @@ import javax.ejb.Singleton;
  * @author Winter
  */
 @Singleton
-public class RoomAllocationSessionBean implements RoomAllocationSessionBeanRemote, RoomAllocationSessionBeanLocal {
+public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

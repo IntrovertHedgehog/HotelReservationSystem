@@ -115,6 +115,7 @@ public class Allocation implements Serializable {
     public void checkOut(LocalTime checkOutTime) {
         this.checkOutTime = checkOutTime;
     }
+    
     @Override
     public int hashCode() {
         int hash = 0;

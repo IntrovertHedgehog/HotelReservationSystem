@@ -12,7 +12,7 @@ import javax.ejb.Stateless;
  * @author Winter
  */
 @Stateless
-public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanRemote, EmployeeEntitySessionBeanLocal {
+public class ExceptionReportManagementSessionBean implements ExceptionReportManagementSessionBeanRemote, ExceptionReportManagementSessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

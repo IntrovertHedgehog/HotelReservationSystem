@@ -5,14 +5,11 @@
  */
 package entity.business;
 
-import entity.user.Guest;
 import entity.user.Occupant;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  *

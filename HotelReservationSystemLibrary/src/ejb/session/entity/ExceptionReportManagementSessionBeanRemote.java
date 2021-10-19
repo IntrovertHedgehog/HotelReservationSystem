@@ -12,6 +12,6 @@ import javax.ejb.Remote;
  * @author Winter
  */
 @Remote
-public interface EmployeeEntitySessionBeanRemote {
+public interface ExceptionReportManagementSessionBeanRemote {
     
 }

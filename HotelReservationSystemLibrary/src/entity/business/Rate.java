@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +29,7 @@ public class Rate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long RateId;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RateType rateType;
     @Column(nullable = false)
