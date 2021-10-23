@@ -17,14 +17,14 @@ import javax.ejb.Local;
 @Local
 public interface AccountManagementSessionBeanLocal {
 
-    public Employee employeeLogin(String username, String password);
+    public List<Partner> viewAllPartners();
 
-    public Long employeeCreate(Employee employee);
+    public Long createPartner(Partner partner);
 
-    public List<Employee> employeeView();
+    public List<Employee> viewAllEmployees();
 
-    public List<Partner> partnerView();
+    public Long createEmployee(Employee employee);
 
-    public Long partnerCreate(Partner partner);
+    public Employee LoginEmployee(String username, String password);
     
 }

@@ -9,7 +9,7 @@ import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
-import enumeration.Status;
+import enumeration.RoomStatus;
 import java.util.List;
 import javax.ejb.Local;
 import keyclass.RoomId;
@@ -37,7 +37,7 @@ public interface RoomManagementSessionBeanLocal {
 
     public List<RoomType> retrieveAllRoomTypes();
 
-    public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, Status status);
+    public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, RoomStatus status);
 
     public void deleteRoom(Room room);
 

@@ -11,10 +11,11 @@ import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
 import entity.user.Employee;
+import entity.user.Partner;
 import enumeration.BedSize;
 import enumeration.EmployeeType;
 import enumeration.RateType;
-import enumeration.Status;
+import enumeration.RoomStatus;
 import java.time.LocalDate;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -49,7 +50,7 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (emp.isEmpty()) {
-            accountManagementSessionBean.employeeCreate(new Employee("admin", "admin", "password", EmployeeType.SYSTEM_ADMINISTRATOR));
+            accountManagementSessionBean.createEmployee(new Employee("admin", "admin", "password", EmployeeType.SYSTEM_ADMINISTRATOR));
         }
         
         List<RoomType> rt = (List<RoomType>) em.createQuery("SELECT rt FROM RoomType rt")
@@ -65,10 +66,10 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (r.isEmpty()) {
-            roomManagementSessionBean.createNewRoom(1l , 1l, em.find(RoomType.class, 1l), Status.AVAILABLE);
-            roomManagementSessionBean.createNewRoom(2l , 2l, em.find(RoomType.class, 2l), Status.AVAILABLE);
-            roomManagementSessionBean.createNewRoom(2l , 4l, em.find(RoomType.class, 2l), Status.AVAILABLE);
-            roomManagementSessionBean.createNewRoom(3l , 3l, em.find(RoomType.class, 3l), Status.AVAILABLE);
+            roomManagementSessionBean.createNewRoom(1l , 1l, em.find(RoomType.class, 1l), RoomStatus.AVAILABLE);
+            roomManagementSessionBean.createNewRoom(2l , 2l, em.find(RoomType.class, 2l), RoomStatus.AVAILABLE);
+            roomManagementSessionBean.createNewRoom(2l , 4l, em.find(RoomType.class, 2l), RoomStatus.AVAILABLE);
+            roomManagementSessionBean.createNewRoom(3l , 3l, em.find(RoomType.class, 3l), RoomStatus.AVAILABLE);
         }
         
         List<Rate> rate = (List<Rate>) em.createQuery("SELECT r FROM Rate r")
@@ -78,6 +79,14 @@ public class DataInitializationSessionBean {
             roomManagementSessionBean.createRate(new Rate("expensive as fuck", em.find(RoomType.class, 1l), RateType.PEAK, 30.0, LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
             roomManagementSessionBean.createRate(new Rate("familial", em.find(RoomType.class, 2l), RateType.NORMAL, 20.0, LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
             roomManagementSessionBean.createRate(new Rate("cheap ass", em.find(RoomType.class, 3l), RateType.PROMOTION, 15.0, LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+        }
+        
+        List<Partner> p = em.createQuery("SELECT p FROM Partner p")
+                .setMaxResults(1)
+                .getResultList();
+        if (p.isEmpty()) {
+            accountManagementSessionBean.createPartner(new Partner("Hexico", "hexico", "password"));
+            accountManagementSessionBean.createPartner(new Partner("Metro", "metro", "password"));
         }
     }
 }

@@ -5,7 +5,7 @@
  */
 package entity.business;
 
-import enumeration.Status;
+import enumeration.RoomStatus;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +32,7 @@ public class Room implements Serializable {
     private Long roomNumber;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private RoomStatus status;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private RoomType roomType;
@@ -40,7 +40,7 @@ public class Room implements Serializable {
     public Room() {
     }
 
-    public Room(Long floorNumber, Long roomNumber, RoomType roomType, Status status) {
+    public Room(Long floorNumber, Long roomNumber, RoomType roomType, RoomStatus status) {
         this.floorNumber = floorNumber;
         this.roomNumber = roomNumber;
         this.roomType = roomType;
@@ -82,20 +82,20 @@ public class Room implements Serializable {
     /**
      * @return the status
      */
-    public Status getStatus() {
+    public RoomStatus getStatus() {
         return status;
     }
 
     public void setAvailable() {
-        this.status = Status.AVAILABLE;
+        this.status = RoomStatus.AVAILABLE;
     }
 
     public void setUnavailable() {
-        this.status = Status.UNAVAILABLE;
+        this.status = RoomStatus.UNAVAILABLE;
     }
 
     public void setDisabled() {
-        this.status = Status.DISABLE;
+        this.status = RoomStatus.DISABLE;
     }
 
     @Override
