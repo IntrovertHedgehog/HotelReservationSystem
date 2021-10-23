@@ -60,6 +60,10 @@ public class Room implements Serializable {
     public Long getRoomNumber() {
         return roomNumber;
     }
+    
+    public RoomId getRoomId() {
+        return new RoomId(floorNumber, roomNumber);
+    }
 
     /**
      * @return the roomType
@@ -92,10 +96,6 @@ public class Room implements Serializable {
 
     public void setDisabled() {
         this.status = Status.DISABLE;
-    }
-
-    private RoomId getRoomId() {
-        return new RoomId(floorNumber, roomNumber);
     }
 
     @Override
