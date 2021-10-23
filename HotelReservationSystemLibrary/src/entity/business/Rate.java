@@ -12,7 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,7 +46,8 @@ public class Rate implements Serializable {
     public Rate() {
     }
 
-    public Rate(RoomType roomType, RateType rateType, Double ratePerNight, LocalDate periodStart, LocalDate periodEnd) {
+    public Rate(String rateName, RoomType roomType, RateType rateType, Double ratePerNight, LocalDate periodStart, LocalDate periodEnd) {
+        this.rateName = rateName;
         this.roomType = roomType;
         this.rateType = rateType;
         this.ratePerNight = ratePerNight;

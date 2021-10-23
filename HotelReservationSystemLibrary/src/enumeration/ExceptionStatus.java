@@ -7,11 +7,10 @@ package enumeration;
 
 /**
  *
- * @author brianlim
+ * @author Winter
  */
-public enum EmployeeType {
-    SYSTEM_ADMINISTRATOR,
-    OPERATIONS_MANAGER,
-    SALES_MANAGER,
-    GUEST_RELATION_OFFICER
+public enum ExceptionStatus {
+    PENDING,
+    RESOLVED,
+    AUTOMATIC
 }

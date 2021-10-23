@@ -5,8 +5,11 @@
  */
 package entity.business;
 
+import enumeration.ExceptionStatus;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,12 +23,14 @@ import javax.persistence.OneToOne;
  */
 @Entity
 @Inheritance()
-public abstract class ExceptionReport implements Serializable {
+public class ExceptionReport implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
+    @Enumerated(EnumType.STRING)
+    private ExceptionStatus status;
     @OneToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Reservation reservation;
@@ -38,11 +43,13 @@ public abstract class ExceptionReport implements Serializable {
     
     public ExceptionReport(Reservation reservation) {
         this.reservation = reservation;
+        this.status = ExceptionStatus.PENDING;
     }
 
     public ExceptionReport(Reservation reservation, Allocation allocation) {
         this(reservation);
         this.allocation = allocation;
+        this.status = ExceptionStatus.AUTOMATIC;
     }
     
     public Long getReportId() {
@@ -68,6 +75,7 @@ public abstract class ExceptionReport implements Serializable {
      */
     public void setAllocation(Allocation allocation) {
         this.allocation = allocation;
+        this.status = ExceptionStatus.RESOLVED;
     }
 
     @Override

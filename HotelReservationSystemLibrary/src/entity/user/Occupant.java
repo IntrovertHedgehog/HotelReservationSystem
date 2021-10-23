@@ -29,9 +29,9 @@ public class Occupant implements Serializable {
     private String passport;
     @Column(length = 32)
     private String name;
-    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "occupant", fetch = FetchType.LAZY)
     private List<Allocation> allocations;
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "occupant", fetch = FetchType.LAZY)
     private List<Reservation> reservations;
     
     public Occupant() {

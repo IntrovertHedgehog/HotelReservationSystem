@@ -16,7 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.NamedQuery;
 
 /**
  *
@@ -24,7 +23,7 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Employee implements Serializable {
+public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
