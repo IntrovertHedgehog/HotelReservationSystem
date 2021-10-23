@@ -21,13 +21,13 @@ public class RoomId implements Serializable {
         this.roomNumber = roomNumber;
     }
     
-    private Long getId() {
-        return Long.parseLong(floorNumber.toString().concat(roomNumber.toString()));
+    private String getId() {
+        return String.format("%d-%d", floorNumber, roomNumber);
     }
 
     @Override
     public int hashCode() {
-        Long id = getId();
+        String id = getId();
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
@@ -40,8 +40,8 @@ public class RoomId implements Serializable {
             return false;
         }
         RoomId other = (RoomId) object;
-        Long id = getId();
-        Long otherId = other.getId();
+        String id = getId();
+        String otherId = other.getId();
         if ((id == null && otherId != null) || (id != null && !id.equals(otherId))) {
             return false;
         }
