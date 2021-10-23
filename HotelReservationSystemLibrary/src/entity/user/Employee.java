@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -47,6 +48,13 @@ public abstract class Employee implements Serializable {
         this.username = username;
         this.password = password;
         this.employeeType = employeeType;
+    }
+
+    /**
+     * @return the employeeId
+     */
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
     
@@ -91,7 +99,7 @@ public abstract class Employee implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (employeeId != null ? employeeId.hashCode() : 0);
+        hash += (getEmployeeId() != null ? getEmployeeId().hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +110,7 @@ public abstract class Employee implements Serializable {
             return false;
         }
         Employee other = (Employee) object;
-        if ((this.employeeId == null && other.employeeId != null) || (this.employeeId != null && !this.employeeId.equals(other.employeeId))) {
+        if ((this.getEmployeeId() == null && other.getEmployeeId() != null) || (this.getEmployeeId() != null && !this.employeeId.equals(other.employeeId))) {
             return false;
         }
         return true;
@@ -110,7 +118,7 @@ public abstract class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "Employee | id = " + employeeId + " | name = " + name;
+        return "Employee | id = " + getEmployeeId() + " | name = " + name;
     }
     
 }

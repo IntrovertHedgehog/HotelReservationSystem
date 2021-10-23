@@ -5,8 +5,11 @@
  */
 package ejb.session.entity;
 
-import ejb.session.entity.RoomManagementSessionBeanRemote;
+import entity.business.Rate;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -15,6 +18,57 @@ import javax.ejb.Stateless;
 @Stateless
 public class RoomManagementSessionBean implements RoomManagementSessionBeanRemote, RoomManagementSessionBeanLocal {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @PersistenceContext(unitName = "HotelReservationSystem-PU")
+    private EntityManager em;
+    
+    public Long rateCreate(Rate rate) {
+        em.persist(rate);
+        em.flush();
+        
+        return rate.getRateId();
+    }
+    
+    public Rate rateDetails(Long id) {
+        return em.find(Rate.class, id);
+    }
+    
+    public Rate rateDetails(String name) {
+        return (Rate) em.createQuery("SELECT r FROM Rate r WHERE r.name = :name")
+                .setParameter("name", name)
+                .getSingleResult();
+    }
+    
+    public Boolean rateUpdate(Rate rate) {
+        Rate oldRate = em.find(Rate.class, rate.getRateId());
+        
+        if (oldRate == null) {
+            return false;
+        }
+        
+        if (!oldRate.getRoomType().equals(rate.getRoomType())) {
+            oldRate.getRoomType().removeRate(rate);
+            rate.getRoomType().addRate(rate);
+        }
+        
+        em.merge(rate);
+        
+        return true;
+    }
+    
+    public Boolean rateDelete(Long id) {
+        Rate rate = em.find(Rate.class, id);
+        
+        if (rate == null) {
+            return false;
+        }
+        
+        rate.getRoomType().removeRate(rate);
+        em.remove(rate);
+        return true;
+    }
+    
+    public List<Rate> rateViewAll() {
+        return em.createQuery("SELECT r FROM Rate r")
+                .getResultList();
+    }
 }

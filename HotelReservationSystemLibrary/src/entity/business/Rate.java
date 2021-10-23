@@ -28,7 +28,9 @@ public class Rate implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long RateId;
+    private Long rateId;
+    @Column(nullable = false, unique = true)
+    private String rateName;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RateType rateType;
@@ -38,7 +40,7 @@ public class Rate implements Serializable {
     private LocalDate periodStart;
     @Column(nullable = false)
     private LocalDate periodEnd;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private RoomType roomType;
 
@@ -54,13 +56,27 @@ public class Rate implements Serializable {
     }
 
     public Long getRateId() {
-        return RateId;
+        return rateId;
+    }
+
+    /**
+     * @return the rateName
+     */
+    public String getRateName() {
+        return rateName;
+    }
+
+    /**
+     * @param rateName the rateName to set
+     */
+    public void setRateName(String rateName) {
+        this.rateName = rateName;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (RateId != null ? RateId.hashCode() : 0);
+        hash += (rateId != null ? rateId.hashCode() : 0);
         return hash;
     }
 
@@ -141,7 +157,7 @@ public class Rate implements Serializable {
             return false;
         }
         Rate other = (Rate) object;
-        if ((this.RateId == null && other.RateId != null) || (this.RateId != null && !this.RateId.equals(other.RateId))) {
+        if ((this.rateId == null && other.rateId != null) || (this.rateId != null && !this.rateId.equals(other.rateId))) {
             return false;
         }
         return true;
@@ -149,7 +165,7 @@ public class Rate implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.business.Rate[ id=" + RateId + " ]";
+        return String.format("Rate | id: %d | name: %s | type: %s | ... | room type: %d", rateId, rateName, rateType.name(), roomType.getRoomTypeId());
     }
     
 }

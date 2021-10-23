@@ -157,6 +157,10 @@ public class RoomType implements Serializable {
         return rates.add(rate);
     }
     
+    public Boolean removeRate(Rate rate) {
+        return rates.remove(rate);
+    }
+    
     public Long getRoomTypeId() {
         return roomTypeId;
     }

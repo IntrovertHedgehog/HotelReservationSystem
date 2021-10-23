@@ -47,6 +47,13 @@ public class Partner implements Serializable {
         this.username = username;
         this.password = password;
     }
+
+    /**
+     * @return the partnerId
+     */
+    public Long getPartnerId() {
+        return partnerId;
+    }
     
     /**
      * @return the name
@@ -91,7 +98,7 @@ public class Partner implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (partnerId != null ? partnerId.hashCode() : 0);
+        hash += (getPartnerId() != null ? getPartnerId().hashCode() : 0);
         return hash;
     }
 
@@ -102,7 +109,7 @@ public class Partner implements Serializable {
             return false;
         }
         Partner other = (Partner) object;
-        if ((this.partnerId == null && other.partnerId != null) || (this.partnerId != null && !this.partnerId.equals(other.partnerId))) {
+        if ((this.getPartnerId() == null && other.getPartnerId() != null) || (this.getPartnerId() != null && !this.partnerId.equals(other.partnerId))) {
             return false;
         }
         return true;
@@ -110,7 +117,7 @@ public class Partner implements Serializable {
 
     @Override
     public String toString() {
-        return "Partner Reservation Manager | id = " + partnerId + " | name = " + getName();
+        return "Partner Reservation Manager | id = " + getPartnerId() + " | name = " + getName();
     }
     
 }

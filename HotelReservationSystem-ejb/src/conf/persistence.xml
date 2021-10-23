@@ -2,38 +2,22 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="HotelReservationSystem-PU" transaction-type="JTA">
     <jta-data-source>jdbc/hotelReservationSystem</jta-data-source>
-    <class>entity.Employee</class>
-    <class>entity.GuestRelationOfficer</class>
-    <class>entity.OperationManager</class>
-    <class>entity.SalesManager</class>
-    <class>entity.SystemAdministrator</class>
-    <class>entity.employee.Employee</class>
-    <class>entity.employee.GuestRelationOfficer</class>
-    <class>entity.employee.OperationManager</class>
-    <class>entity.employee.Partner</class>
-    <class>entity.employee.SalesManager</class>
-    <class>entity.employee.SystemAdministrator</class>
     <class>entity.business.Allocation</class>
-    <class>entity.business.DirectReservation</class>
     <class>entity.business.ExceptionReport</class>
+    <class>entity.business.OnlineReservation</class>
     <class>entity.business.PartnerReservation</class>
     <class>entity.business.Rate</class>
     <class>entity.business.Reservation</class>
     <class>entity.business.Room</class>
     <class>entity.business.RoomType</class>
-    <class>entity.user.DirectCustomer</class>
+    <class>entity.business.WalkInReservation</class>
     <class>entity.user.Employee</class>
     <class>entity.user.Guest</class>
-    <class>entity.user.GuestRelationOfficer</class>
-    <class>entity.user.OnlineDirectCustomer</class>
-    <class>entity.user.OperationManager</class>
-    <class>entity.user.PartnerCustomer</class>
-    <class>entity.user.PartnerReservationManager</class>
-    <class>entity.user.SalesManager</class>
-    <class>entity.user.SystemAdministrator</class>
+    <class>entity.user.Occupant</class>
+    <class>entity.user.Partner</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
 </persistence>
