@@ -6,6 +6,7 @@
 package entity.business;
 
 import enumeration.BedSize;
+import enumeration.Status;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,8 @@ public class RoomType implements Serializable {
     private String amenities;
     @OneToMany(mappedBy = "roomType")
     private List<Rate> rates;
-
+    @Column(nullable = false)
+    private Status status;
     
     public RoomType() {
         rates = new ArrayList<>();
@@ -61,6 +63,7 @@ public class RoomType implements Serializable {
         this.bedsize = bedsize;
         this.capacity = capacity;
         this.amenities = amenities;
+        this.status = Status.AVAILABLE;
     }
     
     
@@ -164,6 +167,23 @@ public class RoomType implements Serializable {
     public Long getRoomTypeId() {
         return roomTypeId;
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setAvailable() {
+        this.status = Status.AVAILABLE;
+    }
+    
+    public void setUnavailable() {
+        this.status = Status.UNAVAILABLE;
+    }
+    
+    public void setDisabled() {
+        this.status = Status.DISABLE;
+    }
+
 
     @Override
     public int hashCode() {

@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import keyclass.RoomId;
+import util.exception.DeleteRoomTypeException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UpdateRoomException;
@@ -129,19 +130,24 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     }
     
     @Override
-    public void deleteRoomType(RoomType roomType) {
- 
-        if(roomType.getRates().isEmpty())
+    public void deleteRoomType(RoomType roomType) throws DeleteRoomTypeException {
+        
+        
+        if(roomType.getRates().isEmpty() && roomType.getStatus() == Status.AVAILABLE)
         {
             em.remove(roomType);
         }
-        else
+        else if (!roomType.getRates().isEmpty() && roomType.getStatus() == Status.AVAILABLE) 
         {
             List<Rate> rates = roomType.getRates();
             for(Rate rate : rates) {
                 em.remove(rate);
             }
             em.remove(roomType);
+        }
+        else 
+        {
+            roomType.setDisabled();
         }
     }
 
@@ -176,13 +182,51 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
         return newRoom.getRoomId();
     }
     
+    //update details of a particular room record.
+    //Room status also updated using this method
     @Override
     public void updateRoom(Room room) throws RoomNotFoundException, UpdateRoomException{
-        em.remove(room);
+        if(room != null && room.getRoomId()!= null)
+        {           
+            em.merge(room);
+        }
+        else
+        {
+            throw new RoomNotFoundException("Room ID not provided for room to be updated");
+        }
     }
     
     @Override
     public void deleteRoom(Room room) {
-        em.remove(room);
+        if(room.getStatus() == Status.AVAILABLE)
+        {
+            em.remove(room);
+        }
+        
+        else 
+        {
+            room.setDisabled();
+        }
     }
+    
+    @Override
+    public List<Room> retrieveAllRooms() {
+        Query query = em.createQuery("SELECT r FROM Room r");
+        return query.getResultList();
+    }
+    
+    @Override
+    public Room retrieveRoomByRoomId(RoomId roomId) throws RoomNotFoundException {
+        Room room = em.find(Room.class, roomId);
+        if(room != null)
+        {
+            return room;
+        }
+        else
+        {
+            throw new RoomNotFoundException("Room ID " + roomId.toString() + " does not exist!");
+        }
+        
+    }
+    
 }

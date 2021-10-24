@@ -10,6 +10,7 @@ import entity.business.RoomType;
 import java.util.List;
 import javax.ejb.Remote;
 import keyclass.RoomId;
+import util.exception.DeleteRoomTypeException;
 import util.exception.RoomNotFoundException;
 import util.exception.RoomTypeNotFoundException;
 import util.exception.UpdateRoomException;
@@ -28,7 +29,7 @@ public interface RoomManagementSessionBeanRemote {
 
     public void updateRoomType(RoomType roomType) throws RoomTypeNotFoundException, UpdateRoomTypeException;
 
-    public void deleteRoomType(RoomType roomType);
+    public void deleteRoomType(RoomType roomType) throws DeleteRoomTypeException;
 
     public RoomType retrieveRoomTypeByRoomTypeId(Long roomTypeId) throws RoomTypeNotFoundException;
 
@@ -39,5 +40,9 @@ public interface RoomManagementSessionBeanRemote {
     public void deleteRoom(Room room);
 
     public void updateRoom(Room room) throws RoomNotFoundException, UpdateRoomException;
+
+    public Room retrieveRoomByRoomId(RoomId roomId) throws RoomNotFoundException;
+
+    public List<Room> retrieveAllRooms();
     
 }
