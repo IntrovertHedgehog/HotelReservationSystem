@@ -10,8 +10,8 @@ package enumeration;
  * @author brianlim
  */
 public enum EmployeeType {
-    SYSTEMADMINISTRATOR,
-    OPERATIONSMANAGER,
-    SALESMANAGER,
-    GUESTRELATIONOFFICER
+    SYSTEM_ADMINISTRATOR,
+    OPERATIONS_MANAGER,
+    SALES_MANAGER,
+    GUEST_RELATION_OFFICER
 }

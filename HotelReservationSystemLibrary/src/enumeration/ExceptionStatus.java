@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.entity;
-import javax.ejb.Remote;
-
+package enumeration;
 
 /**
  *
  * @author Winter
  */
-@Remote
-public interface RoomManagementSessionBeanRemote {
-
-    
+public enum ExceptionStatus {
+    PENDING,
+    RESOLVED,
+    AUTOMATIC
 }

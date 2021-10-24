@@ -9,7 +9,6 @@ import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
-import enumeration.BedSizeConverter;
 import enumeration.Status;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -33,24 +32,30 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     @PersistenceContext(unitName = "HotelReservationSystem-PU")
     private EntityManager em;
     
-    public Long rateCreate(Rate rate) {
+    @Override
+    public Long createRate(Rate rate) {
         em.persist(rate);
         em.flush();
+        
+        rate.getRoomType().addRate(rate);
         
         return rate.getRateId();
     }
     
-    public Rate rateDetails(Long id) {
+    @Override
+    public Rate viewRateDetails(Long id) {
         return em.find(Rate.class, id);
     }
     
-    public Rate rateDetails(String name) {
-        return (Rate) em.createQuery("SELECT r FROM Rate r WHERE r.name = :name")
+    @Override
+    public Rate viewRateDetails(String name) {
+        return (Rate) em.createQuery("SELECT r FROM Rate r WHERE r.rateName = :name")
                 .setParameter("name", name)
                 .getSingleResult();
     }
     
-    public Boolean rateUpdate(Rate rate) {
+    @Override
+    public Boolean updateRate(Rate rate) {
         Rate oldRate = em.find(Rate.class, rate.getRateId());
         
         if (oldRate == null) {
@@ -67,7 +72,8 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
         return true;
     }
     
-    public Boolean rateDelete(Long id) {
+    @Override
+    public Boolean deleteRate(Long id) {
         Rate rate = em.find(Rate.class, id);
         
         if (rate == null) {
@@ -79,16 +85,15 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
         return true;
     }
     
-    public List<Rate> rateViewAll() {
+    @Override
+    public List<Rate> ViewAllRates() {
         return em.createQuery("SELECT r FROM Rate r")
                 .getResultList();
     }
 
     @Override
-    public Long createNewRoomType(String name, String description, Double size, String bedsize, Long capacity, String amenities) {
+    public Long createNewRoomType(String name, String description, Double size, BedSize bedSize, Long capacity, String amenities) {
         
-        BedSizeConverter converter = new BedSizeConverter();
-        BedSize bedSize = converter.convertToEntityAttribute(bedsize);
         RoomType newRoomType = new RoomType(name, description, size, bedSize, capacity, amenities);
         
         em.persist(newRoomType);
@@ -174,8 +179,8 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     
     @Override
-    public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType) {
-        Room newRoom = new Room(floorNumber, roomNumber, roomType, Status.AVAILABLE);
+    public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, Status status) {
+        Room newRoom = new Room(floorNumber, roomNumber, roomType, status);
         em.persist(newRoom);
         em.flush();
         

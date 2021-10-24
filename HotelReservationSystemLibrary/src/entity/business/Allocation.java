@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -30,7 +31,10 @@ public class Allocation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long allocationId;
     @ManyToOne(optional = false)
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumns( {
+        @JoinColumn(name = "room_floor", referencedColumnName = "floorNumber", nullable = false, updatable = false),
+        @JoinColumn(name = "room_number", referencedColumnName = "roomNumber", nullable = false, updatable = false)
+    })
     private Room room;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)

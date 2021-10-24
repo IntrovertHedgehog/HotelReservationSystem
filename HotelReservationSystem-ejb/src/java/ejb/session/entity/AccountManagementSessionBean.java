@@ -17,12 +17,13 @@ import javax.persistence.PersistenceContext;
  * @author Winter
  */
 @Stateless
-public class AccountManagementSessionBean implements AccountManagementSessionBeanRemote {
+public class AccountManagementSessionBean implements AccountManagementSessionBeanLocal, AccountManagementSessionBeanRemote {
 
     @PersistenceContext(unitName = "HotelReservationSystem-PU")
     private EntityManager em;
     
     
+    @Override
     public Employee employeeLogin(String username, String password) {
         Employee employee = (Employee) em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password")
                 .setParameter("username", username)
@@ -32,17 +33,20 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
         return employee;
     }
 
+    @Override
     public Long employeeCreate(Employee employee) {
         em.persist(employee);
         em.flush();
         return employee.getEmployeeId();
     }
     
+    @Override
     public List<Employee> employeeView() {
         return em.createQuery("SELECT e FROM Employee e")
                 .getResultList();
     }
     
+    @Override
     public Long partnerCreate(Partner partner) {
         em.persist(partner);
         em.flush();
@@ -50,6 +54,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
         return partner.getPartnerId();
     }
     
+    @Override
     public List<Partner> partnerView() {
         return em.createQuery("SELECT p FROM Partner p")
                 .getResultList();
