@@ -9,7 +9,7 @@ import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
-import enumeration.Status;
+import enumeration.RoomStatus;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -179,7 +179,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     
     @Override
-    public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, Status status) {
+    public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, RoomStatus status) {
         Room newRoom = new Room(floorNumber, roomNumber, roomType, status);
         em.persist(newRoom);
         em.flush();

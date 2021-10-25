@@ -9,7 +9,7 @@ package enumeration;
  *
  * @author Winter
  */
-public enum Status {
+public enum RoomStatus {
     AVAILABLE, // not-occupied, ready to use
     UNAVAILABLE, // occupied or in cleaning process (not allocatable)
     DISABLE // permanently disable or unavailable for other reasons (I think)

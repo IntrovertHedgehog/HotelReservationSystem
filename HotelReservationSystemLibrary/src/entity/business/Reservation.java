@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,6 +45,8 @@ public abstract class Reservation implements Serializable {
     private LocalDate checkInDate;
     @Column(nullable = false, updatable = false)
     private LocalDate checkOutDate;
+    @Column(nullable = false)
+    private Boolean isAllocated;
 
     @ManyToMany
     @JoinColumn(nullable = false)
@@ -61,6 +65,7 @@ public abstract class Reservation implements Serializable {
         this.checkOutDate = checkOutDate;
         this.occupant = occupant;
         this.rates = rates;
+        this.isAllocated = false;
     }
 
     
@@ -112,6 +117,20 @@ public abstract class Reservation implements Serializable {
      */
     public void setAllocation(Allocation allocation) {
         this.allocation = allocation;
+    }
+
+    /**
+     * @return the isAllocated
+     */
+    public Boolean getIsAllocated() {
+        return isAllocated;
+    }
+
+    /**
+     * @param isAllocated the isAllocated to set
+     */
+    public void setIsAllocated(Boolean isAllocated) {
+        this.isAllocated = isAllocated;
     }
 
     @Override

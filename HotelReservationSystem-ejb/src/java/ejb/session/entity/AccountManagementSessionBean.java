@@ -24,7 +24,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     
     
     @Override
-    public Employee employeeLogin(String username, String password) {
+    public Employee LoginEmployee(String username, String password) {
         Employee employee = (Employee) em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password")
                 .setParameter("username", username)
                 .setParameter("password", password)
@@ -34,20 +34,20 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     }
 
     @Override
-    public Long employeeCreate(Employee employee) {
+    public Long createEmployee(Employee employee) {
         em.persist(employee);
         em.flush();
         return employee.getEmployeeId();
     }
     
     @Override
-    public List<Employee> employeeView() {
+    public List<Employee> viewAllEmployees() {
         return em.createQuery("SELECT e FROM Employee e")
                 .getResultList();
     }
     
     @Override
-    public Long partnerCreate(Partner partner) {
+    public Long createPartner(Partner partner) {
         em.persist(partner);
         em.flush();
         
@@ -55,7 +55,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     }
     
     @Override
-    public List<Partner> partnerView() {
+    public List<Partner> viewAllPartners() {
         return em.createQuery("SELECT p FROM Partner p")
                 .getResultList();
     }
