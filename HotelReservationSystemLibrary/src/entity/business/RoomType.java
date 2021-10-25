@@ -6,12 +6,14 @@
 package entity.business;
 
 import enumeration.BedSize;
-import enumeration.Status;
+import enumeration.RoomTypeStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,8 +48,9 @@ public class RoomType implements Serializable {
     private String amenities;
     @OneToMany(mappedBy = "roomType")
     private List<Rate> rates;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private RoomTypeStatus status;
     
     public RoomType() {
         rates = new ArrayList<>();
@@ -61,7 +64,7 @@ public class RoomType implements Serializable {
         this.bedsize = bedsize;
         this.capacity = capacity;
         this.amenities = amenities;
-        this.status = Status.AVAILABLE;
+        this.status = RoomTypeStatus.UNUSED;
     }
     
     
@@ -166,20 +169,16 @@ public class RoomType implements Serializable {
         return roomTypeId;
     }
 
-    public Status getStatus() {
+    public RoomTypeStatus getStatus() {
         return status;
     }
-
-    public void setAvailable() {
-        this.status = Status.AVAILABLE;
+    
+    public void setUsed() {
+        this.status = RoomTypeStatus.USED;
     }
     
-    public void setUnavailable() {
-        this.status = Status.UNAVAILABLE;
-    }
-    
-    public void setDisabled() {
-        this.status = Status.DISABLE;
+    public void setDisable() {
+        this.status = RoomTypeStatus.DISABLE;
     }
 
 

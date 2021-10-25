@@ -10,6 +10,7 @@ import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
+import enumeration.RoomTypeStatus;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -137,22 +138,21 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     @Override
     public void deleteRoomType(RoomType roomType) throws DeleteRoomTypeException {
         
-        
-        if(roomType.getRates().isEmpty() && roomType.getStatus() == Status.AVAILABLE)
-        {
-            em.remove(roomType);
-        }
-        else if (!roomType.getRates().isEmpty() && roomType.getStatus() == Status.AVAILABLE) 
+        if (!roomType.getRates().isEmpty())
         {
             List<Rate> rates = roomType.getRates();
             for(Rate rate : rates) {
                 em.remove(rate);
             }
+        }
+        
+        if(roomType.getStatus() == RoomTypeStatus.UNUSED)
+        {
             em.remove(roomType);
         }
-        else 
+        else if (roomType.getStatus() == RoomTypeStatus.USED) 
         {
-            roomType.setDisabled();
+            roomType.setDisable();
         }
     }
 
@@ -203,7 +203,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     @Override
     public void deleteRoom(Room room) {
-        if(room.getStatus() == Status.AVAILABLE)
+        if(room.getStatus() == RoomStatus.AVAILABLE)
         {
             em.remove(room);
         }
