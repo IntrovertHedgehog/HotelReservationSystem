@@ -51,6 +51,14 @@ public class ExceptionReport implements Serializable {
         this.allocation = allocation;
         this.status = ExceptionStatus.AUTOMATIC;
     }
+
+    public ExceptionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExceptionStatus status) {
+        this.status = status;
+    }
     
     public Long getReportId() {
         return reportId;
