@@ -48,6 +48,8 @@ public class RoomType implements Serializable {
     private String amenities;
     @OneToMany(mappedBy = "roomType")
     private List<Rate> rates;
+    @Column(nullable = false)
+    private Long quantityAvailable;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomTypeStatus status;
@@ -64,6 +66,7 @@ public class RoomType implements Serializable {
         this.bedsize = bedsize;
         this.capacity = capacity;
         this.amenities = amenities;
+        this.quantityAvailable = 0l;
         this.status = RoomTypeStatus.UNUSED;
     }
     
@@ -168,7 +171,19 @@ public class RoomType implements Serializable {
     public Long getRoomTypeId() {
         return roomTypeId;
     }
+    
+    public Long getQuantityAvailable() {
+        return quantityAvailable;
+    }
 
+    public void incrementQuantity() {
+        quantityAvailable++;
+    }
+    
+    public void decrementQuantity() {
+        quantityAvailable--;
+    }
+    
     public RoomTypeStatus getStatus() {
         return status;
     }

@@ -92,7 +92,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     }
     
     @Override
-    public List<Rate> ViewAllRates() {
+    public List<Rate> viewAllRates() {
         return em.createQuery("SELECT r FROM Rate r")
                 .getResultList();
     }

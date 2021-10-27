@@ -58,5 +58,5 @@ public interface RoomManagementSessionBeanLocal {
 
     public Boolean deleteRate(Long id);
 
-    public List<Rate> ViewAllRates();
+    public List<Rate> viewAllRates();
 }
