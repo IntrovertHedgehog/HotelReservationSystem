@@ -6,6 +6,7 @@
 package ejb.session.entity;
 
 import entity.user.Employee;
+import entity.user.Guest;
 import entity.user.Partner;
 import java.util.List;
 import javax.ejb.Local;
@@ -25,6 +26,10 @@ public interface AccountManagementSessionBeanLocal {
 
     public Long createEmployee(Employee employee);
 
-    public Employee LoginEmployee(String username, String password);
+    public Employee loginEmployee(String username, String password);
+    
+    public Partner loginPartner(String username, String password);
+    
+    public Guest loginGuest(String username, String password);
     
 }

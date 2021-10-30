@@ -94,6 +94,16 @@ public class Partner implements Serializable {
     public List<PartnerReservation> getReservations() {
         return reservations;
     }
+    
+    public void addReservation(PartnerReservation partnerReservation) {
+        if (partnerReservation.getPartner().equals(this) && !reservations.contains(partnerReservation)) {
+            reservations.add(partnerReservation);
+        }
+    }
+    
+    public void removeReservation(PartnerReservation partnerReservation) {
+        reservations.remove(partnerReservation);
+    }
 
     @Override
     public int hashCode() {

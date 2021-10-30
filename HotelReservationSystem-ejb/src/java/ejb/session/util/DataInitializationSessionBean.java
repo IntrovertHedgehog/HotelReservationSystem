@@ -16,8 +16,10 @@ import enumeration.BedSize;
 import enumeration.EmployeeType;
 import enumeration.RateType;
 import enumeration.RoomStatus;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -76,9 +78,9 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (rate.isEmpty()) {
-            roomManagementSessionBean.createRate(new Rate("expensive as fuck", em.find(RoomType.class, 1l), RateType.PEAK, 30.0, LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-            roomManagementSessionBean.createRate(new Rate("familial", em.find(RoomType.class, 2l), RateType.NORMAL, 20.0, LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-            roomManagementSessionBean.createRate(new Rate("cheap ass", em.find(RoomType.class, 3l), RateType.PROMOTION, 15.0, LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+            roomManagementSessionBean.createRate(new Rate("expensive as fuck", em.find(RoomType.class, 1l), RateType.PEAK, new BigDecimal("30.45"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+            roomManagementSessionBean.createRate(new Rate("familial", em.find(RoomType.class, 2l), RateType.NORMAL, new BigDecimal("20"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+            roomManagementSessionBean.createRate(new Rate("cheap ass", em.find(RoomType.class, 3l), RateType.PROMOTION, new BigDecimal("15"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
         }
         
         List<Partner> p = em.createQuery("SELECT p FROM Partner p")

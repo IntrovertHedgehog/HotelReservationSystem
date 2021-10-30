@@ -5,9 +5,13 @@
  */
 package entity.user;
 
+import entity.business.OnlineReservation;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,10 +24,13 @@ public class Guest extends Occupant implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
+    @OneToMany()
+    private List<OnlineReservation> onlineReservations;
     
 
     public Guest() {
         super();
+        this.onlineReservations = new ArrayList<>();
     }
 
     public Guest(String username, String password) {
@@ -51,7 +58,13 @@ public class Guest extends Occupant implements Serializable {
         }
     }
     
+    public List<OnlineReservation> getOnlineReservations() {
+        return onlineReservations;
+    }
     
+    public void addOnlineReservation() {
+        
+    }
     
     @Override
     public int hashCode() {

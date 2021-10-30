@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 /**
  *
  * @author brianlim
@@ -18,6 +20,9 @@ import javax.persistence.Entity;
 public class OnlineReservation extends Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Guest guest;
     
     public OnlineReservation() {
         super();
@@ -25,6 +30,11 @@ public class OnlineReservation extends Reservation implements Serializable {
 
     public OnlineReservation(RoomType roomType, Guest guest, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
         super(roomType, guest, rates, checkInDate, checkOutDate);
+        this.guest = guest;
+    }
+    
+    public Guest getGuest() {
+        return guest;
     }
 
     @Override

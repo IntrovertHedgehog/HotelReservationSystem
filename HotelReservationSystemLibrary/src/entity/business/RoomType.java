@@ -6,8 +6,12 @@
 package entity.business;
 
 import enumeration.BedSize;
+import enumeration.RateType;
 import enumeration.RoomTypeStatus;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -196,6 +200,36 @@ public class RoomType implements Serializable {
         this.status = RoomTypeStatus.DISABLE;
     }
 
+    public BigDecimal calculateWalkInRate(LocalDate checkInDate, LocalDate checkOutDate) {
+        Rate publishedrate = rates.stream()
+                .filter(r -> r.getRateType() == RateType.PUBLISHED)
+                .reduce((f, s) -> s)
+                .orElse(null);
+        
+        return publishedrate.getRatePerNight().multiply(new BigDecimal(ChronoUnit.DAYS.between(checkInDate, checkOutDate)));
+    }
+    
+    public BigDecimal calculateOnlineRate(LocalDate checkInDate, LocalDate checkOutDate) {
+        List<Rate> rateList = rates.stream()
+                .filter(r -> r.getRateType() != RateType.PUBLISHED && r.isApplicableFor(checkInDate, checkOutDate))
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+       
+        BigDecimal total = new BigDecimal("0").setScale(2);
+        for (LocalDate date = checkInDate; date.isBefore(checkOutDate); date = date.plusDays(1)) {
+            Rate rate = null;
+            for (Rate r : rateList) {
+                if (r.isApplicableFor(date)) {
+                    if (rate == null || r.compareTo(rate) < 0) {
+                        rate = r;
+                    }
+                }
+            }
+            
+            total = total.add(rate.getRatePerNight());
+        } 
+        
+        return total;
+    }
 
     @Override
     public int hashCode() {

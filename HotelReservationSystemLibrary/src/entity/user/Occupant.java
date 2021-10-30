@@ -52,6 +52,16 @@ public class Occupant implements Serializable {
         return reservations;
     }
     
+    public void addReservation(Reservation reservation) {
+        if (reservation.getOccupant().equals(this) && !this.reservations.contains(reservation)) {
+            this.reservations.add(reservation);
+        }
+    }
+    
+    public void removeReservation(Reservation reservation) {
+        this.reservations.remove(reservation);
+    }
+    
     /**
      * @return the passport
      */

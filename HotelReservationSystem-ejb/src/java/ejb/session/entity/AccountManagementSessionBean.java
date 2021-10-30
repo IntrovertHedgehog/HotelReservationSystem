@@ -6,6 +6,7 @@
 package ejb.session.entity;
 
 import entity.user.Employee;
+import entity.user.Guest;
 import entity.user.Partner;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -24,7 +25,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     
     
     @Override
-    public Employee LoginEmployee(String username, String password) {
+    public Employee loginEmployee(String username, String password) {
         Employee employee = (Employee) em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password")
                 .setParameter("username", username)
                 .setParameter("password", password)
@@ -58,5 +59,25 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     public List<Partner> viewAllPartners() {
         return em.createQuery("SELECT p FROM Partner p")
                 .getResultList();
+    }
+
+    @Override
+    public Partner loginPartner(String username, String password) {
+        Partner partner = (Partner) em.createQuery("SELECT p FROM Partner p WHERE p.username = :username AND p.password = :password")
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .getSingleResult();
+        
+        return partner;
+    }
+
+    @Override
+    public Guest loginGuest(String username, String password) {
+        Guest guest = (Guest) em.createQuery("SELECT g FROM Guest g WHERE g.username = :username AND g.password = :password")
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .getSingleResult();
+        
+        return guest;
     }
 }

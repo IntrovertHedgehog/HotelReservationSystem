@@ -45,6 +45,9 @@ public class Room implements Serializable {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.status = status;
+        if (status == RoomStatus.AVAILABLE) {
+            this.roomType.incrementQuantity();
+        }
     }
 
     /**
@@ -87,14 +90,23 @@ public class Room implements Serializable {
     }
 
     public void setAvailable() {
+        if (this.status != RoomStatus.AVAILABLE) {
+            this.roomType.incrementQuantity();
+        }
         this.status = RoomStatus.AVAILABLE;
     }
 
     public void setUnavailable() {
+        if (this.status == RoomStatus.AVAILABLE) {
+            this.roomType.decrementQuantity();
+        }
         this.status = RoomStatus.UNAVAILABLE;
     }
 
     public void setDisabled() {
+        if (this.status == RoomStatus.AVAILABLE) {
+            this.roomType.decrementQuantity();
+        }
         this.status = RoomStatus.DISABLE;
     }
 
@@ -105,7 +117,14 @@ public class Room implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        return getRoomId().equals(object);
+        if (!(object instanceof Room)) {
+            return false;
+        }
+        Room other = (Room) object;
+        if ((this.getRoomId() == null && other.getRoomId() != null) || (this.getRoomId() != null && !this.getRoomId().equals(other.getRoomId()))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
