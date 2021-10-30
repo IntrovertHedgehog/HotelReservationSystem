@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 /**
@@ -21,6 +23,7 @@ import javax.persistence.OneToMany;
  * @author Winter
  */
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Occupant implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +55,10 @@ public class Occupant implements Serializable {
         return reservations;
     }
     
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+    
     /**
      * @return the passport
      */
@@ -77,6 +84,13 @@ public class Occupant implements Serializable {
         return allocations;
     }
 
+    public void setAllocations(List<Allocation> allocations) {
+        this.allocations = allocations;
+    }
+
+    
+
+ 
     @Override
     public int hashCode() {
         int hash = 0;

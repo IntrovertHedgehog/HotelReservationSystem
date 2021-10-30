@@ -5,13 +5,13 @@
  */
 package ejb.session.task;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  *
- * @author Winter
+ * @author brianlim
  */
-@Remote
-public interface ReversationClientSessionBeanRemote {
+@Local
+public interface WalkInSessionBeanLocal {
     
 }

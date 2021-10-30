@@ -32,6 +32,12 @@ public class Guest extends Occupant implements Serializable {
         this.password = password;
     }
     
+    public Guest(String username, String password, String passport, String name) {
+        super(passport, name);
+        this.username = username;
+        this.password = password;
+    }
+    
     /**
      * @return the username
      */
@@ -43,6 +49,10 @@ public class Guest extends Occupant implements Serializable {
         if (this.password.equals(password)) {
             this.username = username;
         }
+    }
+    
+    public String getPassword() {
+        return this.password;
     }
 
     public void setPassword(String newPassword, String oldPassword) {

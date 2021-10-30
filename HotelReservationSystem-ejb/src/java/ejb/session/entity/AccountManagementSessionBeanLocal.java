@@ -6,9 +6,11 @@
 package ejb.session.entity;
 
 import entity.user.Employee;
+import entity.user.Guest;
 import entity.user.Partner;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.InvalidLoginCredentialsException;
 
 /**
  *
@@ -26,5 +28,9 @@ public interface AccountManagementSessionBeanLocal {
     public Long createEmployee(Employee employee);
 
     public Employee LoginEmployee(String username, String password);
+
+    public Guest guestLogin(String username, String password) throws InvalidLoginCredentialsException;
+
+    public String registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException;
     
 }
