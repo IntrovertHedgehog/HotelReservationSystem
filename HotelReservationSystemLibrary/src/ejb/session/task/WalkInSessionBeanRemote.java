@@ -22,7 +22,7 @@ public interface WalkInSessionBeanRemote {
 
     public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
 
-    public Long walkInReserveRoom(Integer indexOfRoomType, String passport, LocalDate checkInDate, LocalDate checkOutDate) throws NoMoreRoomException;
+    public Long walkInReserveRoom(Integer indexOfRoomType, Occupant occupant) throws NoMoreRoomException;
 
     public List<String> checkInGuest(LocalDateTime checkInDateTime, String passport);
     

@@ -74,6 +74,8 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
         if (partner == null) {
             throw new InvalidLoginCredentialsException("Invalid Login Credential! \n");
         }
+        
+        partner.getReservations();
         return partner;
     }
     public Guest guestLogin(String username, String password) throws InvalidLoginCredentialsException {

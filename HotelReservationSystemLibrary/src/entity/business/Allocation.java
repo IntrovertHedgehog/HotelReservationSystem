@@ -36,16 +36,9 @@ public class Allocation implements Serializable {
         @JoinColumn(name = "room_number", referencedColumnName = "roomNumber", nullable = false, updatable = false)
     })
     private Room room;
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false, updatable = false)
-    private Occupant occupant;
     @OneToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Reservation reservation;
-    @Column(nullable = false, updatable = false)
-    private LocalDate checkInDate;
-    @Column(nullable = false, updatable = false)
-    private LocalDate checkOutDate;
     @Column(updatable = false)
     private LocalTime checkInTime;
     @Column(updatable = false)
@@ -54,12 +47,10 @@ public class Allocation implements Serializable {
     public Allocation() {
     }
 
-    public Allocation(Room room, Occupant occupant, Reservation reservation, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Allocation(Room room, Reservation reservation) {
         this.room = room;
-        this.occupant = occupant;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
         this.reservation = reservation;
+        room.use();
     }
 
     public Long getAllocationId() {
@@ -77,7 +68,7 @@ public class Allocation implements Serializable {
      * @return the occupant
      */
     public Occupant getOccupant() {
-        return occupant;
+        return reservation.getOccupant();
     }
     
     public Reservation getReservation() {
@@ -88,14 +79,14 @@ public class Allocation implements Serializable {
      * @return the checkInDate
      */
     public LocalDate getCheckInDate() {
-        return checkInDate;
+        return reservation.getCheckInDate();
     }
 
     /**
      * @return the checkOutDate
      */
     public LocalDate getCheckOutDate() {
-        return checkOutDate;
+        return reservation.getCheckOutDate();
     }
 
     /**

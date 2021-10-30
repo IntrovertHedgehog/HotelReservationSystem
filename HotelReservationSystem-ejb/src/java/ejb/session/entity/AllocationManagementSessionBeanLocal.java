@@ -5,6 +5,7 @@
  */
 package ejb.session.entity;
 
+import entity.business.Reservation;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +14,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface AllocationManagementSessionBeanLocal {
-    
+    public Long createAllocation(Reservation reservation);
 }

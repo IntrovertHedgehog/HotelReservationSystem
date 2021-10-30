@@ -42,7 +42,7 @@ public class RoomType implements Serializable {
     private String name;
     @Column(length = 512)
     private String description;
-    @Column(nullable = false, precision = 0, scale = 2)
+    @Column(columnDefinition = "DECIMAL(38,2) NOT NULL")
     private BigDecimal roomSize;
     @Column(nullable = false)
     private BedSize bedsize;

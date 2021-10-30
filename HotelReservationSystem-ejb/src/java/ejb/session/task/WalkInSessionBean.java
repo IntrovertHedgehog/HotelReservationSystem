@@ -10,7 +10,6 @@ import entity.business.Allocation;
 import entity.business.RoomType;
 import entity.user.Occupant;
 import enumeration.ClientType;
-import enumeration.RoomStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -43,15 +42,12 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
     }
 
     @Override
-    public Long walkInReserveRoom(Integer indexOfRoomType, String passport, LocalDate checkInDate, LocalDate checkOutDate) throws NoMoreRoomException {
-        
-        Occupant occupant = em.find(Occupant.class, passport);
-        
-        //find the room type of the chosen room type to be reserved
-        RoomType roomType = (RoomType) this.searchResults.get(indexOfRoomType).getRoomType();
+    public Long walkInReserveRoom(Integer indexOfRoomType, Occupant occupant) throws NoMoreRoomException {
+        ReservationSearchResult target = searchResults.get(indexOfRoomType);
+        RoomType roomType = target.getRoomType();
+        LocalDate checkInDate = target.getCheckInDate();
+        LocalDate checkOutDate = target.getCheckOutDate();
 
-        //create the reservation
-        //associate the reservation with the occupant
         return reservationManagementSessionBean.createWalkInReservation(roomType, checkInDate, checkOutDate, occupant);
     }
 
@@ -64,8 +60,7 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
         List<String> rooms = new ArrayList<>();
         for (Allocation a : occupant.getAllocations()) {
             if (checkInDate.equals(a.getCheckInDate()) && 
-                    (checkInTime.isAfter(LocalTime.of(14, 0)) || 
-                    a.getRoom().getStatus() == RoomStatus.AVAILABLE)) {
+                    checkInTime.isAfter(LocalTime.of(14, 0))) {
                 a.checkIn(checkInTime);
                 rooms.add(a.getRoom().getRoomId().toString());
             }

@@ -114,7 +114,10 @@ public abstract class Reservation implements Serializable {
      * @param allocation the allocation to set
      */
     public void setAllocation(Allocation allocation) {
-        this.allocation = allocation;
+        if (allocation != null && allocation.getReservation().equals(this)) {
+            this.allocation = allocation;
+            this.isAllocated = true;
+        }
     }
 
     /**
@@ -127,8 +130,8 @@ public abstract class Reservation implements Serializable {
     /**
      * @param isAllocated the isAllocated to set
      */
-    public void setIsAllocated(Boolean isAllocated) {
-        this.isAllocated = isAllocated;
+    public void allocate() {
+        
     }
 
     @Override

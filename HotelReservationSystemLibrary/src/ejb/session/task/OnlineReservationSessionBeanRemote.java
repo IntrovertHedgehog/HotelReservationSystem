@@ -9,6 +9,7 @@ import entity.user.Guest;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.InvalidLoginCredentialsException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -19,9 +20,11 @@ import util.supplement.ReservationSearchResult;
 @Remote
 public interface OnlineReservationSessionBeanRemote {
 
-    public void loginGuest(Guest guest);
+    public Guest loginGuest(String username, String password) throws InvalidLoginCredentialsException;
     
     public List<ReservationSearchResult> onlineSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
 
-Long onlineReserveRoom(Integer indexOfRoomType, LocalDate checkInDate, LocalDate checkOutDate) throws NoMoreRoomException;    
+    public Long onlineReserveRoom(Integer indexOfRoomType) throws NoMoreRoomException;    
+
+    public void loginGuest(Guest guest);
 }

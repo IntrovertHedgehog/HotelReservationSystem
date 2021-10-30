@@ -30,12 +30,12 @@ public class Rate implements Serializable, Comparable<Rate> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rateId;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String rateName;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RateType rateType;
-    @Column(nullable = false, precision = 0, scale = 2)
+    @Column(columnDefinition = "DECIMAL(38, 2) NOT NULL")
     private BigDecimal ratePerNight;
     @Column(columnDefinition = "DATE NOT NULL DEFAULT '0000-01-01'")
     private LocalDate periodStart = LocalDate.parse("0000-01-01");

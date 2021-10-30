@@ -18,8 +18,8 @@ import enumeration.RateType;
 import enumeration.RoomStatus;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -64,31 +64,33 @@ public class DataInitializationSessionBean {
             roomManagementSessionBean.createNewRoomType("Trip", "Convenient", new BigDecimal("30.0"), BedSize.TWIN, 2l, "good for short trip");
         }
         
+        List<RoomType> roomTypelist = new ArrayList<>();
+        roomTypelist.add(em.find(RoomType.class, 1l));
+        roomTypelist.add(em.find(RoomType.class, 2l));
+        roomTypelist.add(em.find(RoomType.class, 3l));
+        
         List<Room> r = (List<Room>) em.createQuery("SELECT r FROM Room r")
                 .setMaxResults(1)
                 .getResultList();
         if (r.isEmpty()) {
-            roomManagementSessionBean.createNewRoom(1l , 1l, em.find(RoomType.class, 1l), RoomStatus.AVAILABLE);
-            roomManagementSessionBean.createNewRoom(2l , 2l, em.find(RoomType.class, 2l), RoomStatus.AVAILABLE);
-            roomManagementSessionBean.createNewRoom(2l , 4l, em.find(RoomType.class, 2l), RoomStatus.AVAILABLE);
-            roomManagementSessionBean.createNewRoom(3l , 3l, em.find(RoomType.class, 3l), RoomStatus.AVAILABLE);
+            for (long i = 1l ; i < 4l; i++) {
+                RoomType roTy = roomTypelist.get((int) i);
+                roomManagementSessionBean.createNewRoom(i , 1l, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(i , 2l, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(i , 3l, roTy, RoomStatus.AVAILABLE);
+            }
         }
         
         List<Rate> rate = (List<Rate>) em.createQuery("SELECT r FROM Rate r")
                 .setMaxResults(1)
                 .getResultList();
         if (rate.isEmpty()) {
-            roomManagementSessionBean.createRate(new Rate("expensive as fuck", em.find(RoomType.class, 1l), RateType.PEAK, new BigDecimal("30.45"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-            roomManagementSessionBean.createRate(new Rate("familial", em.find(RoomType.class, 2l), RateType.NORMAL, new BigDecimal("20"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-            roomManagementSessionBean.createRate(new Rate("cheap ass", em.find(RoomType.class, 3l), RateType.PROMOTION, new BigDecimal("15"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-        }
-        
-        List<Partner> p = em.createQuery("SELECT p FROM Partner p")
-                .setMaxResults(1)
-                .getResultList();
-        if (p.isEmpty()) {
-            accountManagementSessionBean.createPartner(new Partner("Hexico", "hexico", "password"));
-            accountManagementSessionBean.createPartner(new Partner("Metro", "metro", "password"));
+            for (RoomType roTy : roomTypelist) {
+                roomManagementSessionBean.createRate(new Rate("walk-in rate", roTy, RateType.PUBLISHED, new BigDecimal("20"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+                roomManagementSessionBean.createRate(new Rate("online rate", roTy, RateType.NORMAL, new BigDecimal("30"), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-10")));
+                roomManagementSessionBean.createRate(new Rate("peak price", roTy, RateType.PEAK, new BigDecimal("40"), LocalDate.parse("2021-12-20"), LocalDate.parse("2021-12-30")));
+                roomManagementSessionBean.createRate(new Rate("cheap ass", roTy, RateType.PROMOTION, new BigDecimal("10"), LocalDate.parse("2021-12-12"), LocalDate.parse("2021-12-31")));
+            }
         }
     }
 }

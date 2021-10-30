@@ -205,7 +205,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     @Override
     public void deleteRoom(Room room) {
-        if(room.getStatus() == RoomStatus.AVAILABLE)
+        if(!room.isUsed())
         {
             em.remove(room);
         }

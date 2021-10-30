@@ -5,20 +5,18 @@
  */
 package ejb.session.task;
 
+import ejb.session.entity.AccountManagementSessionBeanLocal;
 import ejb.session.entity.ReservationManagementSessionBeanLocal;
-import entity.business.Reservation;
 import entity.business.RoomType;
-import entity.business.WalkInReservation;
 import entity.user.Guest;
 import enumeration.ClientType;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import util.exception.InvalidLoginCredentialsException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -30,11 +28,14 @@ import util.supplement.ReservationSearchResult;
 public class OnlineReservationSessionBean implements OnlineReservationSessionBeanRemote {
 
     @EJB
+    private AccountManagementSessionBeanLocal accountManagementSessionBean;
+
+    @EJB
     private ReservationManagementSessionBeanLocal reservationManagementSessionBean;
 
+    private List<ReservationSearchResult> searchResults;
     @PersistenceContext(unitName = "HotelReservationSystem-PU")
     private EntityManager em;
-    private List<ReservationSearchResult> searchResults;
     private Guest guest;
 
     @Override
@@ -43,13 +44,21 @@ public class OnlineReservationSessionBean implements OnlineReservationSessionBea
     }
 
     @Override
-    public Long onlineReserveRoom(Integer indexOfRoomType, LocalDate checkInDate, LocalDate checkOutDate) throws NoMoreRoomException {
-        RoomType roomType = (RoomType) this.searchResults.get(indexOfRoomType).getRoomType();
+    public Long onlineReserveRoom(Integer indexOfRoomType) throws NoMoreRoomException {
+        ReservationSearchResult target = searchResults.get(indexOfRoomType);
+        RoomType roomType = target.getRoomType();
+        LocalDate checkInDate = target.getCheckInDate();
+        LocalDate checkOutDate = target.getCheckOutDate();
         return reservationManagementSessionBean.createOnlineReservation(roomType, checkInDate, checkOutDate, guest);
     }
 
     @Override
+    public Guest loginGuest(String username, String password) throws InvalidLoginCredentialsException {
+        return this.guest = accountManagementSessionBean.guestLogin(username, password);
+    }
+    
+    @Override
     public void loginGuest(Guest guest) {
-       this.guest = em.merge(guest);
+        this.guest = em.merge(guest);
     }
 }
