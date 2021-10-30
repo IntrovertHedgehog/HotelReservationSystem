@@ -12,6 +12,7 @@ import entity.business.RoomType;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
 import enumeration.RoomTypeStatus;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -94,7 +95,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     }
 
     @Override
-    public Long createNewRoomType(String name, String description, Double size, BedSize bedSize, Long capacity, String amenities) {
+    public Long createNewRoomType(String name, String description, BigDecimal size, BedSize bedSize, Long capacity, String amenities) {
         
         RoomType newRoomType = new RoomType(name, description, size, bedSize, capacity, amenities);
         

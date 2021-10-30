@@ -88,7 +88,7 @@ public class Room implements Serializable {
     public RoomStatus getStatus() {
         return status;
     }
-
+    
     public void setAvailable() {
         if (this.status != RoomStatus.AVAILABLE) {
             this.roomType.incrementQuantity();

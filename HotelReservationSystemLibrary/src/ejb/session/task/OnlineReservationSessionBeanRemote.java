@@ -5,9 +5,12 @@
  */
 package ejb.session.task;
 
+import entity.user.Guest;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.NoMoreRoomException;
+import util.supplement.ReservationSearchResult;
 
 /**
  *
@@ -16,8 +19,9 @@ import javax.ejb.Remote;
 @Remote
 public interface OnlineReservationSessionBeanRemote {
 
-    public List<Object[]> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
-
-    public Long walkInReserveRoom(Integer indexOfRoomType, String username, LocalDate checkInDate, LocalDate checkOutDate);
+    public void loginGuest(Guest guest);
     
+    public List<ReservationSearchResult> onlineSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
+
+Long onlineReserveRoom(Integer indexOfRoomType, LocalDate checkInDate, LocalDate checkOutDate) throws NoMoreRoomException;    
 }

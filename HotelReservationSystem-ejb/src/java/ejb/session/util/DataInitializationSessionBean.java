@@ -59,9 +59,9 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (rt.isEmpty()) {
-            roomManagementSessionBean.createNewRoomType("Deluxe", "very luxury", 40.0, BedSize.KING, 2l, "everything you want");
-            roomManagementSessionBean.createNewRoomType("Family", "big", 60.0, BedSize.QUEEN, 3l, "TV and PS");
-            roomManagementSessionBean.createNewRoomType("Trip", "Convenient", 3.0, BedSize.TWIN, 2l, "good for short trip");
+            roomManagementSessionBean.createNewRoomType("Deluxe", "very luxury", new BigDecimal("40.0"), BedSize.KING, 2l, "everything you want");
+            roomManagementSessionBean.createNewRoomType("Family", "big",new BigDecimal("30.0"), BedSize.QUEEN, 3l, "TV and PS");
+            roomManagementSessionBean.createNewRoomType("Trip", "Convenient", new BigDecimal("30.0"), BedSize.TWIN, 2l, "good for short trip");
         }
         
         List<Room> r = (List<Room>) em.createQuery("SELECT r FROM Room r")

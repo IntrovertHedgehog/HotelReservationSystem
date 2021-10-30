@@ -42,8 +42,8 @@ public class RoomType implements Serializable {
     private String name;
     @Column(length = 512)
     private String description;
-    @Column(nullable = false)
-    private Double roomSize;
+    @Column(nullable = false, precision = 0, scale = 2)
+    private BigDecimal roomSize;
     @Column(nullable = false)
     private BedSize bedsize;
     @Column(nullable = false)
@@ -62,7 +62,7 @@ public class RoomType implements Serializable {
         rates = new ArrayList<>();
     }
 
-    public RoomType(String name, String description, Double size, BedSize bedsize, Long capacity, String amenities) {
+    public RoomType(String name, String description, BigDecimal size, BedSize bedsize, Long capacity, String amenities) {
         this();
         this.name = name;
         this.description = description;
@@ -107,14 +107,14 @@ public class RoomType implements Serializable {
     /**
      * @return the roomSize
      */
-    public Double getRoomSize() {
+    public BigDecimal getRoomSize() {
         return roomSize;
     }
 
     /**
      * @param roomSize the roomSize to set
      */
-    public void setRoomSize(Double roomSize) {
+    public void setRoomSize(BigDecimal roomSize) {
         this.roomSize = roomSize;
     }
 

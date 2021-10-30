@@ -21,6 +21,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.GuestNotFoundException;
+import util.exception.NoMoreRoomException;
 import util.exception.PartnerNotFoundException;
 import util.supplement.ReservationSearchResult;
 
@@ -63,7 +64,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     @Override
     public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) {
         List<ReservationSearchResult> results = new ArrayList<>();
-        List<Object[]> rawResult = em.createQuery("SELECT rt, rt.quantityAvailable - COUNT(r) FROM Reservation r JOIN r.roomType rt WHERE (r.checkInDate <= :checkInDate AND r.checkOutDate > :checkInDate) OR (:checkInDate <= r.checkInDate AND :checkOutDate > r.checkInDate) GROUP BY rt")
+        List<Object[]> rawResult = em.createQuery("SELECT rt, rt.quantityAvailable - COUNT(r) FROM Reservation r JOIN r.roomType rt WHERE r.checkInDate < :checkOutDate AND r.checkOutDate > :checkInDate GROUP BY rt")
                 .setParameter("checkInDate", checkInDate)
                 .setParameter("checkOutDate", checkOutDate)
                 .getResultList();
@@ -75,20 +76,30 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     }
 
     @Override
-    public void createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest) {
+    public Long createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest) throws NoMoreRoomException{
         OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
         em.persist(onlineReservation);
+        em.flush();
+        guest.addOnlineReservation(onlineReservation);
+        return onlineReservation.getReservationId();
     }
 
     @Override
-    public void createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) {
+    public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) throws NoMoreRoomException{
         WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate);
         em.persist(walkInReservation);
+        em.flush();
+        occupant.addReservation(walkInReservation);
+        return walkInReservation.getReservationId();
     }
 
     @Override
-    public void createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant) {
+    public Long createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant) throws NoMoreRoomException{
         PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);
         em.persist(partnerReservation);
+        em.flush();
+        partner.addReservation(partnerReservation);
+        occupant.addReservation(partnerReservation);
+        return partnerReservation.getReservationId();
     }
 }

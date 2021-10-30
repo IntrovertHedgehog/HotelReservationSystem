@@ -35,7 +35,7 @@ public class Rate implements Serializable, Comparable<Rate> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RateType rateType;
-    @Column(nullable = false, scale = 2)
+    @Column(nullable = false, precision = 0, scale = 2)
     private BigDecimal ratePerNight;
     @Column(columnDefinition = "DATE NOT NULL DEFAULT '0000-01-01'")
     private LocalDate periodStart = LocalDate.parse("0000-01-01");

@@ -10,6 +10,7 @@ import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Local;
 import keyclass.RoomId;
@@ -26,7 +27,7 @@ import util.exception.UpdateRoomTypeException;
 @Local
 public interface RoomManagementSessionBeanLocal {
     
-    public Long createNewRoomType(String name, String description, Double size, BedSize bedSize, Long capacity, String amenities);
+    public Long createNewRoomType(String name, String description, BigDecimal size, BedSize bedSize, Long capacity, String amenities);
 
     public RoomType viewRoomTypeDetails(Long roomTypeId);
 

@@ -7,8 +7,11 @@ package ejb.session.task;
 
 import entity.user.Occupant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.NoMoreRoomException;
+import util.supplement.ReservationSearchResult;
 
 /**
  *
@@ -17,12 +20,12 @@ import javax.ejb.Remote;
 @Remote
 public interface WalkInSessionBeanRemote {
 
-    public List<Object[]> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
+    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
 
-    public Long walkInReserveRoom(Integer indexOfRoomType, String passport, String name, LocalDate checkInDate, LocalDate checkOutDate);
+    public Long walkInReserveRoom(Integer indexOfRoomType, String passport, LocalDate checkInDate, LocalDate checkOutDate) throws NoMoreRoomException;
 
-    public List<String> checkInGuest(LocalDate checkInDate, Occupant occupant);
-
-    public void checkOutGuest(LocalDate checkOutDate, Occupant occupant);
+    public List<String> checkInGuest(LocalDateTime checkInDateTime, String passport);
+    
+    public void checkOutGuest(LocalDateTime checkOutDateTime, String passport);
     
 }

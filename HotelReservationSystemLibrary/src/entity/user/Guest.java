@@ -75,11 +75,13 @@ public class Guest extends Occupant implements Serializable {
     public void addOnlineReservation(OnlineReservation onlineReservation) {
         if (onlineReservation.getGuest().equals(this) && !this.onlineReservations.contains(onlineReservation)) {
             this.onlineReservations.add(onlineReservation);
+            super.addReservation(onlineReservation);
         }
     }
     
     public void removeOnlineReservation(OnlineReservation onlineReservation) {
         this.onlineReservations.remove(onlineReservation);
+        super.removeReservation(onlineReservation);
     }
     
     @Override
