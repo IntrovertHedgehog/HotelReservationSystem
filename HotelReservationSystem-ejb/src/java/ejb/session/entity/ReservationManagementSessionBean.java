@@ -26,7 +26,7 @@ import util.supplement.ReservationSearchResult;
 
 /**
  *
- * @author Winter
+ * @author brianlim
  */
 @Stateless
 public class ReservationManagementSessionBean implements ReservationManagementSessionBeanRemote, ReservationManagementSessionBeanLocal {

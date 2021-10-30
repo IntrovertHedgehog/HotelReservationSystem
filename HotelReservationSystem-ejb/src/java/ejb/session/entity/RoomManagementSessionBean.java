@@ -5,17 +5,13 @@
  */
 package ejb.session.entity;
 
-import entity.business.Allocation;
 import entity.business.ExceptionReport;
 import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
-import entity.user.Occupant;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
 import enumeration.RoomTypeStatus;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -243,36 +239,5 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     public List<ExceptionReport> viewRoomAllocationExceptionReport() {
         Query query = em.createQuery("SELECT er FROM ExceptionReport er");
         return query.getResultList();
-    }
-   
-    
-    public void walkInSearchRoom(String passport, String name, LocalDate checkInDate, LocalDate checkOutDate) {
-        
-        
-    }
-    
-    public void walkInReserveRoom(String passport, String name, LocalDate checkInDate, LocalDate checkOutDate) {
-        
-    }
-    
-    public List<String> checkInGuest(LocalDate checkInDate, Occupant occupant) {
-        
-        List<String> rooms = new ArrayList<>();
-        if(!occupant.getAllocations().isEmpty()) {
-            for(Allocation a : occupant.getAllocations()) {
-                if(checkInDate.equals(a.getCheckInDate())) {
-                    rooms.add(a.getRoom().getRoomId().toString());
-                }
-            }
-        }
-        if(!occupant.getReservations().isEmpty()) {
-            
-        }
-        
-        return rooms;
-    }
-    
-    public void checkOutGuest(LocalDate checkOutDate, Occupant occupant) {
-        
     }
 }
