@@ -5,7 +5,15 @@
  */
 package ejb.session.entity;
 
+import entity.business.OnlineReservation;
+import entity.business.PartnerReservation;
+import enumeration.ClientType;
+import java.time.LocalDate;
+import java.util.List;
 import javax.ejb.Remote;
+import util.exception.GuestNotFoundException;
+import util.exception.PartnerNotFoundException;
+import util.supplement.ReservationSearchResult;
 
 /**
  *
@@ -13,5 +21,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface ReservationManagementSessionBeanRemote {
-    
+    public List<OnlineReservation> viewAllReservationByGuest(Long guestId) throws GuestNotFoundException ;
+    public List<PartnerReservation> viewAllReservationByPartner(Long partnerId) throws PartnerNotFoundException;
+    public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType);
 }

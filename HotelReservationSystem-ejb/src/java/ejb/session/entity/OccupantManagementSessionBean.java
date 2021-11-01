@@ -6,7 +6,12 @@
 package ejb.session.entity;
 
 import ejb.session.entity.OccupantManagementSessionBeanRemote;
+import entity.user.Occupant;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import util.exception.OccupantAlreadyExistsException;
+import util.exception.OccupantNotFoundException;
 
 /**
  *
@@ -15,6 +20,28 @@ import javax.ejb.Stateless;
 @Stateless
 public class OccupantManagementSessionBean implements OccupantManagementSessionBeanRemote {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @PersistenceContext(unitName = "HotelReservationSystem-PU")
+    private EntityManager em;
+
+    @Override
+    public Occupant retrieveOccupant(String passport) throws OccupantNotFoundException {
+        Occupant occupant = em.find(Occupant.class, passport);
+        
+        if (occupant == null) {
+            throw new OccupantNotFoundException("Occupant with is passport is not found");
+        }
+        
+        occupant.getReservations();
+        occupant.getAllocations();
+        return occupant;
+    }
+
+    @Override
+    public Occupant createOccupant(Occupant occupant) throws OccupantAlreadyExistsException {
+        em.persist(occupant);
+        occupant.getReservations();
+        occupant.getAllocations();
+        em.flush();
+        return occupant;
+    }
 }

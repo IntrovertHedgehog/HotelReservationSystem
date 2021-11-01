@@ -5,6 +5,7 @@
  */
 package ejb.session.entity;
 
+import ejb.session.task.AllocatingBotSessionBeanLocal;
 import entity.business.OnlineReservation;
 import entity.business.PartnerReservation;
 import entity.business.Reservation;
@@ -15,8 +16,11 @@ import entity.user.Occupant;
 import entity.user.Partner;
 import enumeration.ClientType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,14 +36,11 @@ import util.supplement.ReservationSearchResult;
 @Stateless
 public class ReservationManagementSessionBean implements ReservationManagementSessionBeanRemote, ReservationManagementSessionBeanLocal {
 
+    @EJB
+    private AllocatingBotSessionBeanLocal allocatingBotSessionBean;
+
     @PersistenceContext(unitName = "HotelReservationSystem-PU")
     private EntityManager em;
-
-    @Override
-    public List<Reservation> viewUnallocatedReservation() {
-        return em.createQuery("SELECT r FROM Reservation r WHERE r.isAllocated = false")
-                .getResultList();
-    }
 
     @Override
     public List<OnlineReservation> viewAllReservationByGuest(Long guestId) throws GuestNotFoundException {
@@ -74,6 +75,15 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         
         return results;
     }
+    
+    private void sameDayCheckIn(Reservation reservation) throws NoMoreRoomException{
+        if (reservation.getCheckInDate().equals(LocalDate.now()) && LocalTime.now().isAfter(LocalTime.of(2,0))) {
+            Long allocationId = allocatingBotSessionBean.allocate(reservation);
+            if (allocationId == null) {
+                throw new NoMoreRoomException("No more room for this reservation");
+            }
+        }
+    }
 
     @Override
     public Long createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest) throws NoMoreRoomException{
@@ -81,6 +91,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         em.persist(onlineReservation);
         em.flush();
         guest.addOnlineReservation(onlineReservation);
+        sameDayCheckIn(onlineReservation);
         return onlineReservation.getReservationId();
     }
 
@@ -90,6 +101,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         em.persist(walkInReservation);
         em.flush();
         occupant.addReservation(walkInReservation);
+        sameDayCheckIn(walkInReservation);
         return walkInReservation.getReservationId();
     }
 
@@ -100,6 +112,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         em.flush();
         partner.addReservation(partnerReservation);
         occupant.addReservation(partnerReservation);
+        sameDayCheckIn(partnerReservation);
         return partnerReservation.getReservationId();
     }
 }

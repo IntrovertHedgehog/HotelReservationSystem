@@ -5,7 +5,10 @@
  */
 package ejb.session.entity;
 
+import util.exception.OccupantAlreadyExistsException;
+import entity.user.Occupant;
 import javax.ejb.Remote;
+import util.exception.OccupantNotFoundException;
 
 /**
  *
@@ -13,5 +16,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface OccupantManagementSessionBeanRemote {
-    
+    public Occupant retrieveOccupant(String passport) throws OccupantNotFoundException;
+
+    public Occupant createOccupant(Occupant occupant) throws OccupantAlreadyExistsException;
 }

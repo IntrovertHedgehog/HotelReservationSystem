@@ -5,6 +5,7 @@
  */
 package ejb.session.entity;
 
+import entity.business.Reservation;
 import javax.ejb.Stateless;
 
 /**
@@ -14,6 +15,10 @@ import javax.ejb.Stateless;
 @Stateless
 public class AllocationManagementSessionBean implements AllocationManagementSessionBeanRemote, AllocationManagementSessionBeanLocal {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @Override
+    public Long createAllocation(Reservation reservation) {
+        return 2l;
+    }
+
+    
 }

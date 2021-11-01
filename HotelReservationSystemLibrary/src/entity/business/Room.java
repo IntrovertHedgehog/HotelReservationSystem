@@ -36,6 +36,8 @@ public class Room implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private RoomType roomType;
+    @Column(nullable = false)
+    private Boolean isUsed;
 
     public Room() {
     }
@@ -48,6 +50,7 @@ public class Room implements Serializable {
         if (status == RoomStatus.AVAILABLE) {
             this.roomType.incrementQuantity();
         }
+        this.isUsed = false;
     }
 
     /**
@@ -108,6 +111,14 @@ public class Room implements Serializable {
             this.roomType.decrementQuantity();
         }
         this.status = RoomStatus.DISABLE;
+    }
+    
+    public Boolean isUsed() {
+        return isUsed;
+    }
+    
+    public void use() {
+        this.isUsed = true;
     }
 
     @Override
