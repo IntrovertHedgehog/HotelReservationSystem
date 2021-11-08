@@ -5,6 +5,10 @@
  */
 package ejb.session.entity;
 
+import entity.business.Allocation;
+import entity.business.ExceptionReport;
+import entity.business.Reservation;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +17,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface ExceptionReportManagementSessionBeanLocal {
-    
+    public List<ExceptionReport> getAllReports();
+    public void createReports(Reservation reservation);
+    public void createReports(Reservation reservation, Allocation allocation);
 }

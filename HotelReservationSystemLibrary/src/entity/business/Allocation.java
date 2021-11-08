@@ -39,6 +39,9 @@ public class Allocation implements Serializable {
     @OneToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Reservation reservation;
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false, updatable = false)
+    private Occupant occupant;
     @Column(updatable = false)
     private LocalTime checkInTime;
     @Column(updatable = false)
@@ -50,6 +53,7 @@ public class Allocation implements Serializable {
     public Allocation(Room room, Reservation reservation) {
         this.room = room;
         this.reservation = reservation;
+        this.occupant = reservation.getOccupant();
         room.use();
     }
 
@@ -68,7 +72,7 @@ public class Allocation implements Serializable {
      * @return the occupant
      */
     public Occupant getOccupant() {
-        return reservation.getOccupant();
+        return occupant;
     }
     
     public Reservation getReservation() {

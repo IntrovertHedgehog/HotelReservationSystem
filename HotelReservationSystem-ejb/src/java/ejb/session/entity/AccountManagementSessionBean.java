@@ -11,6 +11,7 @@ import entity.user.Partner;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.InvalidLoginCredentialsException;
@@ -98,27 +99,21 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     }
 
     @Override
-    public String registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException {
+    public void registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException {
         //Occupant occupant = em.find(Occupant.class, passport);
         Guest newGuest = new Guest(username, password, passport, name);
         Query query = em.createQuery("SELECT g FROM Guest g WHERE g.username = :inUsername");
         query.setParameter("inUsername", username);
-        Guest oldGuest = (Guest) query.getSingleResult();
         
-        if (oldGuest == null) {
-            /*
-            if (occupant != null) {
-                newGuest.setAllocations(occupant.getAllocations());
-                newGuest.setReservations(occupant.getReservations());
+        try {
+            Guest oldGuest = (Guest) query.getSingleResult();
+            if (oldGuest != null) {
+                throw new InvalidLoginCredentialsException("The username is taken!");
             }
-            */
+        } catch (NoResultException ex) {
             em.persist(newGuest);
             em.flush();
-            
-        } else {
-            throw new InvalidLoginCredentialsException("The username is taken!");
         }
-        return newGuest.getPassport();
     }
     
  

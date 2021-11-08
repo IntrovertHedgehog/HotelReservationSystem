@@ -11,7 +11,7 @@ import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
 import entity.user.Employee;
-import entity.user.Partner;
+import entity.user.Guest;
 import enumeration.BedSize;
 import enumeration.EmployeeType;
 import enumeration.RateType;
@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -27,6 +29,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.InvalidLoginCredentialsException;
 
 /**
  *
@@ -74,7 +77,7 @@ public class DataInitializationSessionBean {
                 .getResultList();
         if (r.isEmpty()) {
             for (long i = 1l ; i < 4l; i++) {
-                RoomType roTy = roomTypelist.get((int) i);
+                RoomType roTy = roomTypelist.get((int) i-1);
                 roomManagementSessionBean.createNewRoom(i , 1l, roTy, RoomStatus.AVAILABLE);
                 roomManagementSessionBean.createNewRoom(i , 2l, roTy, RoomStatus.AVAILABLE);
                 roomManagementSessionBean.createNewRoom(i , 3l, roTy, RoomStatus.AVAILABLE);
@@ -90,6 +93,18 @@ public class DataInitializationSessionBean {
                 roomManagementSessionBean.createRate(new Rate("online rate", roTy, RateType.NORMAL, new BigDecimal("30"), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-10")));
                 roomManagementSessionBean.createRate(new Rate("peak price", roTy, RateType.PEAK, new BigDecimal("40"), LocalDate.parse("2021-12-20"), LocalDate.parse("2021-12-30")));
                 roomManagementSessionBean.createRate(new Rate("cheap ass", roTy, RateType.PROMOTION, new BigDecimal("10"), LocalDate.parse("2021-12-12"), LocalDate.parse("2021-12-31")));
+            }
+        }
+        
+        List<Guest> guests = em.createQuery("SELECT g FROM Guest g")
+                .getResultList();
+        if (guests.isEmpty()) {
+            try {
+                accountManagementSessionBean.registerAsGuest("guest1", "password", "PPT1101", "Gus Johnson");
+                accountManagementSessionBean.registerAsGuest("guest2", "password", "PPT1102", "Derek Morrison");
+                accountManagementSessionBean.registerAsGuest("guest3", "password", "PPT1103", "Richard NoName");
+            } catch (InvalidLoginCredentialsException ex) {
+                ex.printStackTrace();
             }
         }
     }

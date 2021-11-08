@@ -27,22 +27,16 @@ public class Guest extends Occupant implements Serializable {
     @OneToMany()
     private List<OnlineReservation> onlineReservations;
     
-
     public Guest() {
         super();
         this.onlineReservations = new ArrayList<>();
-    }
-
-    public Guest(String username, String password) {
-        this();
-        this.username = username;
-        this.password = password;
     }
     
     public Guest(String username, String password, String passport, String name) {
         super(passport, name);
         this.username = username;
         this.password = password;
+        this.onlineReservations = new ArrayList<>();
     }
     
     /**

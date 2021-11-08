@@ -11,8 +11,11 @@ import ejb.session.entity.OccupantManagementSessionBeanRemote;
 import ejb.session.entity.ReservationManagementSessionBeanRemote;
 import ejb.session.entity.RoomManagementSessionBeanRemote;
 import ejb.session.task.WalkInSessionBeanRemote;
+import entity.user.Employee;
+import enumeration.EmployeeType;
 import java.util.Scanner;
 import javax.ejb.EJB;
+import util.exception.InvalidLoginCredentialsException;
 
 /**
  *
@@ -45,26 +48,58 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int ip = 0;
         
-        while (ip < 1 && ip > 2) {
+        OUTER:
+        while (ip < 1 || ip > 2) {
             System.out.println("****** Hotel Reservation Management Client ******");
             System.out.println("1. Login");
             System.out.println("2. Exit");
-            
+            System.out.print("> ");
             ip = sc.nextInt();
-            
             switch (ip) {
                 case 1:
                     login();
                     break;
                 case 2:
-                    break;
+                    break OUTER;
                 default:
+                    System.out.println("Invalid command, please try again!\n");
                     break;
             }
         }
     }
     
     public static void login() {
+        Scanner sc = new Scanner(System.in);
+        String username = "";
+        String password = "";
         
+        System.out.println("****** Login ******");
+        System.out.print("username> ");
+        username = sc.nextLine().trim();
+        System.out.print("password> ");
+        password = sc.nextLine().trim();
+        
+        try {
+            Employee employee = accountManagementSessionBean.loginEmployee(username, password);
+            System.out.println("=====> Successful Login!\n");
+            EmployeeType empType = employee.getEmployeeType();
+            
+            if (null != empType) switch (empType) {
+                case SYSTEM_ADMINISTRATOR:
+                    SystemAdminOperation session = new SystemAdminOperation(accountManagementSessionBean);
+                    session.start();
+                    break;
+                case OPERATIONS_MANAGER:
+                    break;
+                case SALES_MANAGER:
+                    break;
+                case GUEST_RELATION_OFFICER:
+                    break;
+                default:
+                    break;
+            }
+        } catch (InvalidLoginCredentialsException ex) {
+            ex.printStackTrace();
+        }
     }
 }

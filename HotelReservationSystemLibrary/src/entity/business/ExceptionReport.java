@@ -31,10 +31,11 @@ public class ExceptionReport implements Serializable {
     private Long reportId;
     @Enumerated(EnumType.STRING)
     private ExceptionStatus status;
-    @OneToOne(optional = false)
-    @JoinColumn(nullable = false, updatable = false)
+    @OneToOne
+    @JoinColumn(unique = true, nullable = false, updatable = false)
     private Reservation reservation;
     @OneToOne
+    @JoinColumn(unique = true)
     private Allocation allocation;
     
 
