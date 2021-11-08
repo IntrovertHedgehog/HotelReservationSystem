@@ -58,8 +58,7 @@ public class MainApp {
 
             while (response < 1 || response > 4) {
                 System.out.println(" > ");
-                response = sc.nextInt();
-                sc.nextLine();
+                response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
                     guestLogin();
@@ -101,8 +100,7 @@ public class MainApp {
         
         while (response < 1 || response > 4) {
                 System.out.println(" > ");
-                response = sc.nextInt();
-                sc.nextLine();
+                response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
                     searchHotelRoom();
@@ -168,7 +166,7 @@ public class MainApp {
         System.out.println("Enter check out date (yyyy-MM-dd) > ");
         LocalDate dateEnd = LocalDate.parse(sc.nextLine());
         
-        List<ReservationSearchResult> results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateEnd, dateStart);
+        List<ReservationSearchResult> results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateStart, dateEnd);
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: Search Rooms ***\n");
         System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
@@ -184,8 +182,7 @@ public class MainApp {
         System.out.println("2. Exit\n");
         Integer response = 0;
         while (response < 1 || response > 2) {
-            response = sc.nextInt();
-            sc.nextLine();
+            response = Integer.parseInt(sc.nextLine());
             
             if(response == 1) {
                 reserveHotelRoom();
@@ -201,7 +198,7 @@ public class MainApp {
 
     public void reserveHotelRoom() {
         System.out.println("Enter Index of Room Type");
-        Integer index = sc.nextInt();
+        Integer index = Integer.parseInt(sc.nextLine());
         Long reservationId;
         try {
             reservationId = this.onlineReservationSessionBeanRemote.onlineReserveRoom(index);
@@ -216,7 +213,7 @@ public class MainApp {
 
     public void viewMyReservationDetails() {
         System.out.println("Enter the S/N of reservation > ");
-        Integer serialNum = sc.nextInt();
+        Integer serialNum = Integer.parseInt(sc.nextLine());
         OnlineReservation r;
         try {
             r =this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport()).get(serialNum);

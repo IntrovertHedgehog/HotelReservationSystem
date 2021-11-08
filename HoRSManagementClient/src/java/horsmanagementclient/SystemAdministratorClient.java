@@ -45,7 +45,7 @@ public class SystemAdministratorClient {
             response = 0;
 
             while (response < 1 || response > 5) {
-                System.out.println(" > ");
+                System.out.print(" > ");
                 response = Integer.parseInt(sc.nextLine());
                 
 
@@ -57,14 +57,36 @@ public class SystemAdministratorClient {
                     System.out.print("Enter new employee password > ");
                     String password = sc.nextLine().trim();
 
-                    System.out.println("1. System Administrator");
-                    System.out.println("2. Operation Manager");
-                    System.out.println("3. Sales Manager");
-                    System.out.println("4. Guest Relation Officer");
+                    int role = 0;
                     
-                    System.out.print("Enter new employee type > ");
-                    String role = sc.nextLine().trim();
-                    EmployeeType employeeType = EmployeeType.valueOf(role);
+                    while (role < 1 || role > 4) {
+                        System.out.println("****** Employee Access Right");
+                        System.out.println("1. System Administrator");
+                        System.out.println("2. Operation Manager");
+                        System.out.println("3. Sales Manager");
+                        System.out.println("4. Guest Relation Officer");
+
+                        System.out.print("Enter new employee type > ");
+                        role = Integer.parseInt(sc.nextLine());
+                    }
+                    
+                    EmployeeType employeeType = null;
+                    switch (role) {
+                        case 1:
+                            employeeType = EmployeeType.SYSTEM_ADMINISTRATOR;
+                            break;
+                        case 2:
+                            employeeType = EmployeeType.OPERATIONS_MANAGER;
+                            break;
+                        case 3:
+                            employeeType = EmployeeType.SALES_MANAGER;
+                            break;
+                        case 4:
+                            employeeType = EmployeeType.GUEST_RELATION_OFFICER;
+                            break;
+                        default:
+                            break;
+                    }
 
                     Employee employee = new Employee(name, username, password, employeeType);
                     Long employeeId = this.accountManagementSessionBeanRemote.createEmployee(employee);
@@ -74,18 +96,18 @@ public class SystemAdministratorClient {
                     List<Employee> employees = this.accountManagementSessionBeanRemote.viewAllEmployees();
                     
                     System.out.println("*** HoRS Management Client :: System Administration Operation :: View List of Employees ***\n");
-                    System.out.printf("\n%3s%20s%20s", "Employee ID", "Employee Name", "Employee Type");
+                    System.out.printf("%20s%20s%30s\n", "Employee ID", "Employee Name", "Employee Type");
                     
                     for (Employee e : employees) {
-                        System.out.printf("\n%3s%20s%20s", e.getEmployeeId(), e.getName(), e.getEmployeeType().toString());
+                        System.out.printf("%20s%20s%30s\n", e.getEmployeeId(), e.getName(), e.getEmployeeType().toString());
                     }
                     
                 } else if (response == 3) {
-                    System.out.println("Enter new partner name > ");
+                    System.out.print("Enter new partner name > ");
                     String name = sc.nextLine().trim();
-                    System.out.println("Enter new partner username > ");
+                    System.out.print("Enter new partner username > ");
                     String username = sc.nextLine().trim();
-                    System.out.println("Enter new partner password > ");
+                    System.out.print("Enter new partner password > ");
                     String password = sc.nextLine().trim();
                     
                     Partner partner = new Partner(name, username, password);
@@ -95,17 +117,17 @@ public class SystemAdministratorClient {
                 } else if (response == 4) {
                     List<Partner> partners = this.accountManagementSessionBeanRemote.viewAllPartners();
                     System.out.println("*** HoRS Management Client :: System Administration Operation :: View List of Partners ***\n");
-                    System.out.printf("\n%3s%20s", "Partner ID", "Partner Name");
+                    System.out.printf("%20s%20s\n", "Partner ID", "Partner Name");
                     
-                    for (Partner p : partners) {
-                        System.out.printf("\n%3s%20s%20s", p.getPartnerId(), p.getName());
-                    }
+                    partners.forEach(p -> {
+                        System.out.printf("%20s%20s\n", p.getPartnerId(), p.getName());
+                    });
                     
                 } else if (response == 5) {
                     break;
 
                 } else {
-                    System.out.println("Invalid option, please try again!\\n");
+                    System.out.println("Invalid option, please try again!\n");
                     
                 }
             }

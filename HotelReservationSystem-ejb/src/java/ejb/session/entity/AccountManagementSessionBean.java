@@ -28,6 +28,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
 
     @Override
     public Employee loginEmployee(String username, String password) throws InvalidLoginCredentialsException {
+        System.out.println("Attempt to login with credentials: " + username + " | " + password);
         Employee employee = (Employee) em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password")
                 .setParameter("username", username)
                 .setParameter("password", password)

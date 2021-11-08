@@ -51,9 +51,8 @@ public class SalesManagerClient {
             response = 0;
 
             while (response < 1 || response > 4) {
-                System.out.println(" > ");
-                response = sc.nextInt();
-                sc.nextLine();
+                System.out.print(" > ");
+                response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
                     createNewRoomRate();
@@ -78,17 +77,17 @@ public class SalesManagerClient {
     }
 
     public void createNewRoomRate() {
-        System.out.println("Enter new room rate name > ");
+        System.out.print("Enter new room rate name > ");
         String name = sc.nextLine();
 
         List<RoomType> roomTypes = this.roomManagementSessionBeanRemote.retrieveAllRoomTypes();
 
-        System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View List of Room Types ***\n");
-        System.out.printf("\n%3s%20s%20s", "Room Type ID", "Room Type Name", "Room Type Quantity");
-        for (RoomType rt : roomTypes) {
-            System.out.printf("\n%3s%20s%20s", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
-        }
-        System.out.println("Enter new room rate's room type ID > ");
+        System.out.print("*** HoRS Management Client :: Sales Manager Operation :: View List of Room Types ***\n");
+        System.out.printf("%3s%20s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
+        roomTypes.forEach(rt -> {
+            System.out.printf("%3s%20s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+        });
+        System.out.print("Enter new room rate's room type ID > ");
         Long roomTypeId = sc.nextLong();
         RoomType rt;
         try {
@@ -98,16 +97,16 @@ public class SalesManagerClient {
             return;
         }
 
-        System.out.println("Enter new room rate type > ");
+        System.out.print("Enter new room rate type > ");
         String rateTypeString = sc.nextLine();
         RateType rateType = RateType.valueOf(rateTypeString);
 
-        System.out.println("Enter new room rate's per night > ");
+        System.out.print("Enter new room rate's per night > ");
         BigDecimal ratePerNight = sc.nextBigDecimal();
 
-        System.out.println("Enter new room rate's start date (yyyy-MM-dd) > ");
+        System.out.print("Enter new room rate's start date (yyyy-MM-dd) > ");
         LocalDate dateStart = LocalDate.parse(sc.nextLine());
-        System.out.println("Enter new room rate's end date (yyyy-MM-dd) > ");
+        System.out.print("Enter new room rate's end date (yyyy-MM-dd) > ");
         LocalDate dateEnd = LocalDate.parse(sc.nextLine());
 
         Rate roomRate = new Rate(name, rt, rateType, ratePerNight, dateStart, dateEnd);
@@ -116,19 +115,19 @@ public class SalesManagerClient {
     }
 
     public void viewRoomRateDetails() {
-        System.out.println("Enter Room Rate ID > ");
+        System.out.print("Enter Room Rate ID > ");
         Long roomRateId = sc.nextLong();
 
         Rate r = this.roomManagementSessionBeanRemote.viewRateDetails(roomRateId);
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View Room Rates Details ***\n");
-        System.out.printf("\n%3s%20s%20s%20s%20s%20s", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
-        System.out.printf("\n%3s%20s%20s%20s%20s%20s", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
+        System.out.printf("%3s%20s%20s%20s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
+        System.out.printf("%3s%20s%20s%20s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
         System.out.println("=====================================");
         System.out.println("1. Update Room Rate");
         System.out.println("2. Delete Room Rate");
         System.out.println("3. Exit\n");
 
-        Integer rrDetailsChoice = sc.nextInt();
+        Integer rrDetailsChoice = Integer.parseInt(sc.nextLine());
         while (rrDetailsChoice < 1 || rrDetailsChoice > 3) {
             if (rrDetailsChoice == 1) {
                 updateRoomRate(r);
@@ -137,7 +136,7 @@ public class SalesManagerClient {
             } else if (rrDetailsChoice == 3) {
                 break;
             } else {
-                System.out.println("Invalid option, please try again!\\n");
+                System.out.print("Invalid option, please try again!\n");
             }
         }
     }
@@ -146,14 +145,14 @@ public class SalesManagerClient {
         List<Rate> rates = this.roomManagementSessionBeanRemote.viewAllRates();
 
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View List of Room Rates ***\n");
-        System.out.printf("\n%3s%20s%20s%20s%20s%20s", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
-        for (Rate r : rates) {
-            System.out.printf("\n%3s%20s%20s%20s%20s%20s", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
-        }
+        System.out.printf("%3s%20s%20s%20s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
+        rates.forEach(r -> {
+            System.out.printf("%3s%20s%20s%20s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
+        });
     }
 
     public void updateRoomRate(Rate rate) {
-        System.out.println("Enter new room rate name (Leave Blank If No Change)> ");
+        System.out.print("Enter new room rate name (Leave Blank If No Change)> ");
         String name = sc.nextLine();
         if (name.length() > 0) {
             rate.setRateName(name);
@@ -162,11 +161,11 @@ public class SalesManagerClient {
         List<RoomType> roomTypes = this.roomManagementSessionBeanRemote.retrieveAllRoomTypes();
 
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View List of Room Types ***\n");
-        System.out.printf("\n%3s%20s%20s", "Room Type ID", "Room Type Name", "Room Type Quantity");
+        System.out.printf("%3s%20s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
         for (RoomType rt : roomTypes) {
-            System.out.printf("\n%3s%20s%20s", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+            System.out.printf("%3s%20s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
         }
-        System.out.println("Enter new room rate's room type ID (Type 0 If No Change)> ");
+        System.out.print("Enter new room rate's room type ID (Type 0 If No Change)> ");
 
         Long roomTypeId = sc.nextLong();
         if (roomTypeId > 0) {
@@ -181,7 +180,7 @@ public class SalesManagerClient {
 
         }
         
-        System.out.println("Enter new room rate type (Leave Blank If No Change)> ");
+        System.out.print("Enter new room rate type (Leave Blank If No Change)> ");
         String rateTypeString = sc.nextLine();
         if(rateTypeString.length() > 0) {
             RateType rateType = RateType.valueOf(rateTypeString);
@@ -189,20 +188,20 @@ public class SalesManagerClient {
         }
         
 
-        System.out.println("Enter new room rate's per night (Type 0 If No Change)> ");
+        System.out.print("Enter new room rate's per night (Type 0 If No Change)> ");
         BigDecimal ratePerNight = sc.nextBigDecimal();
         if(!ratePerNight.equals(0)) {
             rate.setRatePerNight(ratePerNight);
         }
 
-        System.out.println("Enter new room rate's start date (yyyy-MM-dd) (Leave Blank If No Change)> ");
+        System.out.print("Enter new room rate's start date (yyyy-MM-dd) (Leave Blank If No Change)> ");
         String stringStartDate = sc.nextLine();
         if(stringStartDate.length() > 0) {
             LocalDate dateStart = LocalDate.parse(stringStartDate);
             rate.setPeriodStart(dateStart);
         }
         
-        System.out.println("Enter new room rate's end date (yyyy-MM-dd) (Leave Blank If No Change)> ");
+        System.out.print("Enter new room rate's end date (yyyy-MM-dd) (Leave Blank If No Change)> ");
         String stringEndDate = sc.nextLine();
         if(stringEndDate.length() > 0) {
             LocalDate dateEnd = LocalDate.parse(stringEndDate);
