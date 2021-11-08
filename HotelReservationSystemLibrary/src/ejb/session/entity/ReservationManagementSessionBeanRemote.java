@@ -21,7 +21,7 @@ import util.supplement.ReservationSearchResult;
  */
 @Remote
 public interface ReservationManagementSessionBeanRemote {
-    public List<OnlineReservation> viewAllReservationByGuest(Long guestId) throws GuestNotFoundException ;
+    public List<OnlineReservation> viewAllReservationByGuest(String guestId) throws GuestNotFoundException ;
     public List<PartnerReservation> viewAllReservationByPartner(Long partnerId) throws PartnerNotFoundException;
     public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType);
 }

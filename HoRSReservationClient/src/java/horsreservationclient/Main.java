@@ -5,17 +5,29 @@
  */
 package horsreservationclient;
 
+import ejb.session.entity.AccountManagementSessionBeanRemote;
+import ejb.session.entity.ReservationManagementSessionBeanRemote;
+import ejb.session.task.OnlineReservationSessionBeanRemote;
+import javax.ejb.EJB;
+
 /**
  *
  * @author brianlim
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
+    @EJB
+    private static ReservationManagementSessionBeanRemote reservationManagementSessionBeanRemote;
+
+    @EJB
+    private static OnlineReservationSessionBeanRemote onlineReservationSessionBeanRemote;
+
+    @EJB
+    private static AccountManagementSessionBeanRemote accountManagementSessionBeanRemote;
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainApp mainApp = new MainApp(reservationManagementSessionBeanRemote, onlineReservationSessionBeanRemote, accountManagementSessionBeanRemote);
+        mainApp.run();
     }
     
 }

@@ -99,7 +99,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     }
 
     @Override
-    public void registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException {
+    public Guest registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException {
         //Occupant occupant = em.find(Occupant.class, passport);
         Guest newGuest = new Guest(username, password, passport, name);
         Query query = em.createQuery("SELECT g FROM Guest g WHERE g.username = :inUsername");
@@ -114,6 +114,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
             em.persist(newGuest);
             em.flush();
         }
+        return newGuest;
     }
     
  

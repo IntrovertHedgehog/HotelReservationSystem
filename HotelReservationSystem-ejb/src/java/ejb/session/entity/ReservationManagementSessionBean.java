@@ -43,7 +43,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     private EntityManager em;
 
     @Override
-    public List<OnlineReservation> viewAllReservationByGuest(Long guestId) throws GuestNotFoundException {
+    public List<OnlineReservation> viewAllReservationByGuest(String guestId) throws GuestNotFoundException {
         Guest guest = em.find(Guest.class, guestId);
         if (guest == null) {
             throw new GuestNotFoundException(String.format("Guest with id %d does not exist", guestId));

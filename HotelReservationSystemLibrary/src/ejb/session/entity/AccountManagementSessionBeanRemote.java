@@ -29,8 +29,8 @@ public interface AccountManagementSessionBeanRemote {
     public Employee loginEmployee(String username, String password) throws InvalidLoginCredentialsException;
     
     public Partner loginPartner(String username, String password) throws InvalidLoginCredentialsException;
-    
+
     public Guest guestLogin(String username, String password) throws InvalidLoginCredentialsException;
 
-    public void registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException;
+    public Guest registerAsGuest(String username, String password, String passport, String name) throws InvalidLoginCredentialsException;    
 }
