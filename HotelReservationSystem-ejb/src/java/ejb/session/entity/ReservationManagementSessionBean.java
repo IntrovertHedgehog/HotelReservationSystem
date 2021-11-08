@@ -16,7 +16,6 @@ import entity.user.Occupant;
 import entity.user.Partner;
 import enumeration.ClientType;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +64,20 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     @Override
     public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) {
         List<ReservationSearchResult> results = new ArrayList<>();
-        List<Object[]> rawResult = em.createQuery("SELECT rt, rt.quantityAvailable - COUNT(r) FROM Reservation r JOIN r.roomType rt WHERE r.checkInDate < :checkOutDate AND r.checkOutDate > :checkInDate GROUP BY rt")
-                .setParameter("checkInDate", checkInDate)
-                .setParameter("checkOutDate", checkOutDate)
+        List<Object[]> rawResult = em.createNativeQuery("SELECT rt.roomTypeId, rt.quantityAvailable - COUNT(r.RESERVATIONID)\n" +
+                                                        "FROM roomType rt LEFT JOIN \n" +
+                                                        "(SELECT * FROM Reservation r \n" +
+                                                        "    WHERE r.checkInDate < ? \n" +
+                                                        "    AND r.checkOutDate > ?) r\n" +
+                                                        "ON r.ROOMTYPE_ROOMTYPEID = rt.ROOMTYPEID\n" +
+                                                        "GROUP BY rt.roomTypeId")
+                .setParameter(2, checkInDate)
+                .setParameter(1, checkOutDate)
                 .getResultList();
         for (Object[] obj : rawResult) {
-            results.add(new ReservationSearchResult((RoomType) obj[0], (Long) obj[1], checkInDate, checkOutDate, clientType));
+            RoomType roomType = em.find(RoomType.class, (Long) obj[0]);
+            Long quantity = (Long) obj[1];
+            results.add(new ReservationSearchResult(roomType, quantity, checkInDate, checkOutDate, clientType));
         }
         
         return results;

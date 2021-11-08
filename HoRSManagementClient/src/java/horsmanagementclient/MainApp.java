@@ -69,9 +69,8 @@ public class MainApp {
             response = 0;
             
             while (response < 1 || response > 2) {
-                System.out.println(" > ");
-                response = sc.nextInt();
-                sc.nextLine();
+                System.out.print(" > ");
+                response = Integer.parseInt(sc.nextLine());
                 
                 switch (response) {
                     case 1:
@@ -102,34 +101,37 @@ public class MainApp {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter Employee Username > ");
         String username = sc.nextLine().trim();
+        System.out.println("reprint input: " + username);
 
         System.out.print("Enter Employee Passowrd > ");
         String password = sc.nextLine().trim();
+        System.out.println("reprint input: " + password);
 
         return accountManagementSessionBeanRemote.loginEmployee(username, password);
-
     }
 
     private void mainMenu() {
 
-        if (this.currentLoggedInEmployee.getEmployeeType().equals(enumeration.EmployeeType.SYSTEM_ADMINISTRATOR)) {
-            SystemAdministratorClient sysAdmin = new SystemAdministratorClient(this.accountManagementSessionBeanRemote, this.currentLoggedInEmployee);
-            sysAdmin.menuSysAdminOperations();
-
-        } else if (this.currentLoggedInEmployee.getEmployeeType().equals(enumeration.EmployeeType.OPERATIONS_MANAGER)) {
-            OperationManagerClient opsManager = new OperationManagerClient(this.roomManagementSessionBeanRemote, this.exceptionReportManagementSessionBeanRemote, this.currentLoggedInEmployee);
-            opsManager.menuOperationManagerOperations();
-
-        } else if (this.currentLoggedInEmployee.getEmployeeType().equals(enumeration.EmployeeType.SALES_MANAGER)) {
-            SalesManagerClient salesManager = new SalesManagerClient(this.roomManagementSessionBeanRemote, this.currentLoggedInEmployee);
-            salesManager.menuSalesManagerOperations();
-
-        } else if (this.currentLoggedInEmployee.getEmployeeType().equals(enumeration.EmployeeType.GUEST_RELATION_OFFICER)) {
-            GuestRelationOfficerClient guestOfficer = new GuestRelationOfficerClient(this.walkInSessionBeanRemote, this.currentLoggedInEmployee);
-            guestOfficer.menuGuestRelationOfficerOperations();
-
-        } else {
-            System.out.println("No such employee role!");
+        switch (this.currentLoggedInEmployee.getEmployeeType()) {
+            case SYSTEM_ADMINISTRATOR:
+                SystemAdministratorClient sysAdmin = new SystemAdministratorClient(this.accountManagementSessionBeanRemote, this.currentLoggedInEmployee);
+                sysAdmin.menuSysAdminOperations();
+                break;
+            case OPERATIONS_MANAGER:
+                OperationManagerClient opsManager = new OperationManagerClient(this.roomManagementSessionBeanRemote, this.exceptionReportManagementSessionBeanRemote, this.currentLoggedInEmployee);
+                opsManager.menuOperationManagerOperations();
+                break;
+            case SALES_MANAGER:
+                SalesManagerClient salesManager = new SalesManagerClient(this.roomManagementSessionBeanRemote, this.currentLoggedInEmployee);
+                salesManager.menuSalesManagerOperations();
+                break;
+            case GUEST_RELATION_OFFICER:
+                GuestRelationOfficerClient guestOfficer = new GuestRelationOfficerClient(this.walkInSessionBeanRemote, this.currentLoggedInEmployee);
+                guestOfficer.menuGuestRelationOfficerOperations();
+                break;
+            default:
+                System.out.println("No such employee role!");
+                break;
         }
 
     }

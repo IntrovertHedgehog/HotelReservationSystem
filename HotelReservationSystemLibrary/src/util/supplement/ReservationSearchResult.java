@@ -27,6 +27,7 @@ public class ReservationSearchResult implements Serializable {
         this.roomType = roomType;
         this.quantity = quantity;
         this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
         this.clientType = clientType;
         if (clientType == ClientType.WALKIN) {
             this.prevailRate = roomType.calculateWalkInRate(checkInDate, checkOutDate);

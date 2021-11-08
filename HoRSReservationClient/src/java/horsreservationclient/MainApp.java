@@ -58,6 +58,7 @@ public class MainApp {
 
             while (response < 1 || response > 4) {
                 System.out.print(" > ");
+
                 response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
@@ -190,6 +191,7 @@ public class MainApp {
             response = Integer.parseInt(sc.nextLine());
 
             if (response == 1) {
+
                 reserveHotelRoom();
 
             } else if (response == 2) {
@@ -202,8 +204,9 @@ public class MainApp {
     }
 
     public void reserveHotelRoom() {
-        System.out.print("Enter Index of Room Type");
-        Integer index = sc.nextInt();
+
+        System.out.println("Enter Index of Room Type");
+        Integer index = Integer.parseInt(sc.nextLine());
         Long reservationId;
         try {
             reservationId = this.onlineReservationSessionBeanRemote.onlineReserveRoom(index);
@@ -216,8 +219,9 @@ public class MainApp {
     }
 
     public void viewMyReservationDetails() {
-        System.out.print("Enter the S/N of reservation > ");
-        Integer serialNum = sc.nextInt();
+
+        System.out.println("Enter the S/N of reservation > ");
+        Integer serialNum = Integer.parseInt(sc.nextLine());
         OnlineReservation r;
         try {
             r = this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport()).get(serialNum);
