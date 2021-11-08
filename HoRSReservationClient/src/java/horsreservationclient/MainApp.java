@@ -25,9 +25,9 @@ import util.supplement.ReservationSearchResult;
 public class MainApp {
 
     private ReservationManagementSessionBeanRemote reservationManagementSessionBeanRemote;
-    
+
     private OnlineReservationSessionBeanRemote onlineReservationSessionBeanRemote;
-    
+
     private AccountManagementSessionBeanRemote accountManagementSessionBeanRemote;
 
     private Guest currentGuest;
@@ -57,9 +57,8 @@ public class MainApp {
             response = 0;
 
             while (response < 1 || response > 4) {
-                System.out.println(" > ");
-                response = sc.nextInt();
-                sc.nextLine();
+                System.out.print(" > ");
+                response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
                     guestLogin();
@@ -91,18 +90,18 @@ public class MainApp {
     public void loggedInMenu() {
         Integer response;
 
-        System.out.println("****** Hotel Reservation Client ******");
-        System.out.println("You are logged in as " + this.currentGuest.getName());
-        System.out.println("1. Search Hotel Room");
-        System.out.println("2. View My Reservation Details");
-        System.out.println("3. View All My Reservations");
-        System.out.println("4. Exit \n");
-        response = 0;
-        
-        while (response < 1 || response > 4) {
-                System.out.println(" > ");
-                response = sc.nextInt();
-                sc.nextLine();
+        while (true) {
+            System.out.println("****** Hotel Reservation Client ******");
+            System.out.println("You are logged in as " + this.currentGuest.getName());
+            System.out.println("1. Search Hotel Room");
+            System.out.println("2. View My Reservation Details");
+            System.out.println("3. View All My Reservations");
+            System.out.println("4. Exit \n");
+            response = 0;
+
+            while (response < 1 || response > 4) {
+                System.out.print("> ");
+                response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
                     searchHotelRoom();
@@ -121,78 +120,81 @@ public class MainApp {
 
                 }
             }
+            if(response == 4) {
+                break;
+            }
+
+        }
 
     }
 
     public void guestLogin() {
-        System.out.println("Enter Guest Username > ");
+        System.out.print("Enter Guest Username > ");
         String username = sc.nextLine();
 
-        System.out.println("Enter Guest Password >");
+        System.out.print("Enter Guest Password > ");
         String password = sc.nextLine();
         try {
             this.currentGuest = this.onlineReservationSessionBeanRemote.loginGuest(username, password);
         } catch (InvalidLoginCredentialsException e) {
             System.out.println("Invalid Login Credentials!");
         }
-        
+
     }
 
     public void registerAsGuest() {
-        System.out.println("Enter Guest Username > ");
+        System.out.print("Enter Guest Username > ");
         String username = sc.nextLine().trim();
 
-        System.out.println("Enter Guest Password >");
+        System.out.print("Enter Guest Password >");
         String password = sc.nextLine().trim();
-        
-        System.out.println("Enter Guest Passport >");
+
+        System.out.print("Enter Guest Passport >");
         String passport = sc.nextLine().trim();
 
-        System.out.println("Enter Guest Name >");
+        System.out.print("Enter Guest Name >");
         String name = sc.nextLine().trim();
-        
+
         try {
             Guest guest = this.accountManagementSessionBeanRemote.registerAsGuest(username, password, passport, name);
             this.currentGuest = guest;
-            
+
         } catch (InvalidLoginCredentialsException e) {
             System.out.println(e.getMessage());
         }
-        
-        
+
     }
 
     public void searchHotelRoom() {
-        System.out.println("Enter check in date (yyyy-MM-dd) > ");
+        System.out.print("Enter check in date (yyyy-MM-dd) > ");
         LocalDate dateStart = LocalDate.parse(sc.nextLine());
-        System.out.println("Enter check out date (yyyy-MM-dd) > ");
+        System.out.print("Enter check out date (yyyy-MM-dd) > ");
         LocalDate dateEnd = LocalDate.parse(sc.nextLine());
-        
-        List<ReservationSearchResult> results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateEnd, dateStart);
+
+        List<ReservationSearchResult> results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateStart, dateEnd);
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: Search Rooms ***\n");
         System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
-        
+
         Integer counter = 0;
         for (ReservationSearchResult r : results) {
             System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
             counter++;
         }
 
-        System.out.println("=====================================");
+        System.out.println("\n=====================================");
         System.out.println("1. Reserve Room");
         System.out.println("2. Exit\n");
         Integer response = 0;
         while (response < 1 || response > 2) {
-            response = sc.nextInt();
-            sc.nextLine();
-            
-            if(response == 1) {
+            response = Integer.parseInt(sc.nextLine());
+
+            if (response == 1) {
                 reserveHotelRoom();
-                
+
             } else if (response == 2) {
-                break;
-                
+                return;
+
             } else {
                 System.out.println("Invalid option, please try again!\\n");
             }
@@ -200,7 +202,7 @@ public class MainApp {
     }
 
     public void reserveHotelRoom() {
-        System.out.println("Enter Index of Room Type");
+        System.out.print("Enter Index of Room Type");
         Integer index = sc.nextInt();
         Long reservationId;
         try {
@@ -209,22 +211,21 @@ public class MainApp {
             System.out.println("No more room available!");
             return;
         }
-        
-        
+
         System.out.println("You successfully reserved a room type with reservation ID : " + reservationId);
     }
 
     public void viewMyReservationDetails() {
-        System.out.println("Enter the S/N of reservation > ");
+        System.out.print("Enter the S/N of reservation > ");
         Integer serialNum = sc.nextInt();
         OnlineReservation r;
         try {
-            r =this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport()).get(serialNum);
+            r = this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport()).get(serialNum);
         } catch (GuestNotFoundException e) {
             System.out.println(e.getMessage());
             return;
         }
-        
+
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservation Detail ***\n");
         System.out.printf("\n%3s%20s%20s%20s", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date");
         System.out.printf("\n%3s%20s%20s%20s%20s%20s%20s", r.getReservationId(), r.getRoomType(), r.getCheckInDate(), r.getCheckOutDate());
@@ -233,15 +234,15 @@ public class MainApp {
     public void viewAllMyReservations() {
         List<OnlineReservation> onlineReservations;
         try {
-            onlineReservations =this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport());
+            onlineReservations = this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport());
         } catch (GuestNotFoundException e) {
             System.out.println(e.getMessage());
             return;
         }
-        
+
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservations ***\n");
         System.out.printf("\n%8s%20s%20s%20s", "S/N", "Room Type Name", "Check In Date", "Check Out Date");
-        
+
         Integer counter = 0;
         for (OnlineReservation r : onlineReservations) {
             System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", counter, r.getRoomType(), r.getCheckInDate(), r.getCheckOutDate());

@@ -24,7 +24,7 @@ import util.supplement.ReservationSearchResult;
  * @author Winter
  */
 @Stateless
-public class PartnerClientSessionBean implements PartnerClientSessionBeanRemote {
+public class PartnerClientSessionBean implements PartnerClientSessionBeanRemote, PartnerClientSessionBeanLocal {
 
     @EJB
     private ReservationManagementSessionBeanLocal reservationManagementSessionBean;
