@@ -172,6 +172,15 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
         
     }
     
+    @Override
+    public RoomType retrieveRoomTypeByRoomTypeName(String name) {
+         return (RoomType) em.createQuery("SELECT rt FROM RoomType rt WHERE rt.name = :name")
+                .setParameter("name", name)
+                .getSingleResult();
+        
+        
+    }
+    
     
     @Override
     public List<RoomType> retrieveAllRoomTypes() {
@@ -204,7 +213,8 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     }
     
     @Override
-    public void deleteRoom(Room room) {
+    public void deleteRoom(RoomId roomId) throws RoomNotFoundException {
+        Room room = retrieveRoomByRoomId(roomId);
         if(!room.isUsed())
         {
             em.remove(room);

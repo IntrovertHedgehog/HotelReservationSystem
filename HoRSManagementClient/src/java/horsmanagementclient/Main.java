@@ -11,7 +11,6 @@ import ejb.session.entity.OccupantManagementSessionBeanRemote;
 import ejb.session.entity.ReservationManagementSessionBeanRemote;
 import ejb.session.entity.RoomManagementSessionBeanRemote;
 import ejb.session.task.WalkInSessionBeanRemote;
-import java.util.Scanner;
 import javax.ejb.EJB;
 
 /**
@@ -21,50 +20,29 @@ import javax.ejb.EJB;
 public class Main {
 
     @EJB
-    private static WalkInSessionBeanRemote walkInSessionBean;
+    private static WalkInSessionBeanRemote walkInSessionBeanRemote;
 
     @EJB
-    private static RoomManagementSessionBeanRemote roomManagementSessionBean;
+    private static RoomManagementSessionBeanRemote roomManagementSessionBeanRemote;
 
     @EJB
-    private static ReservationManagementSessionBeanRemote reservationManagementSessionBean;
+    private static ReservationManagementSessionBeanRemote reservationManagementSessionBeanRemote;
 
     @EJB
-    private static OccupantManagementSessionBeanRemote occupantManagementSessionBean;
+    private static OccupantManagementSessionBeanRemote occupantManagementSessionBeanRemote;
 
     @EJB
-    private static ExceptionReportManagementSessionBeanRemote exceptionReportManagementSessionBean;
+    private static ExceptionReportManagementSessionBeanRemote exceptionReportManagementSessionBeanRemote;
 
     @EJB
-    private static AccountManagementSessionBeanRemote accountManagementSessionBean;
+    private static AccountManagementSessionBeanRemote accountManagementSessionBeanRemote;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int ip = 0;
-        
-        while (ip < 1 && ip > 2) {
-            System.out.println("****** Hotel Reservation Management Client ******");
-            System.out.println("1. Login");
-            System.out.println("2. Exit");
-            
-            ip = sc.nextInt();
-            
-            switch (ip) {
-                case 1:
-                    login();
-                    break;
-                case 2:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
     
-    public static void login() {
+    public static void main(String[] args) {
         
-    }
+        MainApp mainApp = new MainApp(walkInSessionBeanRemote, roomManagementSessionBeanRemote,
+                reservationManagementSessionBeanRemote, occupantManagementSessionBeanRemote,
+                        exceptionReportManagementSessionBeanRemote, accountManagementSessionBeanRemote);
+        mainApp.run();  
+    }  
 }

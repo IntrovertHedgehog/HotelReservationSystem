@@ -41,7 +41,7 @@ public interface RoomManagementSessionBeanLocal {
 
     public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, RoomStatus status);
 
-    public void deleteRoom(Room room);
+    public void deleteRoom(RoomId roomId) throws RoomNotFoundException;
 
     public void updateRoom(Room room) throws RoomNotFoundException, UpdateRoomException;
     
@@ -60,4 +60,6 @@ public interface RoomManagementSessionBeanLocal {
     public Boolean deleteRate(Long id);
 
     public List<Rate> viewAllRates();
+    
+    public RoomType retrieveRoomTypeByRoomTypeName(String name);
 }
