@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package holidayreservationsystemseclient;
+package partnerreservationclient;
 
 /**
  *
- * @author brianlim
+ * @author Winter
  */
-public class HolidayReservationSystemSeClient {
+public class PartnerReservationClient {
 
     /**
      * @param args the command line arguments

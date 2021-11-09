@@ -14,6 +14,8 @@ import entity.business.Room;
 import entity.business.RoomType;
 import entity.user.Employee;
 import entity.user.Guest;
+import entity.user.Occupant;
+import entity.user.Partner;
 import enumeration.BedSize;
 import enumeration.EmployeeType;
 import enumeration.RateType;
@@ -23,6 +25,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -121,6 +125,17 @@ public class DataInitializationSessionBean {
             }
         }
         
+        List<Partner> partners = em.createQuery("SELECT p FROM Partner p")
+                .getResultList();
+        if (partners.isEmpty()) {
+            try {
+                accountManagementSessionBean.createPartner(new Partner("Nvidia", "nvi", "password"));
+                accountManagementSessionBean.createPartner(new Partner("AMD", "amd", "password"));
+            } catch (UsedUsernameException ex) {
+                System.out.println("Named used!");
+            }
+        }
+        
         List<Reservation> reservations = em.createQuery("SELECT r FROM Reservation r")
                 .getResultList();
         if (reservations.isEmpty()) {
@@ -128,7 +143,9 @@ public class DataInitializationSessionBean {
                 reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(0), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-03"), em.find(Guest.class, "PPT1101"));
                 reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(1), LocalDate.parse("2021-12-02"), LocalDate.parse("2021-12-05"), em.find(Guest.class, "PPT1102"));
                 reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(2), LocalDate.parse("2021-12-03"), LocalDate.parse("2021-12-06"), em.find(Guest.class, "PPT1103"));
-                reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(2), LocalDate.parse("2021-12-04"), LocalDate.parse("2021-12-07"), em.find(Guest.class, "PPT1101"));
+                reservationManagementSessionBean.createWalkInReservation(roomTypelist.get(2), LocalDate.parse("2021-12-04"), LocalDate.parse("2021-12-07"), em.find(Occupant.class, "PPT1101"));
+                reservationManagementSessionBean.createPartnerReservation(roomTypelist.get(1), LocalDate.parse("2021-12-06"), LocalDate.parse("2021-12-09"), em.find(Partner.class, 1l), new Occupant("PPT9128", "Jack Sparrow"));
+                reservationManagementSessionBean.createPartnerReservation(roomTypelist.get(0), LocalDate.parse("2021-12-07"), LocalDate.parse("2021-12-08"), em.find(Partner.class, 2l), new Occupant("PPT4231", "Hanma Noname"));
             } catch (NoMoreRoomException ex) {
                 System.out.println(ex.getMessage());
                 

@@ -39,9 +39,6 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
     @PersistenceContext(unitName = "HotelReservationSystem-PU")
     private EntityManager em;
 
-    @EJB
-    private AccountManagementSessionBeanLocal accountManagementSessionBean;
-
     @Override
     public Partner loginPartner(String username, String password) throws InvalidLoginCredentialsException {
         try {
