@@ -17,6 +17,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -39,7 +40,7 @@ public class OnlineReservationSessionBean implements OnlineReservationSessionBea
     private Guest guest;
 
     @Override
-    public List<ReservationSearchResult> onlineSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) {
+    public List<ReservationSearchResult> onlineSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) throws InvalidTemporalInputException {
         return this.searchResults = reservationManagementSessionBean.searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
     }
 

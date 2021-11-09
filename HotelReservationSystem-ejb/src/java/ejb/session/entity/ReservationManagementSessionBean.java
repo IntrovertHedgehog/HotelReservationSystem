@@ -24,6 +24,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.GuestNotFoundException;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.exception.PartnerNotFoundException;
 import util.supplement.ReservationSearchResult;
@@ -62,7 +63,8 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     }
 
     @Override
-    public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) {
+    public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) throws InvalidTemporalInputException {
+        if (!checkInDate.isBefore(checkOutDate)) throw new InvalidTemporalInputException("Check in date must be before checkout date");
         List<ReservationSearchResult> results = new ArrayList<>();
         List<Object[]> rawResult = em.createNativeQuery("SELECT rt.roomTypeId, rt.quantityAvailable - COUNT(r.RESERVATIONID)\n" +
                                                         "FROM roomType rt LEFT JOIN \n" +
@@ -104,6 +106,13 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
     @Override
     public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) throws NoMoreRoomException{
+        if (em.contains(occupant)) {
+            occupant = em.merge(occupant);
+        } else {
+            em.persist(occupant);
+        }
+        
+        em.flush();
         WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate);
         em.persist(walkInReservation);
         em.flush();
@@ -114,6 +123,13 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
     @Override
     public Long createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant) throws NoMoreRoomException{
+        if (em.contains(occupant)) {
+            occupant = em.merge(occupant);
+        } else {
+            em.persist(occupant);
+        }
+        
+        em.flush();
         PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);
         em.persist(partnerReservation);
         em.flush();

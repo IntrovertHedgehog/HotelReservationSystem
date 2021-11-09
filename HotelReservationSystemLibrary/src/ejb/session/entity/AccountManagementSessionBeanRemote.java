@@ -11,6 +11,7 @@ import entity.user.Partner;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.UsedUsernameException;
 
 /**
  *
@@ -20,11 +21,11 @@ import util.exception.InvalidLoginCredentialsException;
 public interface AccountManagementSessionBeanRemote {
     public List<Partner> viewAllPartners();
 
-    public Long createPartner(Partner partner);
+    public Long createPartner(Partner partner) throws UsedUsernameException ;
 
     public List<Employee> viewAllEmployees();
 
-    public Long createEmployee(Employee employee);
+    public Long createEmployee(Employee employee) throws UsedUsernameException ;
 
     public Employee loginEmployee(String username, String password) throws InvalidLoginCredentialsException;
     

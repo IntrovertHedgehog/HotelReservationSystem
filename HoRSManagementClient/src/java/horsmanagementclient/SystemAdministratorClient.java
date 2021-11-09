@@ -6,11 +6,13 @@
 package horsmanagementclient;
 
 import ejb.session.entity.AccountManagementSessionBeanRemote;
+import ejb.session.entity.OccupantManagementSessionBeanRemote;
 import entity.user.Employee;
 import entity.user.Partner;
 import enumeration.EmployeeType;
 import java.util.List;
 import java.util.Scanner;
+import util.exception.UsedUsernameException;
 
 /**
  *
@@ -88,10 +90,13 @@ public class SystemAdministratorClient {
                             break;
                     }
 
-                    Employee employee = new Employee(name, username, password, employeeType);
-                    Long employeeId = this.accountManagementSessionBeanRemote.createEmployee(employee);
-                    System.out.println("You created an employee with Employee ID: " + employeeId);
-
+                    try {
+                        Employee employee = new Employee(name, username, password, employeeType);
+                        Long employeeId = this.accountManagementSessionBeanRemote.createEmployee(employee);
+                        System.out.println("You created an employee with Employee ID: " + employeeId);
+                    } catch (UsedUsernameException ex) {
+                        System.out.println("Taken username!\n");
+                    }
                 } else if (response == 2) {
                     List<Employee> employees = this.accountManagementSessionBeanRemote.viewAllEmployees();
                     
@@ -110,10 +115,13 @@ public class SystemAdministratorClient {
                     System.out.print("Enter new partner password > ");
                     String password = sc.nextLine().trim();
                     
-                    Partner partner = new Partner(name, username, password);
-                    Long partnerId = this.accountManagementSessionBeanRemote.createPartner(partner);
-                    System.out.println("You created a new partner with Partner ID: " + partnerId);
-
+                    try {
+                        Partner partner = new Partner(name, username, password);
+                        Long partnerId = this.accountManagementSessionBeanRemote.createPartner(partner);
+                        System.out.println("You created a new partner with Partner ID: " + partnerId);
+                    } catch (UsedUsernameException ex) {
+                        System.out.println("Username taken!\n");
+                    }
                 } else if (response == 4) {
                     List<Partner> partners = this.accountManagementSessionBeanRemote.viewAllPartners();
                     System.out.println("*** HoRS Management Client :: System Administration Operation :: View List of Partners ***\n");

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import util.exception.InvalidLoginCredentialsException;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -33,7 +33,7 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanRemote,
     private AccountManagementSessionBeanLocal accountManagementSessionBean;
 
     @Override
-    public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate) {
+    public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate) throws InvalidTemporalInputException {
         return reservationManagementSessionBean.searchReservation(CheckInDate, checkOutDate, ClientType.ONLINE);
     }
 

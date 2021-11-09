@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -28,8 +29,10 @@ public class Occupant implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Size(min = 4, max = 16)
     @Column(length = 16)
     private String passport;
+    @Size(min = 1, max = 32)
     @Column(length = 32)
     private String name;
     @OneToMany(mappedBy = "occupant", fetch = FetchType.LAZY)
@@ -94,9 +97,16 @@ public class Occupant implements Serializable {
         this.allocations = allocations;
     }
 
+    public void addAllocation(Allocation allocation) {
+        if (allocation.getOccupant().equals(this) && !this.reservations.contains(allocation)) {
+            this.allocations.add(allocation);
+        }
+    }
     
+    public void removeAllocation(Allocation allocation) {
+        this.allocations.remove(allocation);
+    }
 
- 
     @Override
     public int hashCode() {
         int hash = 0;

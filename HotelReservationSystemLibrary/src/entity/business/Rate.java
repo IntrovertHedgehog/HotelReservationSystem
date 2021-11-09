@@ -19,6 +19,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -30,11 +32,13 @@ public class Rate implements Serializable, Comparable<Rate> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rateId;
-    @Column(nullable = false)
+    @Size(min = 1, max = 32)
+    @Column(nullable = false, length = 32)
     private String rateName;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RateType rateType;
+    @Digits(integer = 38, fraction = 2)
     @Column(columnDefinition = "DECIMAL(38, 2) NOT NULL")
     private BigDecimal ratePerNight;
     @Column(columnDefinition = "DATE NOT NULL DEFAULT '0000-01-01'")

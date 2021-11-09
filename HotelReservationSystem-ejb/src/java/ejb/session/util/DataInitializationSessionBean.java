@@ -9,15 +9,16 @@ import ejb.session.entity.AccountManagementSessionBeanLocal;
 import ejb.session.entity.ReservationManagementSessionBeanLocal;
 import ejb.session.entity.RoomManagementSessionBeanLocal;
 import entity.business.Rate;
+import entity.business.Reservation;
 import entity.business.Room;
 import entity.business.RoomType;
 import entity.user.Employee;
 import entity.user.Guest;
 import enumeration.BedSize;
-import enumeration.ClientType;
 import enumeration.EmployeeType;
 import enumeration.RateType;
 import enumeration.RoomStatus;
+import enumeration.RoomTypeConfig;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.NoMoreRoomException;
+import util.exception.UsedUsernameException;
 
 /**
  *
@@ -58,16 +61,23 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (emp.isEmpty()) {
-            accountManagementSessionBean.createEmployee(new Employee("admin", "admin", "password", EmployeeType.SYSTEM_ADMINISTRATOR));
+            try {
+                accountManagementSessionBean.createEmployee(new Employee("admin", "admin", "password", EmployeeType.SYSTEM_ADMINISTRATOR));
+                accountManagementSessionBean.createEmployee(new Employee("operator", "operator", "password", EmployeeType.OPERATIONS_MANAGER));
+                accountManagementSessionBean.createEmployee(new Employee("seller", "seller", "password", EmployeeType.SALES_MANAGER));
+                accountManagementSessionBean.createEmployee(new Employee("officer", "officer", "password", EmployeeType.GUEST_RELATION_OFFICER));
+            } catch (UsedUsernameException ex) {
+                System.out.println("Username taken!");
+            }
         }
         
         List<RoomType> rt = (List<RoomType>) em.createQuery("SELECT rt FROM RoomType rt")
                 .setMaxResults(1)
                 .getResultList();
         if (rt.isEmpty()) {
-            roomManagementSessionBean.createNewRoomType("Deluxe", "very luxury", new BigDecimal("40.0"), BedSize.KING, 2l, "everything you want");
-            roomManagementSessionBean.createNewRoomType("Family", "big",new BigDecimal("30.0"), BedSize.QUEEN, 3l, "TV and PS");
-            roomManagementSessionBean.createNewRoomType("Trip", "Convenient", new BigDecimal("30.0"), BedSize.TWIN, 2l, "good for short trip");
+            roomManagementSessionBean.createNewRoomType("Deluxe", "very luxury", new BigDecimal("40.0"), BedSize.KING, 2l, "everything you want", RoomTypeConfig.DELUXE_ROOM);
+            roomManagementSessionBean.createNewRoomType("Family", "big",new BigDecimal("30.0"), BedSize.QUEEN, 3l, "TV and PS", RoomTypeConfig.FAMILY_ROOM);
+            roomManagementSessionBean.createNewRoomType("Trip", "Convenient", new BigDecimal("30.0"), BedSize.TWIN, 2l, "good for short trip", RoomTypeConfig.PREMIER_ROOM);
         }
         
         List<RoomType> roomTypelist = new ArrayList<>();
@@ -108,6 +118,20 @@ public class DataInitializationSessionBean {
                 accountManagementSessionBean.registerAsGuest("guest3", "password", "PPT1103", "Richard NoName");
             } catch (InvalidLoginCredentialsException ex) {
                 ex.printStackTrace();
+            }
+        }
+        
+        List<Reservation> reservations = em.createQuery("SELECT r FROM Reservation r")
+                .getResultList();
+        if (reservations.isEmpty()) {
+            try {
+                reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(0), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-03"), em.find(Guest.class, "PPT1101"));
+                reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(1), LocalDate.parse("2021-12-02"), LocalDate.parse("2021-12-05"), em.find(Guest.class, "PPT1102"));
+                reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(2), LocalDate.parse("2021-12-03"), LocalDate.parse("2021-12-06"), em.find(Guest.class, "PPT1103"));
+                reservationManagementSessionBean.createOnlineReservation(roomTypelist.get(2), LocalDate.parse("2021-12-04"), LocalDate.parse("2021-12-07"), em.find(Guest.class, "PPT1101"));
+            } catch (NoMoreRoomException ex) {
+                System.out.println(ex.getMessage());
+                
             }
         }
     }

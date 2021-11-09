@@ -11,6 +11,7 @@ import entity.user.Partner;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.UsedUsernameException;
 
 /**
  *
@@ -19,9 +20,9 @@ import util.exception.InvalidLoginCredentialsException;
 @Local
 public interface AccountManagementSessionBeanLocal {
 
-    public Long createEmployee(Employee employee);
+    public Long createEmployee(Employee employee) throws UsedUsernameException ;
 
-    public Long createPartner(Partner partner);
+    public Long createPartner(Partner partner) throws UsedUsernameException ;
 
     public Guest guestLogin(String username, String password) throws InvalidLoginCredentialsException;
 

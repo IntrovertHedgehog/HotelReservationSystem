@@ -5,6 +5,7 @@
  */
 package horsmanagementclient;
 
+import ejb.session.entity.OccupantManagementSessionBeanRemote;
 import ejb.session.task.WalkInSessionBeanRemote;
 import entity.user.Employee;
 import entity.user.Occupant;
@@ -13,7 +14,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
+import util.exception.OccupantNotFoundException;
 import util.supplement.ReservationSearchResult;
 
 /**
@@ -22,6 +25,7 @@ import util.supplement.ReservationSearchResult;
  */
 public class GuestRelationOfficerClient {
 
+    private OccupantManagementSessionBeanRemote occupantManagementSessionBeanRemote;
     private WalkInSessionBeanRemote walkInSessionBeanRemote;
 
     private Employee currentEmployee;
@@ -32,7 +36,8 @@ public class GuestRelationOfficerClient {
 
     }
 
-    public GuestRelationOfficerClient(WalkInSessionBeanRemote walkInSessionBeanRemote, Employee currentEmployee) {
+    public GuestRelationOfficerClient(OccupantManagementSessionBeanRemote occupantManagementSessionBeanRemote, WalkInSessionBeanRemote walkInSessionBeanRemote, Employee currentEmployee) {
+        this.occupantManagementSessionBeanRemote = occupantManagementSessionBeanRemote;
         this.walkInSessionBeanRemote = walkInSessionBeanRemote;
         this.currentEmployee = currentEmployee;
     }
@@ -82,63 +87,77 @@ public class GuestRelationOfficerClient {
         System.out.print("Enter check out date (yyyy-MM-dd) > ");
         LocalDate dateEnd = LocalDate.parse(sc.nextLine());
 
-        List<ReservationSearchResult> results = this.walkInSessionBeanRemote.walkInSearchRoom(dateStart, dateEnd);
+        List<ReservationSearchResult> results;
+        try {
+            results = this.walkInSessionBeanRemote.walkInSearchRoom(dateStart, dateEnd);
 
-        System.out.println("*** HoRS Management Client :: Guest Relation Officer Operation :: Search Rooms ***\n");
-        System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
-        
-        Integer counter = 0;
-        for (ReservationSearchResult r : results) {
-            System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
-            counter++;
-        }
+            System.out.println("*** HoRS Management Client :: Guest Relation Officer Operation :: Search Rooms ***\n");
+            System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
-        System.out.println("=====================================");
-        System.out.println("1. Reserve Room");
-        System.out.println("2. Exit\n");
-        Integer response = 0;
-        while (response < 1 || response > 2) {
-            response = Integer.parseInt(sc.nextLine());
-            
-            if(response == 1) {
-                walkInReserveRoom();
-                
-            } else if (response == 2) {
-                break;
-                
-            } else {
-                System.out.println("Invalid option, please try again!\n");
+            Integer counter = 0;
+            for (ReservationSearchResult r : results) {
+                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
+                counter++;
             }
+
+            System.out.println("=====================================");
+            System.out.println("1. Reserve Room");
+            System.out.println("2. Exit\n");
+            System.out.print(" > ");
+            Integer response = 0;
+            while (response < 1 || response > 2) {
+                response = Integer.parseInt(sc.nextLine());
+
+                if (response == 1) {
+                    walkInReserveRoom();
+
+                } else if (response == 2) {
+                    break;
+
+                } else {
+                    System.out.println("Invalid option, please try again!\n");
+                }
+            }
+        } catch (InvalidTemporalInputException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
     public void walkInReserveRoom() {
-        
+
         System.out.print("Enter occupant passport > ");
-        String passport = sc.nextLine();
-        System.out.print("Enter occupant name > ");
-        String name = sc.nextLine();
-        
-        Occupant o = new Occupant(passport, name);
+        String passport = sc.nextLine().trim();
+        Occupant o = null;
+        try {
+            o = occupantManagementSessionBeanRemote.retrieveOccupant(passport);
+        } catch (OccupantNotFoundException ex) {
+        }
+
+        if (o == null) {
+            System.out.print("Enter occupant name > ");
+            String name = sc.nextLine().trim();
+
+            o = new Occupant(passport, name);
+        }
         
         System.out.print("Enter index of room to book > ");
         Integer index = Integer.parseInt(sc.nextLine());
-        
+
         try {
             Long reservationId = walkInSessionBeanRemote.walkInReserveRoom(index, o);
             System.out.println("You have successfully reserved a room with Walk-In Reservation ID " + reservationId);
-            
+
         } catch (NoMoreRoomException e) {
             System.out.println("No more rooms are available!");
         }
-        
+
     }
 
     public void checkInGuest() {
         System.out.print("Enter check in date (yyyy-MM-dd HH:mm) > ");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateStart = LocalDateTime.parse(sc.nextLine(), formatter);
-        
+
         System.out.println("Enter occupant passport > ");
         String passport = sc.nextLine().trim();
         walkInSessionBeanRemote.checkInGuest(dateStart, passport);
@@ -148,7 +167,7 @@ public class GuestRelationOfficerClient {
         System.out.println("Enter check out date (yyyy-MM-dd HH:mm) > ");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateEnd = LocalDateTime.parse(sc.nextLine(), formatter);
-        
+
         System.out.println("Enter occupant passport > ");
         String passport = sc.nextLine().trim();
         walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -20,7 +21,7 @@ import util.supplement.ReservationSearchResult;
 @Remote
 public interface WalkInSessionBeanRemote {
 
-    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate);
+    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate)  throws InvalidTemporalInputException ;
 
     public Long walkInReserveRoom(Integer indexOfRoomType, Occupant occupant) throws NoMoreRoomException;
 

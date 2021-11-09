@@ -12,6 +12,7 @@ import entity.business.RoomType;
 import entity.user.Employee;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
+import enumeration.RoomTypeConfig;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
@@ -86,18 +87,29 @@ public class OperationManagerClient {
                     BedSize bedSize = bedSizes[bedSizeNumber - 1];
 
                     System.out.print("Enter new room type capacity > ");
-                    Long capacity = sc.nextLong();
-                    //sc.nextLine();
+                    Long capacity = Long.parseLong(sc.nextLine());
 
                     System.out.print("Enter new room type amenities > ");
                     String amenities = sc.nextLine().trim();
+                    
+                    System.out.println("**** Room Type Configuration");
+                    System.out.println("1. Deluxe Room\n"
+                            + "2. Premier Room\n"
+                            + "3. Family Room\n"
+                            + "4. Junior Suite\n"
+                            + "5. Grand Suite");
+                    System.out.print(" > ");
+                    Integer configNo = Integer.parseInt(sc.nextLine().trim());
+                    
+                    RoomTypeConfig[] configs = {RoomTypeConfig.DELUXE_ROOM, RoomTypeConfig.PREMIER_ROOM, RoomTypeConfig.FAMILY_ROOM, RoomTypeConfig.JUNIOR_SUIT, RoomTypeConfig.GRAND_SUIT};
+                    RoomTypeConfig config = configs[configNo - 1];
 
-                    Long roomTypeId = this.roomManagementSessionBeanRemote.createNewRoomType(name, description, roomSize, bedSize, capacity, amenities);
+                    Long roomTypeId = this.roomManagementSessionBeanRemote.createNewRoomType(name, description, roomSize, bedSize, capacity, amenities, config);
                     System.out.println("You created a new room type with Room Type ID: " + roomTypeId);
 
                 } else if (response == 2) {
-                    System.out.println("Enter Room Type ID > ");
-                    Long roomTypeId = sc.nextLong();
+                    System.out.print("Enter Room Type ID > ");
+                    Long roomTypeId = Long.parseLong(sc.nextLine());
                     RoomType rt;
                     try {
                         rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(roomTypeId);
@@ -106,12 +118,13 @@ public class OperationManagerClient {
                         break;
                     }
 
-                    System.out.printf("\n%3s%20s%20s", "Room Type ID", "Room Type Name", "Room Type Quantity");
-                    System.out.printf("\n%3s%20s%20s", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+                    System.out.printf("%14s%32s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
+                    System.out.printf("%14s%32s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
                     System.out.println("=====================================");
                     System.out.println("1. Update Room Type");
                     System.out.println("2. Delete Room Type");
                     System.out.println("3. Exit\n");
+                    System.out.print(" > ");
                     Integer rtDetailsChoice = Integer.parseInt(sc.nextLine());
                     while (rtDetailsChoice < 1 || rtDetailsChoice > 3) {
                         if (rtDetailsChoice == 1) {
@@ -121,7 +134,7 @@ public class OperationManagerClient {
                         } else if (rtDetailsChoice == 3) {
                             break;
                         } else {
-                            System.out.println("Invalid option, please try again!\\n");
+                            System.out.println("Invalid option, please try again!\n");
                         }
                     }
 
@@ -129,21 +142,21 @@ public class OperationManagerClient {
                     List<RoomType> roomTypes = this.roomManagementSessionBeanRemote.retrieveAllRoomTypes();
 
                     System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Room Types ***\n");
-                    System.out.printf("%3s%20s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
+                    System.out.printf("%14s%32s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
 
                     roomTypes.forEach(rt -> {
-                        System.out.printf("%3s%20s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+                        System.out.printf("%14s%32s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
                     });
 
                 } else if (response == 4) {
                     System.out.print("Enter new room floor number > ");
-                    Long floorNumber = sc.nextLong();
+                    Long floorNumber = Long.parseLong(sc.nextLine());
                     System.out.print("Enter new room number > ");
-                    Long roomNumber = sc.nextLong();
+                    Long roomNumber = Long.parseLong(sc.nextLine());
                     System.out.print("Enter new room's Room Type ID > ");
                     RoomType rt;
                     try {
-                        rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(sc.nextLong());
+                        rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(Long.parseLong(sc.nextLine()));
                     } catch (RoomTypeNotFoundException e) {
                         System.out.println("Room Type Not Found !");
                         break;
@@ -152,7 +165,7 @@ public class OperationManagerClient {
                     System.out.println("1. Available");
                     System.out.println("2. Unavailable");
                     System.out.println("3. Disabled");
-                    System.out.println("Enter new room status > ");
+                    System.out.print("Enter new room status > ");
                     RoomStatus[] roomStatuses = {RoomStatus.AVAILABLE, RoomStatus.UNAVAILABLE, RoomStatus.DISABLE};
                     Integer roomStatusIndex = Integer.parseInt(sc.nextLine());
                     RoomStatus roomStatus = roomStatuses[roomStatusIndex - 1];
@@ -162,13 +175,13 @@ public class OperationManagerClient {
 
                 } else if (response == 5) {
                     System.out.print("Enter new room floor number > ");
-                    Long floorNumber = sc.nextLong();
+                    Long floorNumber = Long.parseLong(sc.nextLine());
                     System.out.print("Enter new room number > ");
-                    Long roomNumber = sc.nextLong();
+                    Long roomNumber = Long.parseLong(sc.nextLine());
                     System.out.print("Enter new room's Room Type ID > ");
                     RoomType rt;
                     try {
-                        rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(sc.nextLong());
+                        rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(Long.parseLong(sc.nextLine()));
                     } catch (RoomTypeNotFoundException e) {
                         System.out.println("Room Type Not Found !");
                         break;
@@ -194,9 +207,9 @@ public class OperationManagerClient {
 
                 } else if (response == 6) {
                     System.out.print("Enter new room floor number > ");
-                    Long floorNumber = sc.nextLong();
+                    Long floorNumber = Long.parseLong(sc.nextLine());
                     System.out.print("Enter new room number > ");
-                    Long roomNumber = sc.nextLong();
+                    Long roomNumber = Long.parseLong(sc.nextLine());
 
                     RoomId roomId = new RoomId(floorNumber, roomNumber);
                     try {
@@ -209,10 +222,10 @@ public class OperationManagerClient {
                     List<Room> rooms = this.roomManagementSessionBeanRemote.retrieveAllRooms();
 
                     System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Rooms ***\n");
-                    System.out.printf("%3s%20s%20s%20s\n", "Room ID", "Room Status", "Room Type", "Room is Used");
+                    System.out.printf("%14s%32s%32s%20s\n", "Room ID", "Room Status", "Room Type", "Room is Used");
 
                     rooms.forEach(r -> {
-                        System.out.printf("%3s%20s%20s\n", r.getRoomId().toString(), r.getStatus().toString(), r.getRoomType().toString(), r.isUsed().toString());
+                        System.out.printf("%14s%32s%32s%20s\n", r.getRoomId().toString(), r.getStatus().toString(), r.getRoomType().getName(), r.isUsed().toString());
                     });
 
                 } else if (response == 8) {
@@ -274,8 +287,7 @@ public class OperationManagerClient {
         }
 
         System.out.print("Enter new room type capacity (Type 0 If No Change)> ");
-        Long capacity = sc.nextLong();
-        //sc.nextLine();
+        Long capacity = Long.parseLong(sc.nextLine());
         if (capacity != 0) {
             roomType.setCapacity(capacity);
         }

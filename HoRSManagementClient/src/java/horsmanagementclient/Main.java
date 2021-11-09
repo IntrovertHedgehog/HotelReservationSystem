@@ -20,6 +20,9 @@ import javax.ejb.EJB;
 public class Main {
 
     @EJB
+    private static OccupantManagementSessionBeanRemote occupantManagementSessionBean;
+
+    @EJB
     private static WalkInSessionBeanRemote walkInSessionBeanRemote;
 
     @EJB

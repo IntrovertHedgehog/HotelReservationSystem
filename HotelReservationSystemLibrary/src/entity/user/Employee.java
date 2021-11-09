@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.validation.constraints.*;
 
 /**
  *
@@ -29,10 +30,13 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
+    @Size(min = 1, max = 32)
     @Column(length = 32)
     private String name;
+    @Size(min = 1, max = 32)
     @Column(nullable = false, unique = true, length = 32)
     private String username;
+    @Size(min = 1)
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)

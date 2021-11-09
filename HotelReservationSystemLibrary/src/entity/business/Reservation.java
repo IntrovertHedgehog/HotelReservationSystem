@@ -44,7 +44,7 @@ public abstract class Reservation implements Serializable {
     @Column(nullable = false, updatable = false)
     private LocalDate checkOutDate;
     @Column(nullable = false)
-    private Boolean isAllocated;
+    private Boolean isProcessed;
 
     @ManyToMany
     @JoinColumn(nullable = false)
@@ -63,7 +63,7 @@ public abstract class Reservation implements Serializable {
         this.checkOutDate = checkOutDate;
         this.occupant = occupant;
         this.rates = rates;
-        this.isAllocated = false;
+        this.isProcessed = false;
     }
 
     
@@ -116,22 +116,20 @@ public abstract class Reservation implements Serializable {
     public void setAllocation(Allocation allocation) {
         if (allocation != null && allocation.getReservation().equals(this)) {
             this.allocation = allocation;
-            this.isAllocated = true;
+            this.isProcessed = true;
+            this.occupant.addAllocation(allocation);
         }
     }
 
     /**
-     * @return the isAllocated
+     * @return the isProcessed
      */
-    public Boolean getIsAllocated() {
-        return isAllocated;
+    public Boolean getIsProcessed() {
+        return isProcessed;
     }
-
-    /**
-     * @param isAllocated the isAllocated to set
-     */
-    public void allocate() {
-        
+    
+    public void setIsProcessed(Boolean isProcessed) {
+        this.isProcessed = isProcessed;
     }
 
     @Override

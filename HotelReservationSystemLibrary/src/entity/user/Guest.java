@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -19,9 +20,11 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Guest extends Occupant implements Serializable {
-    private static final long serialVersionUID = 1L;    
+    private static final long serialVersionUID = 1L;
+    @Size(min = 1, max = 32)
     @Column(nullable = false, unique = true, length = 32)
     private String username;
+    @Size(min = 1)
     @Column(nullable = false)
     private String password;
     @OneToMany()

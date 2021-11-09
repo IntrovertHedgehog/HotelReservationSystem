@@ -19,6 +19,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.exception.PartnerNotFoundException;
 import util.supplement.ReservationSearchResult;
@@ -51,7 +52,7 @@ public class HolidayReservationSystemWebService {
     
     @WebMethod(operationName = "partnerSearchRoom")
     public List<ReservationSearchResult> partnerSearchRoom(@WebParam(name = "checkInDate") LocalDate checkInDate,
-                                                           @WebParam(name = "checkOutDate") LocalDate checkOutDate) {
+                                                           @WebParam(name = "checkOutDate") LocalDate checkOutDate) throws InvalidTemporalInputException {
         //need to detach???
         return partnerClientSessionBeanLocal.partnerSearchRoom(checkInDate, checkOutDate);  
     }

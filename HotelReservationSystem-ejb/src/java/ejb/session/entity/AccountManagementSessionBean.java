@@ -15,6 +15,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.UsedUsernameException;
 
 /**
  *
@@ -29,19 +30,25 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     @Override
     public Employee loginEmployee(String username, String password) throws InvalidLoginCredentialsException {
         System.out.println("Attempt to login with credentials: " + username + " | " + password);
-        Employee employee = (Employee) em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password")
-                .setParameter("username", username)
-                .setParameter("password", password)
-                .getSingleResult();
-
-        if (employee == null) {
+        try {
+            Employee employee = (Employee) em.createQuery("SELECT e FROM Employee e WHERE e.username = :username AND e.password = :password")
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .getSingleResult();
+            
+            return employee;
+        } catch (NoResultException ex) {
             throw new InvalidLoginCredentialsException("Invalid Login Credential! \n");
         }
-        return employee;
     }
 
     @Override
-    public Long createEmployee(Employee employee) {
+    public Long createEmployee(Employee employee) throws UsedUsernameException {
+        if (!em.createQuery("SELECT e FROM Employee e WHERE e.username = :usr")
+                .setParameter("usr", employee.getUsername())
+                .getResultList().isEmpty()) {
+            throw new UsedUsernameException();
+        }
         em.persist(employee);
         em.flush();
         return employee.getEmployeeId();
@@ -54,7 +61,12 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
     }
 
     @Override
-    public Long createPartner(Partner partner) {
+    public Long createPartner(Partner partner) throws UsedUsernameException {
+        if (!em.createQuery("SELECT e FROM Partner e WHERE e.username = :usr")
+                .setParameter("usr", partner.getUsername())
+                .getResultList().isEmpty()) {
+            throw new UsedUsernameException();
+        }
         em.persist(partner);
         em.flush();
 
@@ -69,24 +81,24 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
 
     @Override
     public Partner loginPartner(String username, String password) throws InvalidLoginCredentialsException{
-        Partner partner = (Partner) em.createQuery("SELECT p FROM Partner p WHERE p.username = :username AND p.password = :password")
-                .setParameter("username", username)
-                .setParameter("password", password)
-                .getSingleResult();
-        if (partner == null) {
+        try {
+            Partner partner = (Partner) em.createQuery("SELECT p FROM Partner p WHERE p.username = :username AND p.password = :password")
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .getSingleResult();
+
+            partner.getReservations();
+            return partner;
+        } catch (NoResultException ex) {
             throw new InvalidLoginCredentialsException("Invalid Login Credential! \n");
         }
-        
-        partner.getReservations();
-        return partner;
     }
     public Guest guestLogin(String username, String password) throws InvalidLoginCredentialsException {
         Query query = em.createQuery("SELECT g FROM Guest g WHERE g.username = :inUsername");
         query.setParameter("inUsername", username);
-
-        Guest guest = (Guest) query.getSingleResult();
-
-        if (guest != null) {
+        try {
+            Guest guest = (Guest) query.getSingleResult();
+            
             if (guest.getPassword().equals(password)) {
                 guest.getReservations().size();
                 guest.getAllocations().size();
@@ -94,7 +106,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
             } else {
                 throw new InvalidLoginCredentialsException("Invalid Login Credential! \n");
             }
-        } else {
+        } catch (NoResultException ex) {
             throw new InvalidLoginCredentialsException("Invalid Login Credential! \n");
         }
     }

@@ -12,13 +12,14 @@ import java.util.List;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 import javax.ejb.Local;
+import util.exception.InvalidTemporalInputException;
 /**
  *
  * @author brianlim
  */
 @Local
 public interface PartnerClientSessionBeanLocal {
-    public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate);
+    public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate)  throws InvalidTemporalInputException ;
     
     public Long partnerReserve(ReservationSearchResult target, Partner partner, Occupant occupant) throws NoMoreRoomException;
 }

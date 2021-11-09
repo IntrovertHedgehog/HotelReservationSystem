@@ -50,6 +50,6 @@ public class RoomId implements Serializable {
     
     @Override
     public String toString() {
-        return "Room ID: " + getId();
+        return getId();
     }
 }

@@ -13,8 +13,11 @@ import entity.user.Guest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialsException;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -121,7 +124,7 @@ public class MainApp {
 
                 }
             }
-            if(response == 4) {
+            if (response == 4) {
                 break;
             }
 
@@ -172,34 +175,39 @@ public class MainApp {
         System.out.print("Enter check out date (yyyy-MM-dd) > ");
         LocalDate dateEnd = LocalDate.parse(sc.nextLine());
 
-        List<ReservationSearchResult> results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateStart, dateEnd);
+        List<ReservationSearchResult> results;
+        try {
+            results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateStart, dateEnd);
 
-        System.out.println("*** HoRS Management Client :: Online Reservation :: Search Rooms ***\n");
-        System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
+            System.out.println("*** HoRS Management Client :: Online Reservation :: Search Rooms ***\n");
+            System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
-        Integer counter = 0;
-        for (ReservationSearchResult r : results) {
-            System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
-            counter++;
-        }
-
-        System.out.println("\n=====================================");
-        System.out.println("1. Reserve Room");
-        System.out.println("2. Exit\n");
-        Integer response = 0;
-        while (response < 1 || response > 2) {
-            response = Integer.parseInt(sc.nextLine());
-
-            if (response == 1) {
-
-                reserveHotelRoom();
-
-            } else if (response == 2) {
-                return;
-
-            } else {
-                System.out.println("Invalid option, please try again!\\n");
+            Integer counter = 0;
+            for (ReservationSearchResult r : results) {
+                System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
+                counter++;
             }
+
+            System.out.println("\n=====================================");
+            System.out.println("1. Reserve Room");
+            System.out.println("2. Exit\n");
+            Integer response = 0;
+            while (response < 1 || response > 2) {
+                response = Integer.parseInt(sc.nextLine());
+
+                if (response == 1) {
+
+                    reserveHotelRoom();
+
+                } else if (response == 2) {
+                    return;
+
+                } else {
+                    System.out.println("Invalid option, please try again!\\n");
+                }
+            }
+        } catch (InvalidTemporalInputException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 

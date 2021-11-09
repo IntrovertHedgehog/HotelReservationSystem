@@ -88,7 +88,7 @@ public class SalesManagerClient {
             System.out.printf("%3s%20s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
         });
         System.out.print("Enter new room rate's room type ID > ");
-        Long roomTypeId = sc.nextLong();
+        Long roomTypeId = Long.parseLong(sc.nextLine());
         RoomType rt;
         try {
             rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(roomTypeId);
@@ -96,13 +96,14 @@ public class SalesManagerClient {
             System.out.println("Room Type Not Found !");
             return;
         }
-
+        
+        System.out.println("Rate types: PUBLISHED, NORMAL, PEAK, PROMOTION");
         System.out.print("Enter new room rate type > ");
         String rateTypeString = sc.nextLine();
         RateType rateType = RateType.valueOf(rateTypeString);
 
         System.out.print("Enter new room rate's per night > ");
-        BigDecimal ratePerNight = sc.nextBigDecimal();
+        BigDecimal ratePerNight = new BigDecimal(sc.nextLine().trim());
 
         System.out.print("Enter new room rate's start date (yyyy-MM-dd) > ");
         LocalDate dateStart = LocalDate.parse(sc.nextLine());
@@ -116,12 +117,12 @@ public class SalesManagerClient {
 
     public void viewRoomRateDetails() {
         System.out.print("Enter Room Rate ID > ");
-        Long roomRateId = sc.nextLong();
+        Long roomRateId = Long.parseLong(sc.nextLine());
 
         Rate r = this.roomManagementSessionBeanRemote.viewRateDetails(roomRateId);
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View Room Rates Details ***\n");
-        System.out.printf("%3s%20s%20s%20s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
-        System.out.printf("%3s%20s%20s%20s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
+        System.out.printf("%14s%20s%20s%30s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
+        System.out.printf("%14s%20s%20s%30s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
         System.out.println("=====================================");
         System.out.println("1. Update Room Rate");
         System.out.println("2. Delete Room Rate");
@@ -145,9 +146,9 @@ public class SalesManagerClient {
         List<Rate> rates = this.roomManagementSessionBeanRemote.viewAllRates();
 
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View List of Room Rates ***\n");
-        System.out.printf("%3s%20s%20s%20s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
+        System.out.printf("%14s%20s%20s%30s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
         rates.forEach(r -> {
-            System.out.printf("%3s%20s%20s%20s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
+            System.out.printf("%14s%20s%20s%30s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
         });
     }
 
@@ -161,13 +162,13 @@ public class SalesManagerClient {
         List<RoomType> roomTypes = this.roomManagementSessionBeanRemote.retrieveAllRoomTypes();
 
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View List of Room Types ***\n");
-        System.out.printf("%3s%20s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
+        System.out.printf("%14s%32s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
         for (RoomType rt : roomTypes) {
-            System.out.printf("%3s%20s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+            System.out.printf("%14s%32s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
         }
         System.out.print("Enter new room rate's room type ID (Type 0 If No Change)> ");
 
-        Long roomTypeId = sc.nextLong();
+        Long roomTypeId = Long.parseLong(sc.nextLine());
         if (roomTypeId > 0) {
             RoomType rt;
             try {
@@ -189,7 +190,7 @@ public class SalesManagerClient {
         
 
         System.out.print("Enter new room rate's per night (Type 0 If No Change)> ");
-        BigDecimal ratePerNight = sc.nextBigDecimal();
+        BigDecimal ratePerNight = new BigDecimal(sc.nextLine().trim());
         if(!ratePerNight.equals(0)) {
             rate.setRatePerNight(ratePerNight);
         }

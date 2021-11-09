@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -28,10 +29,13 @@ public class Partner implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long partnerId;
+    @Size(min = 1, max = 64)
     @Column(nullable = false, length = 64)
     private String name;
+    @Size(min = 1, max = 32)
     @Column(nullable = false, unique = true, length = 32)
     private String username;
+    @Size(min = 1)
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY)

@@ -10,6 +10,7 @@ import entity.user.Partner;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -19,7 +20,7 @@ import util.supplement.ReservationSearchResult;
  */
 @Remote
 public interface PartnerClientSessionBeanRemote {
-    public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate);
+    public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate)  throws InvalidTemporalInputException ;
     
     public Long partnerReserve(ReservationSearchResult target, Partner partner, Occupant occupant) throws NoMoreRoomException;
 }

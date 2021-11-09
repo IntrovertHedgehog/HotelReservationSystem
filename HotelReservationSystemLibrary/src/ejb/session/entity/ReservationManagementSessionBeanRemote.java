@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.GuestNotFoundException;
+import util.exception.InvalidTemporalInputException;
 import util.exception.PartnerNotFoundException;
 import util.supplement.ReservationSearchResult;
 
@@ -23,5 +24,5 @@ import util.supplement.ReservationSearchResult;
 public interface ReservationManagementSessionBeanRemote {
     public List<OnlineReservation> viewAllReservationByGuest(String guestId) throws GuestNotFoundException ;
     public List<PartnerReservation> viewAllReservationByPartner(Long partnerId) throws PartnerNotFoundException;
-    public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType);
+    public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType)  throws InvalidTemporalInputException ;
 }

@@ -7,6 +7,7 @@ package entity.business;
 
 import enumeration.BedSize;
 import enumeration.RateType;
+import enumeration.RoomTypeConfig;
 import enumeration.RoomTypeStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.*;
 
 /**
  *
@@ -46,8 +48,10 @@ public class RoomType implements Serializable {
     private BigDecimal roomSize;
     @Column(nullable = false)
     private BedSize bedsize;
+    @Min(0)
     @Column(nullable = false)
     private Long capacity;
+    @Size(max = 128)
     @Column(length = 128)
     private String amenities;
     @OneToMany(mappedBy = "roomType")
@@ -57,12 +61,15 @@ public class RoomType implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomTypeStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RoomTypeConfig roomTypeConfig;
     
     public RoomType() {
         rates = new ArrayList<>();
     }
 
-    public RoomType(String name, String description, BigDecimal size, BedSize bedsize, Long capacity, String amenities) {
+    public RoomType(String name, String description, BigDecimal size, BedSize bedsize, Long capacity, String amenities, RoomTypeConfig roomTypeConfig) {
         this();
         this.name = name;
         this.description = description;
@@ -72,6 +79,7 @@ public class RoomType implements Serializable {
         this.amenities = amenities;
         this.quantityAvailable = 0l;
         this.status = RoomTypeStatus.UNUSED;
+        this.roomTypeConfig = roomTypeConfig;
     }
     
     
@@ -144,6 +152,20 @@ public class RoomType implements Serializable {
      */
     public void setCapacity(Long capacity) {
         this.capacity = capacity;
+    }
+
+    /**
+     * @return the roomTypeConfig
+     */
+    public RoomTypeConfig getRoomTypeConfig() {
+        return roomTypeConfig;
+    }
+
+    /**
+     * @param roomTypeConfig the roomTypeConfig to set
+     */
+    public void setRoomTypeConfig(RoomTypeConfig roomTypeConfig) {
+        this.roomTypeConfig = roomTypeConfig;
     }
 
     /**

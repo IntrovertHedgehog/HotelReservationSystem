@@ -19,6 +19,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
 import util.supplement.ReservationSearchResult;
 
@@ -37,7 +38,7 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
     private List<ReservationSearchResult> searchResults;
 
     @Override
-    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) {
+    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) throws InvalidTemporalInputException  {
         return this.searchResults = reservationManagementSessionBean.searchReservation(checkInDate, checkOutDate, ClientType.WALKIN);
     }
 
