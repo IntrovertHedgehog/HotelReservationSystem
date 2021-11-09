@@ -106,6 +106,11 @@ public class Occupant implements Serializable {
     public void removeAllocation(Allocation allocation) {
         this.allocations.remove(allocation);
     }
+    
+    public void nullify() {
+        this.allocations = null;
+        this.reservations = null;
+    }
 
     @Override
     public int hashCode() {

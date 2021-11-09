@@ -92,11 +92,25 @@ public class Partner implements Serializable {
         }
     }
     
+    public Boolean matchPassword(String password) {
+        return this.password.equals(password);
+    }
+    
     /**
      * @return the reservations
      */
     public List<PartnerReservation> getReservations() {
         return reservations;
+    }
+    
+    public void hardNullify() {
+        this.reservations = null;
+    }
+    
+    public void softNullify() {
+        for (PartnerReservation res : reservations) {
+            res.nullify();
+        }
     }
     
     public void addReservation(PartnerReservation partnerReservation) {

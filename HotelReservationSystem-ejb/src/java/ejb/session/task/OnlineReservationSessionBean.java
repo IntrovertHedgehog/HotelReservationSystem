@@ -35,9 +35,10 @@ public class OnlineReservationSessionBean implements OnlineReservationSessionBea
     private ReservationManagementSessionBeanLocal reservationManagementSessionBean;
 
     private List<ReservationSearchResult> searchResults;
+    private Guest guest;
+    
     @PersistenceContext(unitName = "HotelReservationSystem-PU")
     private EntityManager em;
-    private Guest guest;
 
     @Override
     public List<ReservationSearchResult> onlineSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) throws InvalidTemporalInputException {

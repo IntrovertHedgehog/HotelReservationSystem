@@ -24,6 +24,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -54,6 +55,7 @@ public class RoomType implements Serializable {
     @Size(max = 128)
     @Column(length = 128)
     private String amenities;
+    @XmlTransient
     @OneToMany(mappedBy = "roomType")
     private List<Rate> rates;
     @Column(nullable = false)

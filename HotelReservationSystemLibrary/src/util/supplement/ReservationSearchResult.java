@@ -16,12 +16,13 @@ import java.time.LocalDate;
  * @author Winter
  */
 public class ReservationSearchResult implements Serializable {
-    private RoomType roomType;
-    private Long quantity;
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
-    private BigDecimal prevailRate;
-    private ClientType clientType;
+
+    private final RoomType roomType;
+    private final Long quantity;
+    private final LocalDate checkInDate;
+    private final LocalDate checkOutDate;
+    private final BigDecimal prevailRate;
+    private final ClientType clientType;
 
     public ReservationSearchResult(RoomType roomType, Long quantity, LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) {
         this.roomType = roomType;

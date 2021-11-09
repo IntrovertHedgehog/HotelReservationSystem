@@ -41,6 +41,11 @@ public class PartnerReservation extends Reservation implements Serializable {
     public Partner getPartner() {
         return partner;
     }
+    
+    public void nullify() {
+        super.nullify();
+        partner = null;
+    }
 
     @Override
     public String toString() {

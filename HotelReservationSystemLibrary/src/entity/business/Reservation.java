@@ -131,6 +131,10 @@ public abstract class Reservation implements Serializable {
     public void setIsProcessed(Boolean isProcessed) {
         this.isProcessed = isProcessed;
     }
+    
+    public void nullify() {
+        this.occupant.nullify();
+    }
 
     @Override
     public int hashCode() {
