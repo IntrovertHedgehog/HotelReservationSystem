@@ -12,6 +12,7 @@ import entity.user.Occupant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import util.exception.InvalidTemporalInputException;
@@ -57,8 +58,8 @@ public class GuestRelationOfficerClient {
 
             while (response < 1 || response > 5) {
                 System.out.print(" > ");
+                try {
                 response = Integer.parseInt(sc.nextLine());
-
                 if (response == 1) {
                     walkInSearchRoom();
 
@@ -72,6 +73,9 @@ public class GuestRelationOfficerClient {
                     break;
                 } else {
                     break;
+                }
+                } catch (DateTimeParseException | NumberFormatException ex) {
+                    System.out.println("Unrecognized input format");
                 }
             }
             if (response == 4) {
@@ -130,6 +134,8 @@ public class GuestRelationOfficerClient {
         Occupant o = null;
         try {
             o = occupantManagementSessionBeanRemote.retrieveOccupant(passport);
+            System.out.println("This occupant has registered before!");
+            System.out.println("Occupant name > " + o.getName());
         } catch (OccupantNotFoundException ex) {
         }
 
@@ -158,19 +164,21 @@ public class GuestRelationOfficerClient {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateStart = LocalDateTime.parse(sc.nextLine(), formatter);
 
-        System.out.println("Enter occupant passport > ");
+        System.out.print("Enter occupant passport > ");
         String passport = sc.nextLine().trim();
-        walkInSessionBeanRemote.checkInGuest(dateStart, passport);
+        List<String> roomIds = walkInSessionBeanRemote.checkInGuest(dateStart, passport);
+        System.out.println("Occupant room ids");
+        roomIds.forEach(r -> System.out.println(r));
     }
 
     public void checkOutGuest() {
-        System.out.println("Enter check out date (yyyy-MM-dd HH:mm) > ");
+        System.out.print("Enter check out date (yyyy-MM-dd HH:mm) > ");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateEnd = LocalDateTime.parse(sc.nextLine(), formatter);
 
-        System.out.println("Enter occupant passport > ");
+        System.out.print("Enter occupant passport > ");
         String passport = sc.nextLine().trim();
         walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);
-
-    }
+        System.out.println("Check out successful");
+    }   
 }

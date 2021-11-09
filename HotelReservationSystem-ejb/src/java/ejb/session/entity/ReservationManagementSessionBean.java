@@ -23,6 +23,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolationException;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
@@ -106,13 +107,22 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
     @Override
     public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) throws NoMoreRoomException{
-        if (em.contains(occupant)) {
-            occupant = em.merge(occupant);
-        } else {
-            em.persist(occupant);
-        }
+        Occupant occupantInDb = em.find(Occupant.class, occupant.getPassport());
         
+        if (occupantInDb == null) {
+            try {
+                em.persist(occupant);
+                em.flush();
+            } catch (ConstraintViolationException ex) {
+                System.out.println("Violated constraints! " + ex.getMessage());
+            }
+            System.out.println("This occupant is not here before!");
+        } else {
+            occupant = em.merge(occupant);
+            System.out.println("This occupant existed!");
+        }
         em.flush();
+        
         WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate);
         em.persist(walkInReservation);
         em.flush();

@@ -38,7 +38,7 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
     private List<ReservationSearchResult> searchResults;
 
     @Override
-    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) throws InvalidTemporalInputException  {
+    public List<ReservationSearchResult> walkInSearchRoom(LocalDate checkInDate, LocalDate checkOutDate) throws InvalidTemporalInputException {
         return this.searchResults = reservationManagementSessionBean.searchReservation(checkInDate, checkOutDate, ClientType.WALKIN);
     }
 
@@ -55,16 +55,20 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
     @Override
     public List<String> checkInGuest(LocalDateTime checkInDateTime, String passport) {
         Occupant occupant = em.find(Occupant.class, passport);
-        
-        LocalDate checkInDate = checkInDateTime.toLocalDate();
-        LocalTime checkInTime = checkInDateTime.toLocalTime();
         List<String> rooms = new ArrayList<>();
-        for (Allocation a : occupant.getAllocations()) {
-            if (checkInDate.equals(a.getCheckInDate()) && 
-                    checkInTime.isAfter(LocalTime.of(14, 0))) {
-                a.checkIn(checkInTime);
-                rooms.add(a.getRoom().getRoomId().toString());
+
+        if (occupant != null) {
+            LocalDate checkInDate = checkInDateTime.toLocalDate();
+            LocalTime checkInTime = checkInDateTime.toLocalTime();
+            for (Allocation a : occupant.getAllocations()) {
+                if (checkInDate.equals(a.getCheckInDate())
+                        && checkInTime.isAfter(LocalTime.of(14, 0))) {
+                    a.checkIn(checkInTime);
+                    rooms.add(a.getRoom().getRoomId().toString());
+                }
             }
+        } else {
+            rooms.add("This occupant has not booked any room");
         }
         return rooms;
     }
@@ -75,11 +79,12 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
         Occupant occupant = em.find(Occupant.class, passport);
         LocalDate checkOutDate = checkOutDateTime.toLocalDate();
         LocalTime checkOutTime = checkOutDateTime.toLocalTime();
-
-        for (Allocation a : occupant.getAllocations()) {
-            if (checkOutDate.equals(a.getCheckOutDate())
-                    && checkOutTime.isBefore(LocalTime.of(12, 0))) {
-                a.checkOut(checkOutTime);
+        if (occupant != null) {
+            for (Allocation a : occupant.getAllocations()) {
+                if (checkOutDate.equals(a.getCheckOutDate())
+                        && checkOutTime.isBefore(LocalTime.of(12, 0))) {
+                    a.checkOut(checkOutTime);
+                }
             }
         }
     }

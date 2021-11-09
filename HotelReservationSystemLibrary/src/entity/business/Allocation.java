@@ -42,9 +42,7 @@ public class Allocation implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Occupant occupant;
-    @Column(updatable = false)
     private LocalTime checkInTime;
-    @Column(updatable = false)
     private LocalTime checkOutTime;
 
     public Allocation() {
@@ -108,6 +106,7 @@ public class Allocation implements Serializable {
     }
     
     public void checkIn(LocalTime checkInTime) {
+        System.out.println("Checked in at " + checkInTime);
         this.checkInTime = checkInTime;
         room.setUnavailable();
     }

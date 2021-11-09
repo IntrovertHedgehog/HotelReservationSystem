@@ -93,21 +93,21 @@ public class Room implements Serializable {
     }
     
     public void setAvailable() {
-        if (this.status != RoomStatus.AVAILABLE) {
+        if (this.status == RoomStatus.DISABLE) {
             this.roomType.incrementQuantity();
         }
         this.status = RoomStatus.AVAILABLE;
     }
 
     public void setUnavailable() {
-        if (this.status == RoomStatus.AVAILABLE) {
-            this.roomType.decrementQuantity();
+        if (this.status == RoomStatus.DISABLE) {
+            this.roomType.incrementQuantity();
         }
         this.status = RoomStatus.UNAVAILABLE;
     }
 
     public void setDisabled() {
-        if (this.status == RoomStatus.AVAILABLE) {
+        if (this.status != RoomStatus.DISABLE) {
             this.roomType.decrementQuantity();
         }
         this.status = RoomStatus.DISABLE;
@@ -119,6 +119,7 @@ public class Room implements Serializable {
     
     public void use() {
         this.isUsed = true;
+        this.roomType.setUsed();
     }
 
     @Override

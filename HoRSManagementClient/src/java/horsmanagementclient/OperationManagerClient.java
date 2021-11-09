@@ -29,7 +29,7 @@ import util.exception.UpdateRoomTypeException;
  */
 public class OperationManagerClient {
 
-    private RoomManagementSessionBeanRemote roomManagementSessionBeanRemote ;
+    private RoomManagementSessionBeanRemote roomManagementSessionBeanRemote;
 
     private ExceptionReportManagementSessionBeanRemote exceptionReportManagementSessionBeanRemote;
 
@@ -91,7 +91,7 @@ public class OperationManagerClient {
 
                     System.out.print("Enter new room type amenities > ");
                     String amenities = sc.nextLine().trim();
-                    
+
                     System.out.println("**** Room Type Configuration");
                     System.out.println("1. Deluxe Room\n"
                             + "2. Premier Room\n"
@@ -100,7 +100,7 @@ public class OperationManagerClient {
                             + "5. Grand Suite");
                     System.out.print(" > ");
                     Integer configNo = Integer.parseInt(sc.nextLine().trim());
-                    
+
                     RoomTypeConfig[] configs = {RoomTypeConfig.DELUXE_ROOM, RoomTypeConfig.PREMIER_ROOM, RoomTypeConfig.FAMILY_ROOM, RoomTypeConfig.JUNIOR_SUIT, RoomTypeConfig.GRAND_SUIT};
                     RoomTypeConfig config = configs[configNo - 1];
 
@@ -118,8 +118,8 @@ public class OperationManagerClient {
                         break;
                     }
 
-                    System.out.printf("%14s%32s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
-                    System.out.printf("%14s%32s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+                    System.out.printf("%14s%32s%20s%15s\n", "Room Type ID", "Room Type Name", "Room Type Quantity", "Configuration");
+                    System.out.printf("%14s%32s%20s%15s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString(), rt.getRoomTypeConfig().toString());
                     System.out.println("=====================================");
                     System.out.println("1. Update Room Type");
                     System.out.println("2. Delete Room Type");
@@ -142,10 +142,10 @@ public class OperationManagerClient {
                     List<RoomType> roomTypes = this.roomManagementSessionBeanRemote.retrieveAllRoomTypes();
 
                     System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Room Types ***\n");
-                    System.out.printf("%14s%32s%20s\n", "Room Type ID", "Room Type Name", "Room Type Quantity");
+                    System.out.printf("%14s%32s%20s%15s\n", "Room Type ID", "Room Type Name", "Room Type Quantity", "Configuration");
 
                     roomTypes.forEach(rt -> {
-                        System.out.printf("%14s%32s%20s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString());
+                        System.out.printf("%14s%32s%20s%15s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString(), rt.getRoomTypeConfig().toString());
                     });
 
                 } else if (response == 4) {
@@ -267,13 +267,13 @@ public class OperationManagerClient {
         if (description.length() > 0) {
             roomType.setDescription(description);
         }
-        
+
         System.out.print("Enter new room type room size (Type 0 If No Change)> ");
         BigDecimal roomSize = new BigDecimal(sc.nextLine().trim());
         if (!roomSize.equals(0)) {
             roomType.setRoomSize(roomSize);
         }
-        
+
         System.out.println("1. King");
         System.out.println("2. Queen");
         System.out.println("3. Full");
@@ -291,7 +291,7 @@ public class OperationManagerClient {
         if (capacity != 0) {
             roomType.setCapacity(capacity);
         }
-        
+
         System.out.print("Enter new room type amenities (Leave Blank If No Change)> ");
         String amenities = sc.nextLine().trim();
         if (amenities.length() > 0) {
@@ -303,7 +303,7 @@ public class OperationManagerClient {
         } catch (RoomTypeNotFoundException | UpdateRoomTypeException e) {
             System.out.println(e.getMessage());
         }
-        
+
     }
 
     public void deleteRoomType(RoomType roomType) {
