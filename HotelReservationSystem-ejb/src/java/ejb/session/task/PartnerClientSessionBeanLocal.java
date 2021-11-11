@@ -6,7 +6,6 @@
 package ejb.session.task;
 
 import entity.business.PartnerReservation;
-import entity.business.Reservation;
 import entity.user.Partner;
 import java.time.LocalDate;
 import java.util.List;

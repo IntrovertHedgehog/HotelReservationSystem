@@ -82,7 +82,9 @@ public class RoomType implements Serializable {
         this.roomTypeConfig = roomTypeConfig;
     }
     
-    
+    public void nullify() {
+        this.rates = null;
+    }
 
     /**
      * @return the name

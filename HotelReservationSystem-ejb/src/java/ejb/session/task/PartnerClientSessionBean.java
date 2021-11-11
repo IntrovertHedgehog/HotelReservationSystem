@@ -5,7 +5,6 @@
  */
 package ejb.session.task;
 
-import ejb.session.entity.AccountManagementSessionBeanLocal;
 import ejb.session.entity.ReservationManagementSessionBeanLocal;
 import entity.business.PartnerReservation;
 import entity.business.RoomType;
@@ -60,7 +59,14 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
 
     @Override
     public List<ReservationSearchResult> partnerSearchRoom(LocalDate CheckInDate, LocalDate checkOutDate) throws InvalidTemporalInputException {
-        return reservationManagementSessionBean.searchReservation(CheckInDate, checkOutDate, ClientType.ONLINE);
+        List<ReservationSearchResult> results =  reservationManagementSessionBean.searchReservation(CheckInDate, checkOutDate, ClientType.ONLINE);
+        for (ReservationSearchResult r : results) {
+            RoomType rt = r.getRoomType();
+            em.detach(rt);
+            rt.nullify();
+        }
+        
+        return results;
     }
 
     @Override

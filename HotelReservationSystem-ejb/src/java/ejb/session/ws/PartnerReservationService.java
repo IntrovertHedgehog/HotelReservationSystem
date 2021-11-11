@@ -28,36 +28,54 @@ import util.supplement.ReservationSearchResult;
  * @author Winter
  */
 @WebService(serviceName = "PartnerReservationService")
-@Stateless()
+@Stateless
 public class PartnerReservationService {
 
     @EJB
-    private PartnerClientSessionBeanLocal ejbRef;// Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Web Service Operation")
+    private PartnerClientSessionBeanLocal partnerClientSessionBean;
 
     @WebMethod(operationName = "loginPartner")
-    public Partner loginPartner(@WebParam(name = "username") String username, @WebParam(name = "password") String password) throws InvalidLoginCredentialsException {
-        return ejbRef.loginPartner(username, password);
+    public Partner loginPartner(@WebParam(name = "username") String username
+                              , @WebParam(name = "password") String password)
+                                throws InvalidLoginCredentialsException {
+        return partnerClientSessionBean.loginPartner(username, password);
     }
 
     @WebMethod(operationName = "partnerSearchRoom")
-    public List<ReservationSearchResult> partnerSearchRoom(@WebParam(name = "checkInDate") LocalDate checkInDate, @WebParam(name = "checkOutDate") LocalDate checkOutDate) throws InvalidTemporalInputException {
-        return ejbRef.partnerSearchRoom(checkInDate, checkOutDate);
+    public List<ReservationSearchResult> partnerSearchRoom(@WebParam(name = "checkInDate") String checkInDate,
+                                                            @WebParam(name = "checkOutDate") String checkOutDate)
+                                                            throws InvalidTemporalInputException {
+        
+        LocalDate checkInd = LocalDate.parse(checkInDate);
+        LocalDate checkOutd = LocalDate.parse(checkOutDate);
+        return partnerClientSessionBean.partnerSearchRoom(checkInd, checkOutd);
     }
 
     @WebMethod(operationName = "partnerReserve")
-    public Long partnerReserve(@WebParam(name = "partnerId") Long partnerId, @WebParam(name = "roomTypeId") Long roomTypeId, @WebParam(name = "passport") String passport, @WebParam(name = "name") String name, @WebParam(name = "CheckInDate") LocalDate CheckInDate, @WebParam(name = "checkOutDate") LocalDate checkOutDate) throws NoMoreRoomException, PartnerNotFoundException, RoomTypeNotFoundException {
-        return ejbRef.partnerReserve(partnerId, roomTypeId, passport, name, CheckInDate, checkOutDate);
+    public Long partnerReserve(@WebParam(name = "partnerId") Long partnerId
+                            , @WebParam(name = "roomTypeId") Long roomTypeId
+                            , @WebParam(name = "passport") String passport
+                            , @WebParam(name = "name") String name
+                            , @WebParam(name = "CheckInDate") String checkInDate
+                            , @WebParam(name = "checkOutDate") String checkOutDate)
+                            throws NoMoreRoomException, PartnerNotFoundException, RoomTypeNotFoundException {
+        
+        LocalDate checkInd = LocalDate.parse(checkInDate);
+        LocalDate checkOutd = LocalDate.parse(checkOutDate);
+        return partnerClientSessionBean.partnerReserve(partnerId, roomTypeId, passport, name, checkInd, checkOutd);
     }
 
     @WebMethod(operationName = "viewAllReservations")
-    public List<PartnerReservation> viewAllReservations(@WebParam(name = "partnerId") Long partnerId) throws PartnerNotFoundException {
-        return ejbRef.viewAllReservations(partnerId);
+    public List<PartnerReservation> viewAllReservations(@WebParam(name = "partnerId") Long partnerId) 
+                                                        throws PartnerNotFoundException {
+        return partnerClientSessionBean.viewAllReservations(partnerId);
     }
 
     @WebMethod(operationName = "reservationDetails")
-    public PartnerReservation reservationDetails(@WebParam(name = "partnerId") Long partnerId, @WebParam(name = "reservationId") Long reservationId) throws PartnerNotFoundException, ReservationNotVisibleException {
-        return ejbRef.reservationDetails(partnerId, reservationId);
+    public PartnerReservation reservationDetails(@WebParam(name = "partnerId") Long partnerId
+                                                , @WebParam(name = "reservationId") Long reservationId) 
+                                                throws PartnerNotFoundException, ReservationNotVisibleException {
+        return partnerClientSessionBean.reservationDetails(partnerId, reservationId);
     }
     
 }

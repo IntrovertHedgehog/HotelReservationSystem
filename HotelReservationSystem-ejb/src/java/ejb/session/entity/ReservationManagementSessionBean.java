@@ -19,6 +19,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -49,7 +51,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         if (guest == null) {
             throw new GuestNotFoundException(String.format("Guest with id %d does not exist", guestId));
         }
-        
+
         return guest.getOnlineReservations();
     }
 
@@ -59,21 +61,23 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         if (partner == null) {
             throw new PartnerNotFoundException(String.format("Partner with id %d does not exist", partnerId));
         }
-        
+
         return partner.getReservations();
     }
 
     @Override
     public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) throws InvalidTemporalInputException {
-        if (!checkInDate.isBefore(checkOutDate)) throw new InvalidTemporalInputException("Check in date must be before checkout date");
+        if (!checkInDate.isBefore(checkOutDate)) {
+            throw new InvalidTemporalInputException("Check in date must be before checkout date");
+        }
         List<ReservationSearchResult> results = new ArrayList<>();
-        List<Object[]> rawResult = em.createNativeQuery("SELECT rt.roomTypeId, rt.quantityAvailable - COUNT(r.RESERVATIONID)\n" +
-                                                        "FROM roomType rt LEFT JOIN \n" +
-                                                        "(SELECT * FROM Reservation r \n" +
-                                                        "    WHERE r.checkInDate < ? \n" +
-                                                        "    AND r.checkOutDate > ?) r\n" +
-                                                        "ON r.ROOMTYPE_ROOMTYPEID = rt.ROOMTYPEID\n" +
-                                                        "GROUP BY rt.roomTypeId")
+        List<Object[]> rawResult = em.createNativeQuery("SELECT rt.roomTypeId, rt.quantityAvailable - COUNT(r.RESERVATIONID)\n"
+                + "FROM roomType rt LEFT JOIN \n"
+                + "(SELECT * FROM Reservation r \n"
+                + "    WHERE r.checkInDate < ? \n"
+                + "    AND r.checkOutDate > ?) r\n"
+                + "ON r.ROOMTYPE_ROOMTYPEID = rt.ROOMTYPEID\n"
+                + "GROUP BY rt.roomTypeId")
                 .setParameter(2, checkInDate)
                 .setParameter(1, checkOutDate)
                 .getResultList();
@@ -82,12 +86,12 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             Long quantity = (Long) obj[1];
             results.add(new ReservationSearchResult(roomType, quantity, checkInDate, checkOutDate, clientType));
         }
-        
+
         return results;
     }
-    
-    private void sameDayCheckIn(Reservation reservation) throws NoMoreRoomException{
-        if (reservation.getCheckInDate().equals(LocalDate.now()) && LocalTime.now().isAfter(LocalTime.of(2,0))) {
+
+    private void sameDayCheckIn(Reservation reservation) throws NoMoreRoomException {
+        if (reservation.getCheckInDate().equals(LocalDate.now()) && LocalTime.now().isAfter(LocalTime.of(2, 0))) {
             Long allocationId = allocatingBotSessionBean.allocate(reservation);
             if (allocationId == null) {
                 throw new NoMoreRoomException("No more room for this reservation");
@@ -96,56 +100,109 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     }
 
     @Override
-    public Long createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest) throws NoMoreRoomException{
-        OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
-        em.persist(onlineReservation);
-        em.flush();
-        guest.addOnlineReservation(onlineReservation);
-        sameDayCheckIn(onlineReservation);
-        return onlineReservation.getReservationId();
-    }
+    public Long createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest) throws NoMoreRoomException {
+        try {
+            List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
 
-    @Override
-    public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) throws NoMoreRoomException{
-        Occupant occupantInDb = em.find(Occupant.class, occupant.getPassport());
-        
-        if (occupantInDb == null) {
-            try {
-                em.persist(occupant);
-                em.flush();
-            } catch (ConstraintViolationException ex) {
-                System.out.println("Violated constraints! " + ex.getMessage());
+            for (ReservationSearchResult r : results) {
+                if (r.getRoomType().equals(roomType)) {
+                    if (r.getQuantity() <= 0) {
+                        return null;
+                    }
+
+                    break;
+                }
             }
-            System.out.println("This occupant is not here before!");
-        } else {
-            occupant = em.merge(occupant);
-            System.out.println("This occupant existed!");
+            OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
+            em.persist(onlineReservation);
+            em.flush();
+            guest.addOnlineReservation(onlineReservation);
+            sameDayCheckIn(onlineReservation);
+            return onlineReservation.getReservationId();
+        } catch (InvalidTemporalInputException ex) {
+            return null;
         }
-        em.flush();
-        
-        WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate);
-        em.persist(walkInReservation);
-        em.flush();
-        occupant.addReservation(walkInReservation);
-        sameDayCheckIn(walkInReservation);
-        return walkInReservation.getReservationId();
     }
 
     @Override
-    public Long createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant) throws NoMoreRoomException{
-        if (em.contains(occupant)) {
-            occupant = em.merge(occupant);
-        } else {
-            em.persist(occupant);
+    public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) throws NoMoreRoomException {
+        try {
+            List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
+
+            for (ReservationSearchResult r : results) {
+                if (r.getRoomType().equals(roomType)) {
+                    if (r.getQuantity() <= 0) {
+                        return null;
+                    }
+
+                    break;
+                }
+            }
+
+            if (em.contains(occupant)) {
+                occupant = em.merge(occupant);
+            } else {
+                em.persist(occupant);
+            }
+            
+            Occupant occupantInDb = em.find(Occupant.class, occupant.getPassport());
+
+            if (occupantInDb == null) {
+                try {
+                    em.persist(occupant);
+                    em.flush();
+                } catch (ConstraintViolationException ex) {
+                    System.out.println("Violated constraints! " + ex.getMessage());
+                }
+                System.out.println("This occupant is not here before!");
+            } else {
+                occupant = em.merge(occupant);
+                System.out.println("This occupant existed!");
+            }
+            em.flush();
+
+            WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate);
+            em.persist(walkInReservation);
+            em.flush();
+            occupant.addReservation(walkInReservation);
+            sameDayCheckIn(walkInReservation);
+            return walkInReservation.getReservationId();
+        } catch (InvalidTemporalInputException ex) {
+            return null;
         }
-        
-        em.flush();
-        PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);
-        em.persist(partnerReservation);
-        em.flush();
-        partner.addReservation(partnerReservation);
-        occupant.addReservation(partnerReservation);
-        sameDayCheckIn(partnerReservation);
-        return partnerReservation.getReservationId();
+    }
+
+    @Override
+    public Long createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant) throws NoMoreRoomException {
+        try {
+            List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
+
+            for (ReservationSearchResult r : results) {
+                if (r.getRoomType().equals(roomType)) {
+                    if (r.getQuantity() <= 0) {
+                        return null;
+                    }
+
+                    break;
+                }
+            }
+
+            if (em.contains(occupant)) {
+                occupant = em.merge(occupant);
+            } else {
+                em.persist(occupant);
+            }
+
+            em.flush();
+            PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);
+            em.persist(partnerReservation);
+            em.flush();
+            partner.addReservation(partnerReservation);
+            occupant.addReservation(partnerReservation);
+            sameDayCheckIn(partnerReservation);
+            return partnerReservation.getReservationId();
+        } catch (InvalidTemporalInputException ex) {
+            return null;
+        }
     }
 }

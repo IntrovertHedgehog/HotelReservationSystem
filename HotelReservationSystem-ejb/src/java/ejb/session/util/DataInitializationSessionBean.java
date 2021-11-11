@@ -25,8 +25,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -66,10 +64,10 @@ public class DataInitializationSessionBean {
                 .getResultList();
         if (emp.isEmpty()) {
             try {
-                accountManagementSessionBean.createEmployee(new Employee("admin", "admin", "password", EmployeeType.SYSTEM_ADMINISTRATOR));
-                accountManagementSessionBean.createEmployee(new Employee("operator", "operator", "password", EmployeeType.OPERATIONS_MANAGER));
-                accountManagementSessionBean.createEmployee(new Employee("seller", "seller", "password", EmployeeType.SALES_MANAGER));
-                accountManagementSessionBean.createEmployee(new Employee("officer", "officer", "password", EmployeeType.GUEST_RELATION_OFFICER));
+                accountManagementSessionBean.createEmployee(new Employee("System Administrator", "sysadmin", "password", EmployeeType.SYSTEM_ADMINISTRATOR));
+                accountManagementSessionBean.createEmployee(new Employee("Operation Manager", "opmanager", "password", EmployeeType.OPERATIONS_MANAGER));
+                accountManagementSessionBean.createEmployee(new Employee("Sales Manager", "salesmanager", "password", EmployeeType.SALES_MANAGER));
+                accountManagementSessionBean.createEmployee(new Employee("Guest Relation Officer", "guestrelo", "password", EmployeeType.GUEST_RELATION_OFFICER));
             } catch (UsedUsernameException ex) {
                 System.out.println("Username taken!");
             }
@@ -79,25 +77,31 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (rt.isEmpty()) {
-            roomManagementSessionBean.createNewRoomType("Deluxe", "very luxury", new BigDecimal("40.0"), BedSize.KING, 2l, "everything you want", RoomTypeConfig.DELUXE_ROOM);
-            roomManagementSessionBean.createNewRoomType("Family", "big",new BigDecimal("30.0"), BedSize.QUEEN, 3l, "TV and PS", RoomTypeConfig.FAMILY_ROOM);
-            roomManagementSessionBean.createNewRoomType("Trip", "Convenient", new BigDecimal("30.0"), BedSize.TWIN, 2l, "good for short trip", RoomTypeConfig.PREMIER_ROOM);
+            roomManagementSessionBean.createNewRoomType("Deluxe Room", "It said deluxe but it's the least interesting", new BigDecimal("20.0"), BedSize.TWIN, 2l, "everything you want", RoomTypeConfig.DELUXE_ROOM);
+            roomManagementSessionBean.createNewRoomType("Premier Room", "> Deluxe", new BigDecimal("30.0"), BedSize.FULL, 2l, "TV and PS", RoomTypeConfig.PREMIER_ROOM);
+            roomManagementSessionBean.createNewRoomType("Family Room", "> Premier", new BigDecimal("40.0"), BedSize.QUEEN, 3l, "family dee dee", RoomTypeConfig.FAMILY_ROOM);
+            roomManagementSessionBean.createNewRoomType("Junior Suite", "> Family", new BigDecimal("50.0"), BedSize.KING, 5l, "Business I think", RoomTypeConfig.JUNIOR_SUIT);
+            roomManagementSessionBean.createNewRoomType("Grand Suite", "> Junior", new BigDecimal("60.0"), BedSize.KING, 6l, "A club can fit in this room", RoomTypeConfig.GRAND_SUIT);
         }
         
         List<RoomType> roomTypelist = new ArrayList<>();
         roomTypelist.add(em.find(RoomType.class, 1l));
         roomTypelist.add(em.find(RoomType.class, 2l));
         roomTypelist.add(em.find(RoomType.class, 3l));
+        roomTypelist.add(em.find(RoomType.class, 4l));
+        roomTypelist.add(em.find(RoomType.class, 5l));
         
         List<Room> r = (List<Room>) em.createQuery("SELECT r FROM Room r")
                 .setMaxResults(1)
                 .getResultList();
         if (r.isEmpty()) {
-            for (long i = 1l ; i < 4l; i++) {
+            for (long i = 1l ; i < 6l; i++) {
                 RoomType roTy = roomTypelist.get((int) i-1);
-                roomManagementSessionBean.createNewRoom(i , 1l, roTy, RoomStatus.AVAILABLE);
-                roomManagementSessionBean.createNewRoom(i , 2l, roTy, RoomStatus.AVAILABLE);
-                roomManagementSessionBean.createNewRoom(i , 3l, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(1l , i, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(2l , i, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(3l , i, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(4l , i, roTy, RoomStatus.AVAILABLE);
+                roomManagementSessionBean.createNewRoom(5l , i, roTy, RoomStatus.AVAILABLE);
             }
         }
         
@@ -105,11 +109,10 @@ public class DataInitializationSessionBean {
                 .setMaxResults(1)
                 .getResultList();
         if (rate.isEmpty()) {
-            for (RoomType roTy : roomTypelist) {
-                roomManagementSessionBean.createRate(new Rate("walk-in rate", roTy, RateType.PUBLISHED, new BigDecimal("20"), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-                roomManagementSessionBean.createRate(new Rate("online rate", roTy, RateType.NORMAL, new BigDecimal("30"), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-10")));
-                roomManagementSessionBean.createRate(new Rate("peak price", roTy, RateType.PEAK, new BigDecimal("40"), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-07")));
-                roomManagementSessionBean.createRate(new Rate("cheap ass", roTy, RateType.PROMOTION, new BigDecimal("10"), LocalDate.parse("2021-12-05"), LocalDate.parse("2021-12-10")));
+            for (int i = 1; i < 6; i++) {
+                RoomType roTy = roomTypelist.get(i - 1);
+                roomManagementSessionBean.createRate(new Rate(roTy.getName() + "Published", roTy, RateType.PUBLISHED, new BigDecimal(100 * i), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+                roomManagementSessionBean.createRate(new Rate(roTy.getName() + "Normal", roTy, RateType.NORMAL, new BigDecimal(50 * i), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-10")));
             }
         }
         

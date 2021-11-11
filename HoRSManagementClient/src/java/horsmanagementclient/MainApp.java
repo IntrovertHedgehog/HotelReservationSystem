@@ -13,12 +13,7 @@ import ejb.session.entity.RoomManagementSessionBeanRemote;
 import ejb.session.task.WalkInSessionBeanRemote;
 import entity.user.Employee;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import util.exception.InvalidLoginCredentialsException;
 
 /**
@@ -66,6 +61,7 @@ public class MainApp {
         Scanner sc = new Scanner(System.in);
 
         int response;
+        OUTER:
         while (true) {
 
             System.out.println("****** Hotel Reservation Management Client ******");
@@ -88,16 +84,12 @@ public class MainApp {
                             System.out.println(e.getMessage() + "\n");
 
                         }
-                    
-                    case 2:
                         break;
-
+                    case 2:
+                        break OUTER;
                     default:
                         System.out.println("Invalid option, please try again!\\n");
                 }
-            }
-            if (response == 2) {
-                break;
             }
         }
     }

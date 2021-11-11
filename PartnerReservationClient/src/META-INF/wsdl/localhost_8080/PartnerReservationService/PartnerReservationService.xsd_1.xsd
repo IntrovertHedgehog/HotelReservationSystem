@@ -34,13 +34,9 @@
 
 <xs:complexType name="partnerSearchRoom">
 <xs:sequence>
-<xs:element name="checkInDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="checkOutDate" type="tns:localDate" minOccurs="0"/>
+<xs:element name="checkInDate" type="xs:string" minOccurs="0"/>
+<xs:element name="checkOutDate" type="xs:string" minOccurs="0"/>
 </xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="localDate" final="extension restriction">
-<xs:sequence/>
 </xs:complexType>
 
 <xs:complexType name="partnerSearchRoomResponse">
@@ -115,35 +111,6 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="partnerReserve">
-<xs:sequence>
-<xs:element name="partnerId" type="xs:long" minOccurs="0"/>
-<xs:element name="roomTypeId" type="xs:long" minOccurs="0"/>
-<xs:element name="passport" type="xs:string" minOccurs="0"/>
-<xs:element name="name" type="xs:string" minOccurs="0"/>
-<xs:element name="CheckInDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="checkOutDate" type="tns:localDate" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="partnerReserveResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:long" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="NoMoreRoomException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="RoomTypeNotFoundException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="loginPartner">
 <xs:sequence>
 <xs:element name="username" type="xs:string" minOccurs="0"/>
@@ -164,6 +131,35 @@
 </xs:complexType>
 
 <xs:complexType name="InvalidLoginCredentialsException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerReserve">
+<xs:sequence>
+<xs:element name="partnerId" type="xs:long" minOccurs="0"/>
+<xs:element name="roomTypeId" type="xs:long" minOccurs="0"/>
+<xs:element name="passport" type="xs:string" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="CheckInDate" type="xs:string" minOccurs="0"/>
+<xs:element name="checkOutDate" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="partnerReserveResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="NoMoreRoomException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RoomTypeNotFoundException">
 <xs:sequence>
 <xs:element name="message" type="xs:string" minOccurs="0"/>
 </xs:sequence>

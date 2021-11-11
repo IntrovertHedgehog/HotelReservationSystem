@@ -10,12 +10,8 @@ package partnerreservationclient;
  * @author Winter
  */
 public class PartnerReservationClient {
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainApp client = new MainApp();
+        client.start();
     }
-    
 }

@@ -59,22 +59,22 @@ public class GuestRelationOfficerClient {
             while (response < 1 || response > 5) {
                 System.out.print(" > ");
                 try {
-                response = Integer.parseInt(sc.nextLine());
-                if (response == 1) {
-                    walkInSearchRoom();
+                    response = Integer.parseInt(sc.nextLine());
+                    if (response == 1) {
+                        walkInSearchRoom();
 
-                } else if (response == 2) {
-                    checkInGuest();;
+                    } else if (response == 2) {
+                        checkInGuest();;
 
-                } else if (response == 3) {
-                    checkOutGuest();
+                    } else if (response == 3) {
+                        checkOutGuest();
 
-                } else if (response == 4) {
-                    break;
-                } else {
-                    break;
-                }
-                } catch (DateTimeParseException | NumberFormatException ex) {
+                    } else if (response == 4) {
+                        break;
+                    } else {
+                        System.out.println("Invalid input");
+                    }
+                } catch (NumberFormatException ex) {
                     System.out.println("Unrecognized input format");
                 }
             }
@@ -86,13 +86,13 @@ public class GuestRelationOfficerClient {
     }
 
     public void walkInSearchRoom() {
-        System.out.print("Enter check in date (yyyy-MM-dd) > ");
-        LocalDate dateStart = LocalDate.parse(sc.nextLine());
-        System.out.print("Enter check out date (yyyy-MM-dd) > ");
-        LocalDate dateEnd = LocalDate.parse(sc.nextLine());
-
-        List<ReservationSearchResult> results;
         try {
+            System.out.print("Enter check in date (yyyy-MM-dd) > ");
+            LocalDate dateStart = LocalDate.parse(sc.nextLine());
+            System.out.print("Enter check out date (yyyy-MM-dd) > ");
+            LocalDate dateEnd = LocalDate.parse(sc.nextLine());
+
+            List<ReservationSearchResult> results;
             results = this.walkInSessionBeanRemote.walkInSearchRoom(dateStart, dateEnd);
 
             System.out.println("*** HoRS Management Client :: Guest Relation Officer Operation :: Search Rooms ***\n");
@@ -124,6 +124,8 @@ public class GuestRelationOfficerClient {
             }
         } catch (InvalidTemporalInputException ex) {
             System.out.println(ex.getMessage());
+        } catch (DateTimeParseException ex) {
+            System.out.println("Unrecognised date format");
         }
     }
 
@@ -145,14 +147,17 @@ public class GuestRelationOfficerClient {
 
             o = new Occupant(passport, name);
         }
-        
+
         System.out.print("Enter index of room to book > ");
         Integer index = Integer.parseInt(sc.nextLine());
 
         try {
             Long reservationId = walkInSessionBeanRemote.walkInReserveRoom(index, o);
-            System.out.println("You have successfully reserved a room with Walk-In Reservation ID " + reservationId);
-
+            if (reservationId != null) {
+                System.out.println("You have successfully reserved a room with Walk-In Reservation ID " + reservationId);
+            } else {
+                System.out.println("No more rooms are available!");
+            }
         } catch (NoMoreRoomException e) {
             System.out.println("No more rooms are available!");
         }
@@ -160,25 +165,33 @@ public class GuestRelationOfficerClient {
     }
 
     public void checkInGuest() {
-        System.out.print("Enter check in date (yyyy-MM-dd HH:mm) > ");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime dateStart = LocalDateTime.parse(sc.nextLine(), formatter);
+        try {
+            System.out.print("Enter check in date (yyyy-MM-dd HH:mm) > ");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime dateStart = LocalDateTime.parse(sc.nextLine(), formatter);
 
-        System.out.print("Enter occupant passport > ");
-        String passport = sc.nextLine().trim();
-        List<String> roomIds = walkInSessionBeanRemote.checkInGuest(dateStart, passport);
-        System.out.println("Occupant room ids");
-        roomIds.forEach(r -> System.out.println(r));
+            System.out.print("Enter occupant passport > ");
+            String passport = sc.nextLine().trim();
+            List<String> roomIds = walkInSessionBeanRemote.checkInGuest(dateStart, passport);
+            System.out.println("Occupant room ids");
+            roomIds.forEach(r -> System.out.println(r));
+        } catch (DateTimeParseException ex) {
+            System.out.println("Invalid dattime format");
+        }
     }
 
     public void checkOutGuest() {
-        System.out.print("Enter check out date (yyyy-MM-dd HH:mm) > ");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime dateEnd = LocalDateTime.parse(sc.nextLine(), formatter);
+        try {
+            System.out.print("Enter check out date (yyyy-MM-dd HH:mm) > ");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime dateEnd = LocalDateTime.parse(sc.nextLine(), formatter);
 
-        System.out.print("Enter occupant passport > ");
-        String passport = sc.nextLine().trim();
-        walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);
-        System.out.println("Check out successful");
-    }   
+            System.out.print("Enter occupant passport > ");
+            String passport = sc.nextLine().trim();
+            walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);
+            System.out.println("Check out successful");
+        } catch (DateTimeParseException ex) {
+            System.out.println("Invalid dattime format");
+        }
+    }
 }
