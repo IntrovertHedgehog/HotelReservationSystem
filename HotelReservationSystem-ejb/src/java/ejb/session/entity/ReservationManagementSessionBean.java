@@ -49,7 +49,13 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         if (guest == null) {
             throw new GuestNotFoundException(String.format("Guest with id %d does not exist", guestId));
         }
-        
+        List<OnlineReservation> onlineReservations = guest.getOnlineReservations();
+        for(OnlineReservation o : onlineReservations) {
+            o.getRoomType();
+            o.getCheckInDate();
+            o.getCheckOutDate();
+          
+        }
         return guest.getOnlineReservations();
     }
 
@@ -65,7 +71,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
     @Override
     public List<ReservationSearchResult> searchReservation(LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) throws InvalidTemporalInputException {
-        if (!checkInDate.isBefore(checkOutDate)) throw new InvalidTemporalInputException("Check in date must be before checkout date");
+        if (!checkInDate.isBefore(checkOutDate)) throw new InvalidTemporalInputException("Check in date must be before checkout date\n");
         List<ReservationSearchResult> results = new ArrayList<>();
         List<Object[]> rawResult = em.createNativeQuery("SELECT rt.roomTypeId, rt.quantityAvailable - COUNT(r.RESERVATIONID)\n" +
                                                         "FROM roomType rt LEFT JOIN \n" +

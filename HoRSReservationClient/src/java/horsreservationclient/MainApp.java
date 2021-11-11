@@ -10,15 +10,19 @@ import ejb.session.entity.ReservationManagementSessionBeanRemote;
 import ejb.session.task.OnlineReservationSessionBeanRemote;
 import entity.business.OnlineReservation;
 import entity.user.Guest;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.security.pkcs.ParsingException;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialsException;
 import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
+import util.exception.NoReservationFoundException;
+import util.exception.RoomTypeNotFoundException;
 import util.supplement.ReservationSearchResult;
 
 /**
@@ -60,14 +64,23 @@ public class MainApp {
             response = 0;
 
             while (response < 1 || response > 4) {
-                System.out.print(" > ");
+                System.out.print("> ");
 
-                response = Integer.parseInt(sc.nextLine());
+                try {
+                    response = Integer.parseInt(sc.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Wrong input format, input an integer!\n");
+                    break;
+                }
 
                 if (response == 1) {
-                    guestLogin();
-                    System.out.println("Login successful!\n");
-                    loggedInMenu();
+                    try {
+                        guestLogin();
+                        System.out.println("Login successful!\n");
+                        loggedInMenu();
+                    } catch (InvalidLoginCredentialsException e) {
+                        System.out.println("Invalid Login Credentials!\n");
+                    }
 
                 } else if (response == 2) {
                     registerAsGuest();
@@ -80,6 +93,7 @@ public class MainApp {
                     break;
 
                 } else {
+                    System.out.println("Invalid option, please try again!\n");
                     break;
 
                 }
@@ -105,13 +119,22 @@ public class MainApp {
 
             while (response < 1 || response > 4) {
                 System.out.print("> ");
-                response = Integer.parseInt(sc.nextLine());
+                try {
+                    response = Integer.parseInt(sc.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Wrong input format, input an integer!\n");
+                    break;
+                }
 
                 if (response == 1) {
                     searchHotelRoom();
 
                 } else if (response == 2) {
-                    viewMyReservationDetails();
+                    try {
+                        viewMyReservationDetails();
+                    } catch (NoReservationFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
 
                 } else if (response == 3) {
                     viewAllMyReservations();
@@ -120,6 +143,7 @@ public class MainApp {
                     break;
 
                 } else {
+                    System.out.println("Invalid option, please try again!\n");
                     break;
 
                 }
@@ -132,17 +156,14 @@ public class MainApp {
 
     }
 
-    public void guestLogin() {
+    public void guestLogin() throws InvalidLoginCredentialsException {
         System.out.print("Enter Guest Username > ");
-        String username = sc.nextLine();
+        String username = sc.nextLine().trim();
 
         System.out.print("Enter Guest Password > ");
-        String password = sc.nextLine();
-        try {
-            this.currentGuest = this.onlineReservationSessionBeanRemote.loginGuest(username, password);
-        } catch (InvalidLoginCredentialsException e) {
-            System.out.println("Invalid Login Credentials!");
-        }
+        String password = sc.nextLine().trim();
+
+        this.currentGuest = this.onlineReservationSessionBeanRemote.loginGuest(username, password);
 
     }
 
@@ -150,14 +171,15 @@ public class MainApp {
         System.out.print("Enter Guest Username > ");
         String username = sc.nextLine().trim();
 
-        System.out.print("Enter Guest Password >");
+        System.out.print("Enter Guest Password > ");
         String password = sc.nextLine().trim();
 
-        System.out.print("Enter Guest Passport >");
+        System.out.print("Enter Guest Passport > ");
         String passport = sc.nextLine().trim();
 
-        System.out.print("Enter Guest Name >");
+        System.out.print("Enter Guest Name > ");
         String name = sc.nextLine().trim();
+        System.out.println();
 
         try {
             Guest guest = this.accountManagementSessionBeanRemote.registerAsGuest(username, password, passport, name);
@@ -171,9 +193,22 @@ public class MainApp {
 
     public void searchHotelRoom() {
         System.out.print("Enter check in date (yyyy-MM-dd) > ");
-        LocalDate dateStart = LocalDate.parse(sc.nextLine());
+        LocalDate dateStart;
+        try {
+            dateStart = LocalDate.parse(sc.nextLine());
+        } catch (DateTimeException e) {
+            System.out.println("Wrong date input\n");
+            return;
+        }
+
         System.out.print("Enter check out date (yyyy-MM-dd) > ");
-        LocalDate dateEnd = LocalDate.parse(sc.nextLine());
+        LocalDate dateEnd;
+        try {
+            dateEnd = LocalDate.parse(sc.nextLine());
+        } catch (DateTimeException e) {
+            System.out.println("Wrong date input\n");
+            return;
+        }
 
         List<ReservationSearchResult> results;
         try {
@@ -188,12 +223,17 @@ public class MainApp {
                 counter++;
             }
 
-            System.out.println("\n=====================================");
-            System.out.println("1. Reserve Room");
-            System.out.println("2. Exit\n");
             Integer response = 0;
             while (response < 1 || response > 2) {
-                response = Integer.parseInt(sc.nextLine());
+                System.out.println("\n=====================================");
+                System.out.println("1. Reserve Room");
+                System.out.println("2. Exit\n");
+                System.out.print("> ");
+                try {
+                    response = Integer.parseInt(sc.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("Wrong input format, input an integer!\n");
+                }
 
                 if (response == 1) {
 
@@ -203,7 +243,8 @@ public class MainApp {
                     return;
 
                 } else {
-                    System.out.println("Invalid option, please try again!\\n");
+                    System.out.println("Invalid option, please try again!\n");
+                    
                 }
             }
         } catch (InvalidTemporalInputException ex) {
@@ -213,34 +254,57 @@ public class MainApp {
 
     public void reserveHotelRoom() {
 
-        System.out.println("Enter Index of Room Type");
-        Integer index = Integer.parseInt(sc.nextLine());
+        System.out.print("Enter Index of Room Type > ");
+        Integer index;
+
+        try {
+            index = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Wrong input format, input an integer!\n");
+            return;
+        }
+
         Long reservationId;
+
         try {
             reservationId = this.onlineReservationSessionBeanRemote.onlineReserveRoom(index);
         } catch (NoMoreRoomException e) {
             System.out.println("No more room available!");
+            return;
+        } catch (RoomTypeNotFoundException e) {
+            System.out.println(e.getMessage());
             return;
         }
 
         System.out.println("You successfully reserved a room type with reservation ID : " + reservationId);
     }
 
-    public void viewMyReservationDetails() {
+    public void viewMyReservationDetails() throws NoReservationFoundException {
 
-        System.out.println("Enter the S/N of reservation > ");
-        Integer serialNum = Integer.parseInt(sc.nextLine());
+        System.out.print("Enter the S/N of reservation > ");
+        Integer serialNum;
+        try {
+            serialNum = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Wrong input format, input an integer!\n");
+            return;
+        }
         OnlineReservation r;
         try {
-            r = this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport()).get(serialNum);
+            List<OnlineReservation> onlineReservations = this.reservationManagementSessionBeanRemote.viewAllReservationByGuest(this.currentGuest.getPassport());
+            if (onlineReservations == null || onlineReservations.size() <= serialNum || serialNum < 0) {
+                throw new NoReservationFoundException("No reservations were found!\n");
+            }
+            r = onlineReservations.get(serialNum);
         } catch (GuestNotFoundException e) {
             System.out.println(e.getMessage());
             return;
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservation Detail ***\n");
-        System.out.printf("\n%3s%20s%20s%20s", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date");
-        System.out.printf("\n%3s%20s%20s%20s%20s%20s%20s", r.getReservationId(), r.getRoomType(), r.getCheckInDate(), r.getCheckOutDate());
+        System.out.printf("%8s%50s%30s%30s", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date\n");
+        System.out.printf("%8s%50s%30s%30s\n", r.getReservationId(), r.getRoomType().toString(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+        System.out.println();
     }
 
     public void viewAllMyReservations() {
@@ -253,12 +317,13 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservations ***\n");
-        System.out.printf("\n%8s%20s%20s%20s", "S/N", "Room Type Name", "Check In Date", "Check Out Date");
+        System.out.printf("%8s%50s%30s%30s", "S/N", "Room Type Name", "Check In Date", "Check Out Date\n");
 
         Integer counter = 0;
         for (OnlineReservation r : onlineReservations) {
-            System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", counter, r.getRoomType(), r.getCheckInDate(), r.getCheckOutDate());
+            System.out.printf("%8s%50s%30s%30s\n", counter, r.getRoomType().toString(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
             counter++;
         }
+        System.out.println();
     }
 }
