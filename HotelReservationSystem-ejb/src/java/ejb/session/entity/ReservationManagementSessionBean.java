@@ -51,7 +51,13 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         if (guest == null) {
             throw new GuestNotFoundException(String.format("Guest with id %d does not exist", guestId));
         }
-
+        List<OnlineReservation> onlineReservations = guest.getOnlineReservations();
+        for(OnlineReservation o : onlineReservations) {
+            o.getRoomType();
+            o.getCheckInDate();
+            o.getCheckOutDate();
+          
+        }
         return guest.getOnlineReservations();
     }
 

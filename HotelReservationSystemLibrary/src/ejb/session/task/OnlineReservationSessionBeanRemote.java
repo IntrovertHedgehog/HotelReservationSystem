@@ -12,6 +12,7 @@ import javax.ejb.Remote;
 import util.exception.InvalidLoginCredentialsException;
 import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
+import util.exception.RoomTypeNotFoundException;
 import util.supplement.ReservationSearchResult;
 
 /**
@@ -25,7 +26,7 @@ public interface OnlineReservationSessionBeanRemote {
     
     public List<ReservationSearchResult> onlineSearchRoom(LocalDate checkInDate, LocalDate checkOutDate)  throws InvalidTemporalInputException ;
 
-    public Long onlineReserveRoom(Integer indexOfRoomType) throws NoMoreRoomException;    
+    public Long onlineReserveRoom(Integer indexOfRoomType) throws NoMoreRoomException, RoomTypeNotFoundException;    
 
     public void loginGuest(Guest guest);
 }

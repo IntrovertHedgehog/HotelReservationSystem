@@ -19,6 +19,7 @@ import javax.persistence.PersistenceContext;
 import util.exception.InvalidLoginCredentialsException;
 import util.exception.InvalidTemporalInputException;
 import util.exception.NoMoreRoomException;
+import util.exception.RoomTypeNotFoundException;
 import util.supplement.ReservationSearchResult;
 
 /**
@@ -46,7 +47,11 @@ public class OnlineReservationSessionBean implements OnlineReservationSessionBea
     }
 
     @Override
-    public Long onlineReserveRoom(Integer indexOfRoomType) throws NoMoreRoomException {
+    public Long onlineReserveRoom(Integer indexOfRoomType) throws NoMoreRoomException, RoomTypeNotFoundException {
+        
+        if (searchResults == null || searchResults.size() <= indexOfRoomType) {
+            throw new RoomTypeNotFoundException("Room Type Not Found !");
+        }
         ReservationSearchResult target = searchResults.get(indexOfRoomType);
         RoomType roomType = target.getRoomType();
         LocalDate checkInDate = target.getCheckInDate();
