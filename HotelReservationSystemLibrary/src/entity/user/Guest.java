@@ -27,7 +27,7 @@ public class Guest extends Occupant implements Serializable {
     @Size(min = 1)
     @Column(nullable = false)
     private String password;
-    @OneToMany()
+    @OneToMany
     private List<OnlineReservation> onlineReservations;
     
     public Guest() {

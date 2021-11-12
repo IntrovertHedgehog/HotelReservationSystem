@@ -322,7 +322,7 @@ public class MainApp {
 
         Integer counter = 0;
         for (OnlineReservation r : onlineReservations) {
-            System.out.printf("%8s%50s%30s%30s\n", counter, r.getRoomType().toString(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+            System.out.printf("%8s%50s%30s%30s\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
             counter++;
         }
         System.out.println();

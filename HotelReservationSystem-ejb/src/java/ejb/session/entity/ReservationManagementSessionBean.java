@@ -119,6 +119,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                     break;
                 }
             }
+            guest = em.merge(guest);
             OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
             em.persist(onlineReservation);
             em.flush();
