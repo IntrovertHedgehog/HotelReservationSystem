@@ -157,7 +157,7 @@ public class LoggedInSession {
             System.out.printf("%15s%15s%15s%25s\n", "Reservation ID", "Checkin date", "Checkout date", "Occupant Passport");
 
             reservations.forEach(
-                    r -> System.out.printf("%15s%20s%20s%25s\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport()));
+                    r -> System.out.printf("%15s%15s%15s%25s\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport()));
         } catch (PartnerNotFoundException_Exception ex) {
             System.out.println("Partner not found");
         }
