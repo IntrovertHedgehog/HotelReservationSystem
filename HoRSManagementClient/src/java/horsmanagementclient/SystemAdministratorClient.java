@@ -104,7 +104,7 @@ public class SystemAdministratorClient {
                     System.out.printf("%20s%32s%30s\n", "Employee ID", "Employee Name", "Employee Type");
                     
                     for (Employee e : employees) {
-                        System.out.printf("%20s%s%30s\n", e.getEmployeeId(), e.getName(), e.getEmployeeType().toString());
+                        System.out.printf("%20s%32s%30s\n", e.getEmployeeId(), e.getName(), e.getEmployeeType().toString());
                     }
                     
                 } else if (response == 3) {
