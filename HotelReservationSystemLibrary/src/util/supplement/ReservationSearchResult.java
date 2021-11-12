@@ -17,12 +17,12 @@ import java.time.LocalDate;
  */
 public class ReservationSearchResult implements Serializable {
 
-    private final RoomType roomType;
-    private final Long quantity;
-    private final LocalDate checkInDate;
-    private final LocalDate checkOutDate;
-    private final BigDecimal prevailRate;
-    private final ClientType clientType;
+    private RoomType roomType;
+    private Long quantity;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
+    private BigDecimal prevailRate;
+    private ClientType clientType;
 
     public ReservationSearchResult(RoomType roomType, Long quantity, LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) {
         this.roomType = roomType;
@@ -59,5 +59,43 @@ public class ReservationSearchResult implements Serializable {
 
     public ClientType getClientType() {
         return clientType;
+    }
+    
+    
+    /**
+     * @param roomType the roomType to set
+     */
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(Long quantity) {
+    }
+
+    /**
+     * @param checkInDate the checkInDate to set
+     */
+    public void setCheckInDate(LocalDate checkInDate) {
+    }
+
+    /**
+     * @param checkOutDate the checkOutDate to set
+     */
+    public void setCheckOutDate(LocalDate checkOutDate) {
+    }
+
+    /**
+     * @param prevailRate the prevailRate to set
+     */
+    public void setPrevailRate(BigDecimal prevailRate) {
+    }
+
+    /**
+     * @param clientType the clientType to set
+     */
+    public void setClientType(ClientType clientType) {
     }
 }

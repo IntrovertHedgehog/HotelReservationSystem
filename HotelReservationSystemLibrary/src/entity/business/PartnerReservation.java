@@ -42,6 +42,9 @@ public class PartnerReservation extends Reservation implements Serializable {
         return partner;
     }
     
+    public void setPartner(Partner partner) {
+    }
+    
     public void nullify() {
         super.nullify();
         partner = null;

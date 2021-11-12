@@ -74,6 +74,13 @@ public class Occupant implements Serializable {
     public String getPassport() {
         return passport;
     }
+
+    /**
+     * @param passport the passport to set
+     */
+    public void setPassport(String passport) {
+        this.passport = passport;
+    }
     
     /**
      * @return the name

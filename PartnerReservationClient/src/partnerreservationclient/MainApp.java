@@ -10,8 +10,6 @@ import ws.client.InvalidLoginCredentialsException_Exception;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ws.client.InvalidTemporalInputException_Exception;
 import ws.client.Partner;
 import ws.client.PartnerReservationService;
@@ -95,8 +93,7 @@ public class MainApp {
 
             Integer counter = 0;
             for (ReservationSearchResult r : results) {
-//                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
-                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.toString().toString(), r.toString(), r.toString(), r.toString(), r.toString(), r.toString());
+                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
                 counter++;
             }
         } catch (DateTimeParseException ex) {

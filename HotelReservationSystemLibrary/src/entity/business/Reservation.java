@@ -66,6 +66,10 @@ public abstract class Reservation implements Serializable {
         this.isProcessed = false;
     }
 
+
+    public Long getReservationId() {
+        return ReservationId;
+    }
     
     public List<Rate> getRates() {
         return rates;
@@ -99,10 +103,6 @@ public abstract class Reservation implements Serializable {
         return checkOutDate;
     }
 
-    public Long getReservationId() {
-        return ReservationId;
-    }
-
     /**
      * @return the allocation
      */
@@ -130,6 +130,48 @@ public abstract class Reservation implements Serializable {
     
     public void setIsProcessed(Boolean isProcessed) {
         this.isProcessed = isProcessed;
+    }
+
+    /**
+     * @param ReservationId the ReservationId to set
+     */
+    public void setReservationId(Long ReservationId) {
+        this.ReservationId = ReservationId;
+    }
+
+    /**
+     * @param roomType the roomType to set
+     */
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    /**
+     * @param occupant the occupant to set
+     */
+    public void setOccupant(Occupant occupant) {
+        this.occupant = occupant;
+    }
+
+    /**
+     * @param checkInDate the checkInDate to set
+     */
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    /**
+     * @param checkOutDate the checkOutDate to set
+     */
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    /**
+     * @param rates the rates to set
+     */
+    public void setRates(List<Rate> rates) {
+        this.rates = rates;
     }
     
     public void nullify() {

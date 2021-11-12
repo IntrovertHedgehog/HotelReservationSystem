@@ -14,9 +14,6 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sun.security.pkcs.ParsingException;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialsException;
 import util.exception.InvalidTemporalInputException;
@@ -244,7 +241,7 @@ public class MainApp {
 
                 } else {
                     System.out.println("Invalid option, please try again!\n");
-                    
+
                 }
             }
         } catch (InvalidTemporalInputException ex) {
@@ -276,7 +273,11 @@ public class MainApp {
             return;
         }
 
-        System.out.println("You successfully reserved a room type with reservation ID : " + reservationId);
+        if (reservationId == null) {
+            System.out.println("No more room of this type");
+        } else {
+            System.out.println("You successfully reserved a room type with reservation ID : " + reservationId);
+        }
     }
 
     public void viewMyReservationDetails() throws NoReservationFoundException {

@@ -25,6 +25,7 @@ import javax.validation.constraints.Size;
 @Entity
 public class Partner implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,7 +71,7 @@ public class Partner implements Serializable {
      * @param name the name to set
      */
     public void setName(String name) {
-        this.name = name;
+        this.setName(name);
     }
 
     /**
@@ -80,21 +81,39 @@ public class Partner implements Serializable {
         return username;
     }
 
-    public void setUsername(String username, String password) {
-        if (this.password.equals(password)) {
-            this.username = username;
-        }
-    }
-
-    public void setPassword(String newPassword, String oldPassword) {
-        if (this.password.equals(oldPassword)) {
-            this.password = newPassword;
-        }
-    }
-    
     public Boolean matchPassword(String password) {
         return this.password.equals(password);
     }
+    
+    /**
+     * @param partnerId the partnerId to set
+     */
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @param reservations the reservations to set
+     */
+    public void setReservations(List<PartnerReservation> reservations) {
+        this.reservations = reservations;
+    }
+    
+    
     
     /**
      * @return the reservations
@@ -104,7 +123,7 @@ public class Partner implements Serializable {
     }
     
     public void hardNullify() {
-        this.reservations = null;
+        this.setReservations(null);
     }
     
     public void softNullify() {
