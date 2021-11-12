@@ -64,9 +64,7 @@ public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal, 
                 .setParameter("checkInDate", reservation.getCheckInDate())
                 .setParameter("checkOutDate", reservation.getCheckOutDate())
                 .getResultList();
-        
-        
-                
+
         try {
             Room room = allRooms.stream()
                     .filter(r -> !usedRooms.contains(r))

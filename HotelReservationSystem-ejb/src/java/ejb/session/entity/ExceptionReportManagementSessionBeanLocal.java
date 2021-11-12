@@ -6,9 +6,7 @@
 package ejb.session.entity;
 
 import entity.business.Allocation;
-import entity.business.ExceptionReport;
 import entity.business.Reservation;
-import java.util.List;
 import javax.ejb.Local;
 
 /**

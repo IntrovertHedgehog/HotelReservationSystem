@@ -9,7 +9,6 @@ import entity.user.Occupant;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintViolationException;
 import util.exception.OccupantAlreadyExistsException;
 import util.exception.OccupantNotFoundException;
 
