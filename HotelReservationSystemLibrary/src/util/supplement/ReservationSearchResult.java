@@ -10,6 +10,7 @@ import enumeration.ClientType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
@@ -19,7 +20,9 @@ public class ReservationSearchResult implements Serializable {
 
     private RoomType roomType;
     private Long quantity;
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate checkInDate;
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate checkOutDate;
     private BigDecimal prevailRate;
     private ClientType clientType;

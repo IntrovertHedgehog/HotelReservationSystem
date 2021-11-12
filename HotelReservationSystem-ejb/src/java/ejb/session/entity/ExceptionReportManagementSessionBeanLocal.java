@@ -17,7 +17,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface ExceptionReportManagementSessionBeanLocal {
-    public List<ExceptionReport> getAllReports();
     public void createReports(Reservation reservation);
     public void createReports(Reservation reservation, Allocation allocation);
 }

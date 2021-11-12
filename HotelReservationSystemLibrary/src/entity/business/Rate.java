@@ -63,6 +63,13 @@ public class Rate implements Serializable, Comparable<Rate> {
         }
     }
 
+    public Rate(String rateName, RateType rateType, BigDecimal ratePerNight, RoomType roomType) {
+        this.rateName = rateName;
+        this.rateType = rateType;
+        this.ratePerNight = ratePerNight;
+        this.roomType = roomType;
+    }
+    
     public Long getRateId() {
         return rateId;
     }

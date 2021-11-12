@@ -10,6 +10,7 @@ import ejb.session.entity.ExceptionReportManagementSessionBeanRemote;
 import ejb.session.entity.OccupantManagementSessionBeanRemote;
 import ejb.session.entity.ReservationManagementSessionBeanRemote;
 import ejb.session.entity.RoomManagementSessionBeanRemote;
+import ejb.session.task.AllocationBotSessionBeanRemote;
 import ejb.session.task.WalkInSessionBeanRemote;
 import entity.user.Employee;
 import java.util.Scanner;
@@ -21,6 +22,8 @@ import util.exception.InvalidLoginCredentialsException;
  * @author brianlim
  */
 public class MainApp {
+
+    private AllocationBotSessionBeanRemote allocatingBotSessionBean;
 
     @EJB
     private WalkInSessionBeanRemote walkInSessionBeanRemote;
@@ -46,10 +49,10 @@ public class MainApp {
 
     }
 
-    public MainApp(WalkInSessionBeanRemote walkInSessionBeanRemote, RoomManagementSessionBeanRemote roomManagementSessionBeanRemote,
+    public MainApp(AllocationBotSessionBeanRemote allocatingBotSessionBean, WalkInSessionBeanRemote walkInSessionBeanRemote, RoomManagementSessionBeanRemote roomManagementSessionBeanRemote,
             ReservationManagementSessionBeanRemote reservationManagementSessionBeanRemote, OccupantManagementSessionBeanRemote occupantManagementSessionBeanRemote,
             ExceptionReportManagementSessionBeanRemote exceptionReportManagementSessionBeanRemote, AccountManagementSessionBeanRemote accountManagementSessionBeanRemote) {
-
+this.allocatingBotSessionBean = allocatingBotSessionBean;
         this.walkInSessionBeanRemote = walkInSessionBeanRemote;
         this.roomManagementSessionBeanRemote = roomManagementSessionBeanRemote;
         this.occupantManagementSessionBeanRemote = occupantManagementSessionBeanRemote;
@@ -115,7 +118,7 @@ public class MainApp {
                 sysAdmin.menuSysAdminOperations();
                 break;
             case OPERATIONS_MANAGER:
-                OperationManagerClient opsManager = new OperationManagerClient(this.roomManagementSessionBeanRemote, this.exceptionReportManagementSessionBeanRemote, this.currentLoggedInEmployee);
+                OperationManagerClient opsManager = new OperationManagerClient(this.allocatingBotSessionBean, this.roomManagementSessionBeanRemote, this.exceptionReportManagementSessionBeanRemote, this.currentLoggedInEmployee);
                 opsManager.menuOperationManagerOperations();
                 break;
             case SALES_MANAGER:
