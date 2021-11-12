@@ -36,20 +36,20 @@ public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal, 
                 .setParameter("roomType", reservation.getRoomType())
                 .setParameter("status", RoomStatus.AVAILABLE)
                 .getResultList();
-        
+
         List<Room> usedRooms = em.createQuery("SELECT r FROM Allocation a JOIN a.room r JOIN a.reservation re WHERE r.roomType = :roomType AND r.status = :status AND re.checkInDate < :checkOutDate AND re.checkOutDate > :checkInDate")
                 .setParameter("roomType", reservation.getRoomType())
                 .setParameter("status", RoomStatus.AVAILABLE)
                 .setParameter("checkInDate", reservation.getCheckInDate())
                 .setParameter("checkOutDate", reservation.getCheckOutDate())
                 .getResultList();
-        
+
         for (Room room : allRooms) {
             if (!usedRooms.contains(room)) {
                 return room;
             }
         }
-        
+
         throw new NoResultException("We ran out of room!");
     }
 
@@ -58,8 +58,9 @@ public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal, 
                 .setParameter("nextRoomType", reservation.getRoomType().getNextRoomType())
                 .setParameter("status", RoomStatus.AVAILABLE)
                 .getResultList();
-        
+
         List<Room> usedRooms = em.createQuery("SELECT r FROM Allocation a JOIN a.room r JOIN a.reservation re WHERE r.roomType = :nextRoomType AND r.status = :status AND re.checkInDate < :checkOutDate AND re.checkOutDate > :checkInDate")
+                .setParameter("nextRoomType", reservation.getRoomType().getNextRoomType())
                 .setParameter("status", RoomStatus.AVAILABLE)
                 .setParameter("checkInDate", reservation.getCheckInDate())
                 .setParameter("checkOutDate", reservation.getCheckOutDate())
@@ -109,7 +110,7 @@ public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal, 
             }
         }
     }
-    
+
     @Schedule(hour = "2")
     public void automaticAllocation() {
         List<Reservation> reservations = em.createQuery("SELECT r FROM Reservation r WHERE r.isProcessed = FALSE")

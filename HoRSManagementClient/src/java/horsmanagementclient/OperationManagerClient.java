@@ -242,13 +242,24 @@ public class OperationManagerClient {
                     List<ExceptionReport> ers = this.exceptionReportManagementSessionBeanRemote.getAllReports();
 
                     System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Exception Reports ***\n");
-                    System.out.printf("%14s%40s%25s%25s\n", "Report ID", "Report Status", "Report Reservation", "Report Allocation");
+                    System.out.printf("%9s%15s%15s%15s%12s%12s%25s%8s%25s%5s\n", "Report ID", "Report Status", "Reservation ID", "Occ. Passport", "Ch.in Date", "Ch.out Date", "Old Room Type", "All. ID", "New Room Type", "Room");
 
                     for (ExceptionReport er : ers) {
-                        System.out.printf("%14s%40s%25s%25s\n", er.getReportId().toString(), er.getStatus().name(), er.getReservation(), er.getAllocation());
+                        String reportId = er.getReportId().toString();
+                        String status = er.getStatus().name();
+                        String rId = er.getReservation().getReservationId().toString();
+                        String aId = er.getAllocation() == null ? null : er.getAllocation().getAllocationId().toString();
+                        String passport = er.getReservation().getOccupant().getPassport();
+                        String cid = er.getReservation().getCheckInDate().toString();
+                        String cod = er.getReservation().getCheckOutDate().toString();
+                        String ort = er.getReservation().getRoomType().getName();
+                        String r = er.getAllocation() == null ? null : er.getAllocation().getRoom().getRoomId().toString();
+                        String nrt = er.getAllocation() == null ? null : er.getAllocation().getRoom().getRoomType().getName();
+                        System.out.printf("%9s%15s%15s%15s%12s%12s%25s%8s%25s%5s\n", reportId, status, rId, passport, cid, cod, ort, aId, nrt, r);
                     }
                 } else if (response == 9) {
                     allocatingBotSessionBean.manualAllocate();
+                    System.out.println("All pending reservation has been allocated!\n");
                 } else if (response == 10) {
                     break;
 
