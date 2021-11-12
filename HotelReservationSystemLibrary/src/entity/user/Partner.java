@@ -40,10 +40,10 @@ public class Partner implements Serializable {
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY)
-    private List<PartnerReservation> reservations;
+    private List<PartnerReservation> partnerReservations;
 
     public Partner() {
-        reservations = new ArrayList<>();
+        partnerReservations = new ArrayList<>();
     }
 
     public Partner(String name, String username, String password) {
@@ -107,39 +107,39 @@ public class Partner implements Serializable {
     }
 
     /**
-     * @param reservations the reservations to set
+     * @param partnerReservations the partnerReservations to set
      */
-    public void setReservations(List<PartnerReservation> reservations) {
-        this.reservations = reservations;
+    public void setPartnerReservations(List<PartnerReservation> partnerReservations) {
+        this.partnerReservations = partnerReservations;
     }
     
     
     
     /**
-     * @return the reservations
+     * @return the partnerReservations
      */
-    public List<PartnerReservation> getReservations() {
-        return reservations;
+    public List<PartnerReservation> getPartnerReservations() {
+        return partnerReservations;
     }
     
     public void hardNullify() {
-        this.setReservations(null);
+        this.setPartnerReservations(null);
     }
     
     public void softNullify() {
-        for (PartnerReservation res : reservations) {
+        for (PartnerReservation res : partnerReservations) {
             res.nullify();
         }
     }
     
     public void addReservation(PartnerReservation partnerReservation) {
-        if (partnerReservation.getPartner().equals(this) && !reservations.contains(partnerReservation)) {
-            reservations.add(partnerReservation);
+        if (partnerReservation.getPartner().equals(this) && !partnerReservations.contains(partnerReservation)) {
+            partnerReservations.add(partnerReservation);
         }
     }
     
     public void removeReservation(PartnerReservation partnerReservation) {
-        reservations.remove(partnerReservation);
+        partnerReservations.remove(partnerReservation);
     }
 
     @Override

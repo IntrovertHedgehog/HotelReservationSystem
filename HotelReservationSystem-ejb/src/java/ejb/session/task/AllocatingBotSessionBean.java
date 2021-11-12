@@ -16,6 +16,8 @@ import java.util.List;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -100,6 +102,7 @@ public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal, 
             Room room = searchRoom(reservation);
             Allocation allocation = new Allocation(room, reservation);
             em.persist(allocation);
+            em.merge(allocation.getOccupant());
             reservation.setAllocation(allocation);
             em.flush();
             return allocation.getAllocationId();

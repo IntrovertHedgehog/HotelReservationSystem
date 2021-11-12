@@ -104,7 +104,7 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
 
         em.detach(partner);
         partner.softNullify();
-        return partner.getReservations();
+        return partner.getPartnerReservations();
     }
 
     @Override

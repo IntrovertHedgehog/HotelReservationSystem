@@ -87,7 +87,7 @@ public class AccountManagementSessionBean implements AccountManagementSessionBea
                     .setParameter("password", password)
                     .getSingleResult();
 
-            partner.getReservations();
+            partner.getPartnerReservations();
             return partner;
         } catch (NoResultException ex) {
             throw new InvalidLoginCredentialsException("Invalid Login Credential! \n");

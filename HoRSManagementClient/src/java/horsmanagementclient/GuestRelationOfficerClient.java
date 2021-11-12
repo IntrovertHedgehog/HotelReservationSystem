@@ -107,14 +107,13 @@ public class GuestRelationOfficerClient {
             System.out.println("=====================================");
             System.out.println("1. Reserve Room");
             System.out.println("2. Exit\n");
-            System.out.print(" > ");
             Integer response = 0;
             while (response < 1 || response > 2) {
+                System.out.print(" > ");
                 response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
                     walkInReserveRoom();
-
                 } else if (response == 2) {
                     break;
 
@@ -122,6 +121,7 @@ public class GuestRelationOfficerClient {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
+            
         } catch (InvalidTemporalInputException ex) {
             System.out.println(ex.getMessage());
         } catch (DateTimeParseException ex) {
@@ -184,6 +184,10 @@ public class GuestRelationOfficerClient {
                         } else {
                             System.out.println("Invalid option, please try again!\n");
                         }
+                    }
+                    
+                    if (response == 2) {
+                        break;
                     }
                 }
 

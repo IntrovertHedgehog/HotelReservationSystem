@@ -52,11 +52,11 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             throw new GuestNotFoundException(String.format("Guest with id %d does not exist", guestId));
         }
         List<OnlineReservation> onlineReservations = guest.getOnlineReservations();
-        for(OnlineReservation o : onlineReservations) {
+        for (OnlineReservation o : onlineReservations) {
             o.getRoomType();
             o.getCheckInDate();
             o.getCheckOutDate();
-          
+
         }
         return guest.getOnlineReservations();
     }
@@ -68,7 +68,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             throw new PartnerNotFoundException(String.format("Partner with id %d does not exist", partnerId));
         }
 
-        return partner.getReservations();
+        return partner.getPartnerReservations();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                     break;
                 }
             }
-            guest = em.merge(guest);
+            guest = em.find(Guest.class, guest.getPassport());
             OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
             em.persist(onlineReservation);
             em.flush();
@@ -157,7 +157,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                 }
                 System.out.println("This occupant is not here before!");
             } else {
-                occupant = em.merge(occupant);
+                occupant = occupantInDb;
                 System.out.println("This occupant existed!");
             }
             em.flush();
@@ -199,7 +199,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                 }
                 System.out.println("This occupant is not here before!");
             } else {
-                occupant = em.merge(occupant);
+                occupant = occupantInDb;
                 System.out.println("This occupant existed!");
             }
             em.flush();
