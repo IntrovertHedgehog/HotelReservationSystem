@@ -246,7 +246,7 @@ public class RoomType implements Serializable {
             Rate rate = null;
             for (Rate r : rateList) {
                 if (r.isApplicableFor(date)) {
-                    if (rate == null || r.compareTo(rate) < 0) {
+                    if (rate == null || r.compareTo(rate) > 0) {
                         rate = r;
                     }
                 }

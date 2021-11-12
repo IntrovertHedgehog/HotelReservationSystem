@@ -138,7 +138,7 @@ public class OperationManagerClient {
                     System.out.print(" > ");
                     Integer rtDetailsChoice = 0;
                     while (rtDetailsChoice < 1 || rtDetailsChoice > 3) {
-                         rtDetailsChoice = Integer.parseInt(sc.nextLine());
+                        rtDetailsChoice = Integer.parseInt(sc.nextLine());
                         if (rtDetailsChoice == 1) {
                             updateRoomType(rt);
                         } else if (rtDetailsChoice == 2) {
@@ -185,7 +185,10 @@ public class OperationManagerClient {
                     Long floorNumber = Long.parseLong(sc.nextLine());
                     System.out.print("Enter room number > ");
                     Long roomNumber = Long.parseLong(sc.nextLine());
+
+                    viewAllRoomType();
                     System.out.print("Enter room's Room Type ID > ");
+
                     RoomType rt;
                     try {
                         rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(Long.parseLong(sc.nextLine()));
@@ -212,14 +215,15 @@ public class OperationManagerClient {
                     System.out.println("You updated a room with Room ID: " + room.getRoomId().toString());
 
                 } else if (response == 6) {
-                    System.out.print("Enter new room floor number > ");
+                    System.out.print("Enter room floor number > ");
                     Long floorNumber = Long.parseLong(sc.nextLine());
-                    System.out.print("Enter new room number > ");
+                    System.out.print("Enter room number > ");
                     Long roomNumber = Long.parseLong(sc.nextLine());
 
                     RoomId roomId = new RoomId(floorNumber, roomNumber);
                     try {
                         this.roomManagementSessionBeanRemote.deleteRoom(roomId);
+                        System.out.println("Room with Room ID :" +roomId +  " is deleted");
                     } catch (RoomNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
@@ -238,10 +242,10 @@ public class OperationManagerClient {
                     List<ExceptionReport> ers = this.exceptionReportManagementSessionBeanRemote.getAllReports();
 
                     System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Exception Reports ***\n");
-                    System.out.printf("14s%40s%25s%25s\n", "Report ID", "Report Status", "Report Reservation", "Report Allocation");
+                    System.out.printf("%14s%40s%25s%25s\n", "Report ID", "Report Status", "Report Reservation", "Report Allocation");
 
                     for (ExceptionReport er : ers) {
-                        System.out.printf("14s%40s%25s%25s\n", er.getReportId().toString(), er.getStatus().name(), er.getReservation(), er.getAllocation());
+                        System.out.printf("%14s%40s%25s%25s\n", er.getReportId().toString(), er.getStatus().name(), er.getReservation(), er.getAllocation());
                     }
                 } else if (response == 9) {
                     allocatingBotSessionBean.manualAllocate();

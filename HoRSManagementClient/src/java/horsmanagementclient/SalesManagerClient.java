@@ -105,8 +105,7 @@ public class SalesManagerClient {
         System.out.print("Enter new room rate's per night > ");
         BigDecimal ratePerNight = new BigDecimal(sc.nextLine().trim());
 
-        if (rateType != RateType.PUBLISHED && rateType != RateType.NORMAL)
-        {
+        if (rateType != RateType.PUBLISHED && rateType != RateType.NORMAL) {
             System.out.print("Enter new room rate's start date (yyyy-MM-dd) > ");
             LocalDate dateStart = LocalDate.parse(sc.nextLine());
             System.out.print("Enter new room rate's end date (yyyy-MM-dd) > ");
@@ -126,15 +125,19 @@ public class SalesManagerClient {
 
         Rate r = this.roomManagementSessionBeanRemote.viewRateDetails(roomRateId);
         System.out.println("*** HoRS Management Client :: Sales Manager Operation :: View Room Rates Details ***\n");
-        System.out.printf("%14s%50s%30s%30s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
-        System.out.printf("%14s%50s%30s%30s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
+        System.out.printf("%14s%30s%20s%20s%20s%20s\n", "Room Rate ID", "Room Rate Name", "Room Rate Type", "Room Rate Per Night", "Start Date", "End Date");
+        System.out.printf("%14s%30s%20s%20s%20s%20s\n", r.getRateId(), r.getRateName(), r.getRateType(), r.getRatePerNight(), r.getPeriodStart(), r.getPeriodEnd());
         System.out.println("=====================================");
-        System.out.println("1. Update Room Rate");
-        System.out.println("2. Delete Room Rate");
-        System.out.println("3. Exit\n");
 
-        Integer rrDetailsChoice = Integer.parseInt(sc.nextLine());
+        Integer rrDetailsChoice = 0;
+
         while (rrDetailsChoice < 1 || rrDetailsChoice > 3) {
+            System.out.println("1. Update Room Rate");
+            System.out.println("2. Delete Room Rate");
+            System.out.println("3. Exit\n");
+            System.out.println("> ");
+            rrDetailsChoice = Integer.parseInt(sc.nextLine());
+            
             if (rrDetailsChoice == 1) {
                 updateRoomRate(r);
             } else if (rrDetailsChoice == 2) {

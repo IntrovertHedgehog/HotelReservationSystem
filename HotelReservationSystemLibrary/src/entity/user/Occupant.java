@@ -105,15 +105,9 @@ public class Occupant implements Serializable {
     }
 
     public void addAllocation(Allocation allocation) {
-        System.out.println("Allocation of " + passport+ " before adds");
-        allocations.forEach( a -> System.out.print(a.getAllocationId() + " "));
-        
         if (allocation.getOccupant().equals(this) && !this.allocations.contains(allocation)) {
             this.allocations.add(allocation);
         }
-        
-        System.out.println("Allocation of " + passport+ " after adds");
-        allocations.forEach( a -> System.out.print(a.getAllocationId() + " "));
     }
     
     public void removeAllocation(Allocation allocation) {

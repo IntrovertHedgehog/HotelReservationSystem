@@ -47,9 +47,6 @@ public class Room implements Serializable {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.status = status;
-        if (status == RoomStatus.AVAILABLE) {
-            this.roomType.incrementQuantity();
-        }
         this.isUsed = false;
     }
 
