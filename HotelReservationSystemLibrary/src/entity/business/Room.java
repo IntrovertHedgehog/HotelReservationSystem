@@ -90,21 +90,21 @@ public class Room implements Serializable {
     }
     
     public void setAvailable() {
-        if (this.status == RoomStatus.DISABLE) {
+        if (this.status != RoomStatus.AVAILABLE) {
             this.roomType.incrementQuantity();
         }
         this.status = RoomStatus.AVAILABLE;
     }
 
     public void setUnavailable() {
-        if (this.status == RoomStatus.DISABLE) {
+        if (this.status == RoomStatus.AVAILABLE) {
             this.roomType.incrementQuantity();
         }
         this.status = RoomStatus.UNAVAILABLE;
     }
 
     public void setDisabled() {
-        if (this.status != RoomStatus.DISABLE) {
+        if (this.status == RoomStatus.AVAILABLE) {
             this.roomType.decrementQuantity();
         }
         this.status = RoomStatus.DISABLE;

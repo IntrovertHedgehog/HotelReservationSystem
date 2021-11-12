@@ -226,6 +226,14 @@ public class RoomType implements Serializable {
     public void setDisable() {
         this.status = RoomTypeStatus.DISABLE;
     }
+    
+    public Boolean isUsed() {
+        return this.status == RoomTypeStatus.USED;
+    }
+    
+    public Boolean isDisable() {
+        return this.status == RoomTypeStatus.DISABLE;
+    }
 
     public BigDecimal calculateWalkInRate(LocalDate checkInDate, LocalDate checkOutDate) {
         Rate publishedrate = rates.stream()

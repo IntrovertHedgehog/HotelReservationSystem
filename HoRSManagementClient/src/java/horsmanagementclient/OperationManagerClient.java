@@ -178,7 +178,12 @@ public class OperationManagerClient {
                     RoomStatus roomStatus = roomStatuses[roomStatusIndex - 1];
 
                     RoomId roomId = this.roomManagementSessionBeanRemote.createNewRoom(floorNumber, roomNumber, rt, roomStatus);
-                    System.out.println("You created a new room  with Room ID: " + roomId.toString());
+                    
+                    if (roomId == null) {
+                        System.out.println("This room cannot be created");
+                    } else {
+                        System.out.println("You created a new room  with Room ID: " + roomId.toString());
+                    }
 
                 } else if (response == 5) {
                     System.out.print("Enter room floor number > ");
@@ -223,7 +228,7 @@ public class OperationManagerClient {
                     RoomId roomId = new RoomId(floorNumber, roomNumber);
                     try {
                         this.roomManagementSessionBeanRemote.deleteRoom(roomId);
-                        System.out.println("Room with Room ID :" +roomId +  " is deleted");
+                        System.out.println("Room with Room ID :" + roomId + " is deleted");
                     } catch (RoomNotFoundException e) {
                         System.out.println(e.getMessage());
                     }

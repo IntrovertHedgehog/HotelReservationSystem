@@ -37,13 +37,17 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
 
     @Override
     public Long createRate(Rate rate) {
-        em.persist(rate);
+        if (!rate.getRoomType().isDisable()) {
+            em.persist(rate);
 
-        RoomType rt = em.merge(rate.getRoomType());
-        rt.addRate(rate);
-        em.flush();
+            RoomType rt = em.merge(rate.getRoomType());
+            rt.addRate(rate);
+            em.flush();
 
-        return rate.getRateId();
+            return rate.getRateId();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -161,7 +165,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
             for (Rate rate : rates) {
                 em.remove(rate);
             }
-            
+
             em.remove(roomType);
         } else if (roomType.getStatus() == RoomTypeStatus.USED) {
             roomType.setDisable();
@@ -199,6 +203,10 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
 
     @Override
     public RoomId createNewRoom(Long floorNumber, Long roomNumber, RoomType roomType, RoomStatus status) {
+        if (roomType.isDisable()) {
+            return null;
+        }
+        
         Room newRoom = new Room(floorNumber, roomNumber, roomType, status);
 
         em.persist(newRoom);

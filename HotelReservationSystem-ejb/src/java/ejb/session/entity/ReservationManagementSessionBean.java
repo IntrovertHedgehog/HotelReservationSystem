@@ -88,7 +88,9 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
         for (Object[] obj : rawResult) {
             RoomType roomType = em.find(RoomType.class, (Long) obj[0]);
             Long quantity = (Long) obj[1];
-            results.add(new ReservationSearchResult(roomType, quantity, checkInDate, checkOutDate, clientType));
+            if (!roomType.isDisable()) {
+                results.add(new ReservationSearchResult(roomType, quantity, checkInDate, checkOutDate, clientType));
+            }
         }
 
         return results;
@@ -109,7 +111,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
 
             for (ReservationSearchResult r : results) {
-                if (r.getRoomType().equals(roomType)) {
+                if (r.getRoomType().equals(roomType) || r.getRoomType().isDisable()) {
                     if (r.getQuantity() <= 0) {
                         return null;
                     }
@@ -136,7 +138,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
             for (ReservationSearchResult r : results) {
                 if (r.getRoomType().equals(roomType)) {
-                    if (r.getQuantity() <= 0) {
+                    if (r.getQuantity() <= 0 || r.getRoomType().isDisable()) {
                         return null;
                     }
 
@@ -178,7 +180,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
             for (ReservationSearchResult r : results) {
                 if (r.getRoomType().equals(roomType)) {
-                    if (r.getQuantity() <= 0) {
+                    if (r.getQuantity() <= 0 || r.getRoomType().isDisable()) {
                         return null;
                     }
 

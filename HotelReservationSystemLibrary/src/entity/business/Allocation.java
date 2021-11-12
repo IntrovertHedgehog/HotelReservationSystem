@@ -107,12 +107,10 @@ public class Allocation implements Serializable {
     public void checkIn(LocalTime checkInTime) {
         System.out.println("Checked in at " + checkInTime);
         this.checkInTime = checkInTime;
-        room.setUnavailable();
     }
 
     public void checkOut(LocalTime checkOutTime) {
         this.checkOutTime = checkOutTime;
-        room.setAvailable();
     }
     
     @Override

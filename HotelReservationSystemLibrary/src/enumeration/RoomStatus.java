@@ -10,7 +10,7 @@ package enumeration;
  * @author Winter
  */
 public enum RoomStatus {
-    AVAILABLE, // not-occupied, ready to use
-    UNAVAILABLE, // occupied or in cleaning process
+    AVAILABLE, 
+    UNAVAILABLE, 
     DISABLE // permanently disable or unavailable for other reasons (I think)
 }
