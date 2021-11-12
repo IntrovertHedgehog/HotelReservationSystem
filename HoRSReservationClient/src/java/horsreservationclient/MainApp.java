@@ -212,11 +212,11 @@ public class MainApp {
             results = this.onlineReservationSessionBeanRemote.onlineSearchRoom(dateStart, dateEnd);
 
             System.out.println("*** HoRS Management Client :: Online Reservation :: Search Rooms ***\n");
-            System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
+            System.out.printf("\n%8s%25s%20s%20s%20s%20s%20s", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
             Integer counter = 0;
             for (ReservationSearchResult r : results) {
-                System.out.printf("\n%8s%20s%20s%20s%20s%20s%20s", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
+                System.out.printf("\n%8s%25s%20s%20s%20s%20s%20s", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
                 counter++;
             }
 
@@ -341,8 +341,8 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservation Detail ***\n");
-        System.out.printf("%20s%30s%30s%30s\n", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date");
-        System.out.printf("%20s%30s%30s%30s\n", r.getReservationId(), r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+        System.out.printf("%20s%35s%30s%30s\n", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date");
+        System.out.printf("%20s%35s%30s%30s\n", r.getReservationId(), r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
         System.out.println();
     }
 
@@ -356,11 +356,11 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservations ***\n");
-        System.out.printf("%8s%40s%30s%30s\n", "S/N", "Room Type Name", "Check In Date", "Check Out Date");
+        System.out.printf("%8s%45s%30s%30s\n", "S/N", "Room Type Name", "Check In Date", "Check Out Date");
 
         Integer counter = 0;
         for (OnlineReservation r : onlineReservations) {
-            System.out.printf("%8s%40s%30s%30s\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+            System.out.printf("%8s%45s%30s%30s\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
             counter++;
         }
         System.out.println();

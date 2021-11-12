@@ -105,7 +105,7 @@ public class Occupant implements Serializable {
     }
 
     public void addAllocation(Allocation allocation) {
-        if (allocation.getOccupant().equals(this) && !this.reservations.contains(allocation)) {
+        if (allocation.getOccupant().equals(this) && !this.allocations.contains(allocation)) {
             this.allocations.add(allocation);
         }
     }

@@ -13,6 +13,15 @@
 <message name="InvalidLoginCredentialsException">
 <part name="fault" element="tns:InvalidLoginCredentialsException"/>
 </message>
+<message name="partnerSearchRoom">
+<part name="parameters" element="tns:partnerSearchRoom"/>
+</message>
+<message name="partnerSearchRoomResponse">
+<part name="parameters" element="tns:partnerSearchRoomResponse"/>
+</message>
+<message name="InvalidTemporalInputException">
+<part name="fault" element="tns:InvalidTemporalInputException"/>
+</message>
 <message name="partnerReserve">
 <part name="parameters" element="tns:partnerReserve"/>
 </message>
@@ -28,6 +37,12 @@
 <message name="RoomTypeNotFoundException">
 <part name="fault" element="tns:RoomTypeNotFoundException"/>
 </message>
+<message name="viewAllReservations">
+<part name="parameters" element="tns:viewAllReservations"/>
+</message>
+<message name="viewAllReservationsResponse">
+<part name="parameters" element="tns:viewAllReservationsResponse"/>
+</message>
 <message name="reservationDetails">
 <part name="parameters" element="tns:reservationDetails"/>
 </message>
@@ -37,26 +52,16 @@
 <message name="ReservationNotVisibleException">
 <part name="fault" element="tns:ReservationNotVisibleException"/>
 </message>
-<message name="viewAllReservations">
-<part name="parameters" element="tns:viewAllReservations"/>
-</message>
-<message name="viewAllReservationsResponse">
-<part name="parameters" element="tns:viewAllReservationsResponse"/>
-</message>
-<message name="partnerSearchRoom">
-<part name="parameters" element="tns:partnerSearchRoom"/>
-</message>
-<message name="partnerSearchRoomResponse">
-<part name="parameters" element="tns:partnerSearchRoomResponse"/>
-</message>
-<message name="InvalidTemporalInputException">
-<part name="fault" element="tns:InvalidTemporalInputException"/>
-</message>
 <portType name="PartnerReservationService">
 <operation name="loginPartner">
 <input wsam:Action="http://ws.session.ejb/PartnerReservationService/loginPartnerRequest" message="tns:loginPartner"/>
 <output wsam:Action="http://ws.session.ejb/PartnerReservationService/loginPartnerResponse" message="tns:loginPartnerResponse"/>
 <fault message="tns:InvalidLoginCredentialsException" name="InvalidLoginCredentialsException" wsam:Action="http://ws.session.ejb/PartnerReservationService/loginPartner/Fault/InvalidLoginCredentialsException"/>
+</operation>
+<operation name="partnerSearchRoom">
+<input wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerSearchRoomRequest" message="tns:partnerSearchRoom"/>
+<output wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerSearchRoomResponse" message="tns:partnerSearchRoomResponse"/>
+<fault message="tns:InvalidTemporalInputException" name="InvalidTemporalInputException" wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerSearchRoom/Fault/InvalidTemporalInputException"/>
 </operation>
 <operation name="partnerReserve">
 <input wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerReserveRequest" message="tns:partnerReserve"/>
@@ -65,21 +70,16 @@
 <fault message="tns:PartnerNotFoundException" name="PartnerNotFoundException" wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerReserve/Fault/PartnerNotFoundException"/>
 <fault message="tns:RoomTypeNotFoundException" name="RoomTypeNotFoundException" wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerReserve/Fault/RoomTypeNotFoundException"/>
 </operation>
-<operation name="reservationDetails">
-<input wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetailsRequest" message="tns:reservationDetails"/>
-<output wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetailsResponse" message="tns:reservationDetailsResponse"/>
-<fault message="tns:PartnerNotFoundException" name="PartnerNotFoundException" wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetails/Fault/PartnerNotFoundException"/>
-<fault message="tns:ReservationNotVisibleException" name="ReservationNotVisibleException" wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetails/Fault/ReservationNotVisibleException"/>
-</operation>
 <operation name="viewAllReservations">
 <input wsam:Action="http://ws.session.ejb/PartnerReservationService/viewAllReservationsRequest" message="tns:viewAllReservations"/>
 <output wsam:Action="http://ws.session.ejb/PartnerReservationService/viewAllReservationsResponse" message="tns:viewAllReservationsResponse"/>
 <fault message="tns:PartnerNotFoundException" name="PartnerNotFoundException" wsam:Action="http://ws.session.ejb/PartnerReservationService/viewAllReservations/Fault/PartnerNotFoundException"/>
 </operation>
-<operation name="partnerSearchRoom">
-<input wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerSearchRoomRequest" message="tns:partnerSearchRoom"/>
-<output wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerSearchRoomResponse" message="tns:partnerSearchRoomResponse"/>
-<fault message="tns:InvalidTemporalInputException" name="InvalidTemporalInputException" wsam:Action="http://ws.session.ejb/PartnerReservationService/partnerSearchRoom/Fault/InvalidTemporalInputException"/>
+<operation name="reservationDetails">
+<input wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetailsRequest" message="tns:reservationDetails"/>
+<output wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetailsResponse" message="tns:reservationDetailsResponse"/>
+<fault message="tns:PartnerNotFoundException" name="PartnerNotFoundException" wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetails/Fault/PartnerNotFoundException"/>
+<fault message="tns:ReservationNotVisibleException" name="ReservationNotVisibleException" wsam:Action="http://ws.session.ejb/PartnerReservationService/reservationDetails/Fault/ReservationNotVisibleException"/>
 </operation>
 </portType>
 <binding name="PartnerReservationServicePortBinding" type="tns:PartnerReservationService">
@@ -94,6 +94,18 @@
 </output>
 <fault name="InvalidLoginCredentialsException">
 <soap:fault name="InvalidLoginCredentialsException" use="literal"/>
+</fault>
+</operation>
+<operation name="partnerSearchRoom">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="InvalidTemporalInputException">
+<soap:fault name="InvalidTemporalInputException" use="literal"/>
 </fault>
 </operation>
 <operation name="partnerReserve">
@@ -114,6 +126,18 @@
 <soap:fault name="RoomTypeNotFoundException" use="literal"/>
 </fault>
 </operation>
+<operation name="viewAllReservations">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+<fault name="PartnerNotFoundException">
+<soap:fault name="PartnerNotFoundException" use="literal"/>
+</fault>
+</operation>
 <operation name="reservationDetails">
 <soap:operation soapAction=""/>
 <input>
@@ -127,30 +151,6 @@
 </fault>
 <fault name="ReservationNotVisibleException">
 <soap:fault name="ReservationNotVisibleException" use="literal"/>
-</fault>
-</operation>
-<operation name="viewAllReservations">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-<fault name="PartnerNotFoundException">
-<soap:fault name="PartnerNotFoundException" use="literal"/>
-</fault>
-</operation>
-<operation name="partnerSearchRoom">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-<fault name="InvalidTemporalInputException">
-<soap:fault name="InvalidTemporalInputException" use="literal"/>
 </fault>
 </operation>
 </binding>
