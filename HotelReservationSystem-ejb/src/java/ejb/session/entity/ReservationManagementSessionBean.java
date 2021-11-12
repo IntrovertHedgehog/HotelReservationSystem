@@ -119,6 +119,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                     break;
                 }
             }
+            guest = em.merge(guest);
             OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
             em.persist(onlineReservation);
             em.flush();
@@ -143,12 +144,6 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
 
                     break;
                 }
-            }
-
-            if (em.contains(occupant)) {
-                occupant = em.merge(occupant);
-            } else {
-                em.persist(occupant);
             }
             
             Occupant occupantInDb = em.find(Occupant.class, occupant.getPassport());
