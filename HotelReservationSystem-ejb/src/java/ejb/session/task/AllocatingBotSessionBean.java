@@ -11,13 +11,10 @@ import entity.business.Reservation;
 import entity.business.Room;
 import enumeration.ExceptionStatus;
 import enumeration.RoomStatus;
-import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -60,8 +57,6 @@ public class AllocatingBotSessionBean implements AllocatingBotSessionBeanLocal, 
         List<Room> allRooms = em.createQuery("SELECT r FROM Room r WHERE r.roomType = :nextRoomType AND r.status = :status")
                 .setParameter("nextRoomType", reservation.getRoomType().getNextRoomType())
                 .setParameter("status", RoomStatus.AVAILABLE)
-                .setParameter("checkInDate", reservation.getCheckInDate())
-                .setParameter("checkOutDate", reservation.getCheckOutDate())
                 .getResultList();
         
         List<Room> usedRooms = em.createQuery("SELECT r FROM Allocation a JOIN a.room r JOIN a.reservation re WHERE r.roomType = :nextRoomType AND r.status = :status AND re.checkInDate < :checkOutDate AND re.checkOutDate > :checkInDate")
