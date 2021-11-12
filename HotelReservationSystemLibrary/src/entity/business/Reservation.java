@@ -39,7 +39,7 @@ public abstract class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ReservationId;
+    private Long reservationId;
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private RoomType roomType;
@@ -77,7 +77,7 @@ public abstract class Reservation implements Serializable {
 
 
     public Long getReservationId() {
-        return ReservationId;
+        return reservationId;
     }
     
     public List<Rate> getRates() {
@@ -145,7 +145,7 @@ public abstract class Reservation implements Serializable {
      * @param ReservationId the ReservationId to set
      */
     public void setReservationId(Long ReservationId) {
-        this.ReservationId = ReservationId;
+        this.reservationId = ReservationId;
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class Reservation implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (ReservationId != null ? ReservationId.hashCode() : 0);
+        hash += (reservationId != null ? reservationId.hashCode() : 0);
         return hash;
     }
 
@@ -201,7 +201,7 @@ public abstract class Reservation implements Serializable {
             return false;
         }
         Reservation other = (Reservation) object;
-        if ((this.ReservationId == null && other.ReservationId != null) || (this.ReservationId != null && !this.ReservationId.equals(other.ReservationId))) {
+        if ((this.reservationId == null && other.reservationId != null) || (this.reservationId != null && !this.reservationId.equals(other.reservationId))) {
             return false;
         }
         return true;

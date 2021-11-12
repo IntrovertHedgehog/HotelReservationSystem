@@ -135,35 +135,33 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     public void deleteRoomType(RoomType roomType) throws DeleteRoomTypeException {
         roomType = em.merge(roomType);
 
-        if (!roomType.getRates().isEmpty()) {
+        List<Room> rooms = em.createQuery("SELECT r FROM Room r WHERE r.roomType = :roomType")
+                .setParameter("roomType", roomType)
+                .getResultList();
+
+        rooms.forEach(
+                r -> {
+                    try {
+                        deleteRoom(r.getRoomId());
+                    } catch (RoomNotFoundException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+        );
+
+        List<RoomType> roomtypes = em.createQuery("SELECT r FROM RoomType r WHERE r.nextRoomType = :roomType")
+                .setParameter("roomType", roomType)
+                .getResultList();
+        roomtypes.forEach(
+                r -> r.setNextRoomType(null)
+        );
+
+        if (roomType.getStatus() == RoomTypeStatus.UNUSED) {
             List<Rate> rates = roomType.getRates();
             for (Rate rate : rates) {
                 em.remove(rate);
             }
-
-            List<Room> rooms = em.createQuery("SELECT r FROM Room r WHERE r.roomType = :roomType")
-                    .setParameter("roomType", roomType)
-                    .getResultList();
-
-            rooms.forEach(
-                    r -> {
-                        try {
-                            deleteRoom(r.getRoomId());
-                        } catch (RoomNotFoundException ex) {
-                            System.out.println(ex.getMessage());
-                        }
-                    }
-            );
-
-            List<RoomType> roomtypes = em.createQuery("SELECT r FROM RoomType r WHERE r.nextRoomType = :roomType")
-                    .setParameter("roomType", roomType)
-                    .getResultList();
-            roomtypes.forEach(
-                    r -> r.setNextRoomType(null)
-            );
-        }
-
-        if (roomType.getStatus() == RoomTypeStatus.UNUSED) {
+            
             em.remove(roomType);
         } else if (roomType.getStatus() == RoomTypeStatus.USED) {
             roomType.setDisable();

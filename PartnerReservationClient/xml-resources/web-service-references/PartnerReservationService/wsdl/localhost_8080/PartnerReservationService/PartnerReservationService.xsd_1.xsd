@@ -119,7 +119,7 @@
 <xs:sequence>
 <xs:element name="name" type="xs:string" minOccurs="0"/>
 <xs:element name="partnerId" type="xs:long" minOccurs="0"/>
-<xs:element name="reservations" type="tns:partnerReservation" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="partnerReservations" type="tns:partnerReservation" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="username" type="xs:string" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
