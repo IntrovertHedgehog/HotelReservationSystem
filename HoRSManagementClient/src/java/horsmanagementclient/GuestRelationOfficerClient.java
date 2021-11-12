@@ -96,11 +96,11 @@ public class GuestRelationOfficerClient {
             results = this.walkInSessionBeanRemote.walkInSearchRoom(dateStart, dateEnd);
 
             System.out.println("*** HoRS Management Client :: Guest Relation Officer Operation :: Search Rooms ***\n");
-            System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
+            System.out.printf("%8s%40s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
             Integer counter = 0;
             for (ReservationSearchResult r : results) {
-                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
+                System.out.printf("%8s%40s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
                 counter++;
             }
 
@@ -155,6 +155,38 @@ public class GuestRelationOfficerClient {
             Long reservationId = walkInSessionBeanRemote.walkInReserveRoom(index, o);
             if (reservationId != null) {
                 System.out.println("You have successfully reserved a room with Walk-In Reservation ID " + reservationId);
+
+                while (true) {
+                    Integer response = 0;
+
+                    while (response < 1 || response > 2) {
+                        System.out.println("1. Reserve Another Room");
+                        System.out.println("2. Exit\n");
+                        System.out.print("> ");
+                        response = Integer.parseInt(sc.nextLine());
+
+                        if (response == 1) {
+                            System.out.print("Enter index of room to book > ");
+                            index = Integer.parseInt(sc.nextLine());
+
+                            try {
+                                reservationId = walkInSessionBeanRemote.walkInReserveRoom(index, o);
+                                if (reservationId != null) {
+                                    System.out.println("You have successfully reserved a room with Walk-In Reservation ID " + reservationId);
+                                } else {
+                                    System.out.println("No more rooms are available!");
+                                }
+                            } catch (NoMoreRoomException e) {
+                                System.out.println("No more rooms are available!");
+                            }
+                        } else if (response == 2) {
+                            break;
+                        } else {
+                            System.out.println("Invalid option, please try again!\n");
+                        }
+                    }
+                }
+
             } else {
                 System.out.println("No more rooms are available!");
             }
@@ -191,7 +223,7 @@ public class GuestRelationOfficerClient {
             walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);
             System.out.println("Check out successful");
         } catch (DateTimeParseException ex) {
-            System.out.println("Invalid dattime format");
+            System.out.println("Invalid datetime format");
         }
     }
 }

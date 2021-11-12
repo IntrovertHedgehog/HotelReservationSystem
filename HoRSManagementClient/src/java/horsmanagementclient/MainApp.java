@@ -73,7 +73,7 @@ this.allocatingBotSessionBean = allocatingBotSessionBean;
             response = 0;
             
             while (response < 1 || response > 2) {
-                System.out.print(" > ");
+                System.out.print("> ");
                 response = Integer.parseInt(sc.nextLine());
                 
                 switch (response) {
@@ -103,7 +103,7 @@ this.allocatingBotSessionBean = allocatingBotSessionBean;
         String username = sc.nextLine().trim();
         System.out.println("reprint input: " + username);
 
-        System.out.print("Enter Employee Passowrd > ");
+        System.out.print("Enter Employee Password > ");
         String password = sc.nextLine().trim();
         System.out.println("reprint input: " + password);
 

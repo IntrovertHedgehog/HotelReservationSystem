@@ -32,7 +32,7 @@ public class Rate implements Serializable, Comparable<Rate> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rateId;
-    @Size(min = 1, max = 32)
+    @Size(min = 1, max = 132)
     @Column(nullable = false, length = 32)
     private String rateName;
     @Enumerated(EnumType.STRING)

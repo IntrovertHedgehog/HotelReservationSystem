@@ -100,13 +100,17 @@ public class OperationManagerClient {
 
                     System.out.println("**** Room Type");
                     viewAllRoomType();
-                    System.out.println("Next Room Type Id> ");
+                    System.out.print("Next Room Type Id (type 0 if none) > ");
 
                     Long nextRoomTypeId = Long.parseLong(sc.nextLine());
                     RoomType rt;
-                    try {
-                        rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(nextRoomTypeId);
 
+                    try {
+                        if (nextRoomTypeId == 0) {
+                            rt = null;
+                        } else {
+                            rt = this.roomManagementSessionBeanRemote.retrieveRoomTypeByRoomTypeId(nextRoomTypeId);
+                        }
                         Long roomTypeId = this.roomManagementSessionBeanRemote.createNewRoomType(rt, name, description, roomSize, bedSize, capacity, amenities);
                         System.out.println("You created a new room type with Room Type ID: " + roomTypeId);
 
@@ -125,15 +129,16 @@ public class OperationManagerClient {
                         break;
                     }
 
-                    System.out.printf("%14s%32s%20s%15s%15s\n", "Room Type ID", "Room Type Name", "Room Type Quantity", "Status", "Next Room Type");
-                    System.out.printf("%14s%32s%20s%15s%15s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString(), rt.getStatus().toString(), rt.getNextRoomType().getName());
+                    System.out.printf("%14s%40s%25s%25s%25s\n", "Room Type ID", "Room Type Name", "Room Quantity", "Status", "Next Room Type");
+                    System.out.printf("%14s%40s%25s%25s%25s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString(), rt.getStatus().toString(), rt.getNextRoomType() == null ? null : rt.getNextRoomType().getName());
                     System.out.println("=====================================");
                     System.out.println("1. Update Room Type");
                     System.out.println("2. Delete Room Type");
                     System.out.println("3. Exit\n");
                     System.out.print(" > ");
-                    Integer rtDetailsChoice = Integer.parseInt(sc.nextLine());
+                    Integer rtDetailsChoice = 0;
                     while (rtDetailsChoice < 1 || rtDetailsChoice > 3) {
+                         rtDetailsChoice = Integer.parseInt(sc.nextLine());
                         if (rtDetailsChoice == 1) {
                             updateRoomType(rt);
                         } else if (rtDetailsChoice == 2) {
@@ -233,10 +238,10 @@ public class OperationManagerClient {
                     List<ExceptionReport> ers = this.exceptionReportManagementSessionBeanRemote.getAllReports();
 
                     System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Exception Reports ***\n");
-                    System.out.printf("\n%3s%20s%20s%20s", "Report ID", "Report Status", "Report Reservation", "Report Allocation");
+                    System.out.printf("14s%40s%25s%25s\n", "Report ID", "Report Status", "Report Reservation", "Report Allocation");
 
                     for (ExceptionReport er : ers) {
-                        System.out.printf("\n%3s%20s%20s", er.getReportId().toString(), er.getStatus().name(), er.getReservation(), er.getAllocation());
+                        System.out.printf("14s%40s%25s%25s\n", er.getReportId().toString(), er.getStatus().name(), er.getReservation(), er.getAllocation());
                     }
                 } else if (response == 9) {
                     allocatingBotSessionBean.manualAllocate();
@@ -258,10 +263,10 @@ public class OperationManagerClient {
         List<RoomType> roomTypes = this.roomManagementSessionBeanRemote.retrieveAllRoomTypes();
 
         System.out.println("*** HoRS Management Client :: Operation Manager Operation :: View List of Room Types ***\n");
-        System.out.printf("%14s%32s%20s%15s%15s\n", "Room Type ID", "Room Type Name", "Room Type Quantity", "Status", "Next Room Type");
+        System.out.printf("%14s%40s%25s%25s%25s\n", "Room Type ID", "Room Type Name", "Room Type Quantity", "Status", "Next Room Type");
 
         roomTypes.forEach(rt -> {
-            System.out.printf("%14s%32s%20s%15s%15s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString(), rt.getStatus(), rt.getNextRoomType().getName());
+            System.out.printf("%14s%40s%25s%25s%25s\n", rt.getRoomTypeId(), rt.getName(), rt.getQuantityAvailable().toString(), rt.getStatus(), rt.getNextRoomType() == null ? null : rt.getNextRoomType().getName());
         });
     }
 

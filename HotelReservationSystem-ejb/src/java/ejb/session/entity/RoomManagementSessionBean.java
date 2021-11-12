@@ -38,9 +38,10 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     @Override
     public Long createRate(Rate rate) {
         em.persist(rate);
-        em.flush();
         
-        rate.getRoomType().addRate(rate);
+        RoomType rt = em.merge(rate.getRoomType());
+        rt.addRate(rate);
+        em.flush();
         
         return rate.getRateId();
     }
@@ -120,7 +121,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
         {
             RoomType roomTypeToUpdate = retrieveRoomTypeByRoomTypeId(roomType.getRoomTypeId());
             
-            if(roomTypeToUpdate.getName().equals(roomType.getName()))
+            if(roomTypeToUpdate.equals(roomType))
             {
                 em.merge(roomType);
             
@@ -206,8 +207,12 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     @Override
     public List<RoomType> retrieveAllRoomTypes() {
-        Query query = em.createQuery("SELECT r FROM RoomType r WHERE");
-        return query.getResultList();
+        Query query = em.createQuery("SELECT r FROM RoomType r");
+        List<RoomType> rts = query.getResultList();
+        for (RoomType rt : rts) {
+            rt.getNextRoomType();
+        }
+        return rts;
     }
     
     
