@@ -277,6 +277,44 @@ public class MainApp {
             System.out.println("No more room of this type");
         } else {
             System.out.println("You successfully reserved a room type with reservation ID : " + reservationId);
+            while (true) {
+                Integer response = 0;
+
+                while (response < 1 || response > 2) {
+                    System.out.println("1. Reserve Another Room");
+                    System.out.println("2. Exit\n");
+                    System.out.print("> ");
+                    response = Integer.parseInt(sc.nextLine());
+
+                    if (response == 1) {
+                        System.out.print("Enter index of room to book > ");
+                        index = Integer.parseInt(sc.nextLine());
+
+                        try {
+                            reservationId = this.onlineReservationSessionBeanRemote.onlineReserveRoom(index);
+                            if (reservationId != null) {
+                                System.out.println("You have successfully reserved a room with Walk-In Reservation ID " + reservationId);
+                            } else {
+                                System.out.println("No more rooms are available!");
+                                return;
+                            }
+                        } catch (NoMoreRoomException e) {
+                            System.out.println("No more rooms are available!");
+                            return;
+                        } catch (RoomTypeNotFoundException e) {
+                            System.out.println(e.getMessage());
+                            return;
+                        }
+                    } else if (response == 2) {
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!\n");
+                    }
+                }
+                if (response == 2) {
+                    break;
+                }
+            }
         }
     }
 
@@ -303,8 +341,8 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservation Detail ***\n");
-        System.out.printf("%8s%50s%30s%30s", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date\n");
-        System.out.printf("%8s%50s%30s%30s\n", r.getReservationId(), r.getRoomType().toString(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+        System.out.printf("%20s%30s%30s%30s\n", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date");
+        System.out.printf("%20s%30s%30s%30s\n", r.getReservationId(), r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
         System.out.println();
     }
 
@@ -318,11 +356,11 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservations ***\n");
-        System.out.printf("%8s%50s%30s%30s", "S/N", "Room Type Name", "Check In Date", "Check Out Date\n");
+        System.out.printf("%8s%40s%30s%30s\n", "S/N", "Room Type Name", "Check In Date", "Check Out Date");
 
         Integer counter = 0;
         for (OnlineReservation r : onlineReservations) {
-            System.out.printf("%8s%50s%30s%30s\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+            System.out.printf("%8s%40s%30s%30s\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
             counter++;
         }
         System.out.println();

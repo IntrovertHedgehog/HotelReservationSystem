@@ -185,6 +185,9 @@ public class GuestRelationOfficerClient {
                             System.out.println("Invalid option, please try again!\n");
                         }
                     }
+                    if (response == 2) {
+                        break;
+                    }
                 }
 
             } else {
