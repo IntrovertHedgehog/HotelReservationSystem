@@ -105,13 +105,18 @@ public class SalesManagerClient {
         System.out.print("Enter new room rate's per night > ");
         BigDecimal ratePerNight = new BigDecimal(sc.nextLine().trim());
 
-        System.out.print("Enter new room rate's start date (yyyy-MM-dd) > ");
-        LocalDate dateStart = LocalDate.parse(sc.nextLine());
-        System.out.print("Enter new room rate's end date (yyyy-MM-dd) > ");
-        LocalDate dateEnd = LocalDate.parse(sc.nextLine());
-
-        Rate roomRate = new Rate(name, rt, rateType, ratePerNight, dateStart, dateEnd);
-        this.roomManagementSessionBeanRemote.createRate(roomRate);
+        if (rateType != RateType.PUBLISHED && rateType != RateType.NORMAL)
+        {
+            System.out.print("Enter new room rate's start date (yyyy-MM-dd) > ");
+            LocalDate dateStart = LocalDate.parse(sc.nextLine());
+            System.out.print("Enter new room rate's end date (yyyy-MM-dd) > ");
+            LocalDate dateEnd = LocalDate.parse(sc.nextLine());
+            Rate roomRate = new Rate(name, rt, rateType, ratePerNight, dateStart, dateEnd);
+            this.roomManagementSessionBeanRemote.createRate(roomRate);
+        } else {
+            Rate roomRate = new Rate(name, rt, rateType, ratePerNight);
+            this.roomManagementSessionBeanRemote.createRate(roomRate);
+        }
 
     }
 
