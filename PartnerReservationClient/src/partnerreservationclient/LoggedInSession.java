@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ws.client.InvalidTemporalInputException_Exception;
 import ws.client.NoMoreRoomException_Exception;
 import ws.client.Partner;
@@ -84,24 +82,22 @@ public class LoggedInSession {
             System.out.println("*** HoRS Management Client :: Guest Relation Officer Operation :: Search Rooms ***\n");
             System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
-            Integer counter = 0;
             for (ReservationSearchResult r : results) {
-                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
-                counter++;
+                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", r.getRoomType().getRoomTypeId(), r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
             }
 
             System.out.println("=====================================");
             System.out.println("1. Reserve Room");
             System.out.println("2. Exit\n");
-            System.out.print(" > ");
             Integer response = 0;
             while (response < 1 || response > 2) {
+                System.out.print(" > ");
                 response = Integer.parseInt(sc.nextLine());
 
                 if (response == 1) {
+                    reserve(checkInDate.toString(), checkOutDate.toString());
                 } else if (response == 2) {
                     break;
-
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
@@ -114,31 +110,40 @@ public class LoggedInSession {
     }
 
     public void reserve(String checkInDate, String checkOutDate) {
-        PartnerReservationService_Service service = new PartnerReservationService_Service();
-        PartnerReservationService port = service.getPartnerReservationServicePort();
+        String response = "Y";
+        do {
+            PartnerReservationService_Service service = new PartnerReservationService_Service();
+            PartnerReservationService port = service.getPartnerReservationServicePort();
 
-        System.out.print("Occupant passport > ");
-        String passport = sc.nextLine().trim();
-        System.out.print("Occupant Name> ");
-        String name = sc.nextLine().trim();
+            System.out.print("Occupant passport > ");
+            String passport = sc.nextLine().trim();
+            System.out.print("Occupant Name> ");
+            String name = sc.nextLine().trim();
 
-        Long reservationId = null;
+            System.out.print("Room Type Id > ");
+            Long roomTypeId = Long.parseLong(sc.nextLine().trim());
+            
+            Long reservationId = null;
 
-        try {
-            reservationId = port.partnerReserve(partner.getPartnerId(), Long.MIN_VALUE, passport, name, checkInDate, checkOutDate);
-        } catch (NoMoreRoomException_Exception ex) {
-            System.out.println("No more room of this type");
-        } catch (PartnerNotFoundException_Exception ex) {
-            System.out.println("Partner not existing!");
-        } catch (RoomTypeNotFoundException_Exception ex) {
-            System.out.println("Invalid room type");
-        }
+            try {
+                reservationId = port.partnerReserve(partner.getPartnerId(), roomTypeId, passport, name, checkInDate, checkOutDate);
+            } catch (NoMoreRoomException_Exception ex) {
+                System.out.println("No more room of this type");
+            } catch (PartnerNotFoundException_Exception ex) {
+                System.out.println("Partner not existing!");
+            } catch (RoomTypeNotFoundException_Exception ex) {
+                System.out.println("Invalid room type");
+            }
 
-        if (reservationId == null) {
-            System.out.println("No more room of this type");
-        } else {
-            System.out.println("Successfully reserved room with reservation id: " + reservationId);
-        }
+            if (reservationId == null) {
+                System.out.println("No more room of this type");
+            } else {
+                System.out.println("Successfully reserved room with reservation id: " + reservationId);
+            }
+
+            System.out.print("Continue? (Y) > ");
+            response = sc.nextLine().trim();
+        } while (response.equals("Y"));
     }
 
     public void viewAllReservation() {
@@ -152,7 +157,7 @@ public class LoggedInSession {
             System.out.printf("%15s%15s%15s%25s\n", "Reservation ID", "Checkin date", "Checkout date", "Occupant Passport");
 
             reservations.forEach(
-                    r -> System.out.printf("%15s%15s%15s%25s\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport()));
+                    r -> System.out.printf("%15s%20s%20s%25s\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport()));
         } catch (PartnerNotFoundException_Exception ex) {
             System.out.println("Partner not found");
         }
@@ -163,7 +168,7 @@ public class LoggedInSession {
         PartnerReservationService_Service service = new PartnerReservationService_Service();
         PartnerReservationService port = service.getPartnerReservationServicePort();
 
-        System.out.println("Reservation Id > ");
+        System.out.print("Reservation Id > ");
         Long reservationId = Long.parseLong(sc.nextLine().trim());
 
         try {

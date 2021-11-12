@@ -14,8 +14,6 @@ import enumeration.RoomStatus;
 import enumeration.RoomTypeStatus;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -163,6 +161,13 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
                     System.out.println(ex.getMessage());
                 }
             }
+            );
+            
+            List<RoomType> roomtypes = em.createQuery("SELECT r FROM RoomType r WHERE r.nextRoomType = :roomType")
+                    .setParameter("roomType", roomType)
+                    .getResultList();
+            roomtypes.forEach(
+                    r -> r.setNextRoomType(null)
             );
         }
         

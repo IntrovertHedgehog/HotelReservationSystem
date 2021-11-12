@@ -10,12 +10,17 @@ import enumeration.ClientType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
  * @author Winter
  */
+@XmlRootElement(name="ReservationSearchResult")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ReservationSearchResult implements Serializable {
 
     private RoomType roomType;
@@ -26,6 +31,9 @@ public class ReservationSearchResult implements Serializable {
     private LocalDate checkOutDate;
     private BigDecimal prevailRate;
     private ClientType clientType;
+
+    public ReservationSearchResult() {
+    }
 
     public ReservationSearchResult(RoomType roomType, Long quantity, LocalDate checkInDate, LocalDate checkOutDate, ClientType clientType) {
         this.roomType = roomType;
@@ -49,11 +57,11 @@ public class ReservationSearchResult implements Serializable {
     }
 
     public LocalDate getCheckInDate() {
-        return checkInDate;
+        return this.checkInDate;
     }
 
     public LocalDate getCheckOutDate() {
-        return checkOutDate;
+        return this.checkOutDate;
     }
 
     public BigDecimal getPrevailRate() {

@@ -198,6 +198,10 @@ public class RoomType implements Serializable {
     public Long getRoomTypeId() {
         return roomTypeId;
     }
+
+    public void setRoomTypeId(Long roomTypeId) {
+        this.roomTypeId = roomTypeId;
+    }
     
     public Long getQuantityAvailable() {
         return quantityAvailable;

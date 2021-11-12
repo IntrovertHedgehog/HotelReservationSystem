@@ -101,8 +101,8 @@ public class DataInitializationSessionBean {
         if (rate.isEmpty()) {
             for (int i = 1; i < 6; i++) {
                 RoomType roTy = roomTypelist.get(5 - i);
-                roomManagementSessionBean.createRate(new Rate(roTy.getName() + "Published", roTy, RateType.PUBLISHED, new BigDecimal(100 * i), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
-                roomManagementSessionBean.createRate(new Rate(roTy.getName() + "Normal", roTy, RateType.NORMAL, new BigDecimal(50 * i), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-10")));
+                roomManagementSessionBean.createRate(new Rate(roTy.getName() + " Published", roTy, RateType.PUBLISHED, new BigDecimal(100 * i), LocalDate.parse("2021-12-10"), LocalDate.parse("2021-12-31")));
+                roomManagementSessionBean.createRate(new Rate(roTy.getName() + " Normal", roTy, RateType.NORMAL, new BigDecimal(50 * i), LocalDate.parse("2021-12-01"), LocalDate.parse("2021-12-10")));
             }
         }
 

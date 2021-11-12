@@ -8,7 +8,11 @@
 
 <xs:element name="PartnerNotFoundException" type="tns:PartnerNotFoundException"/>
 
+<xs:element name="Reservation" type="tns:reservation"/>
+
 <xs:element name="ReservationNotVisibleException" type="tns:ReservationNotVisibleException"/>
+
+<xs:element name="ReservationSearchResult" type="tns:reservationSearchResult"/>
 
 <xs:element name="RoomTypeNotFoundException" type="tns:RoomTypeNotFoundException"/>
 
@@ -47,17 +51,13 @@
 
 <xs:complexType name="reservationSearchResult">
 <xs:sequence>
-<xs:element name="checkInDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="checkOutDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="clientType" type="tns:clientType" minOccurs="0"/>
-<xs:element name="prevailRate" type="xs:decimal" minOccurs="0"/>
-<xs:element name="quantity" type="xs:long" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomType" minOccurs="0"/>
+<xs:element name="quantity" type="xs:long" minOccurs="0"/>
+<xs:element name="checkInDate" type="xs:string" minOccurs="0"/>
+<xs:element name="checkOutDate" type="xs:string" minOccurs="0"/>
+<xs:element name="prevailRate" type="xs:decimal" minOccurs="0"/>
+<xs:element name="clientType" type="tns:clientType" minOccurs="0"/>
 </xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="localDate" final="extension restriction">
-<xs:sequence/>
 </xs:complexType>
 
 <xs:complexType name="roomType">
@@ -67,8 +67,9 @@
 <xs:element name="capacity" type="xs:long" minOccurs="0"/>
 <xs:element name="description" type="xs:string" minOccurs="0"/>
 <xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="nextRoomType" type="tns:roomType" minOccurs="0"/>
 <xs:element name="roomSize" type="xs:decimal" minOccurs="0"/>
-<xs:element name="roomTypeConfig" type="tns:roomTypeConfig" minOccurs="0"/>
+<xs:element name="roomTypeId" type="xs:long" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -103,14 +104,14 @@
 
 <xs:complexType name="reservation" abstract="true">
 <xs:sequence>
-<xs:element name="allocation" type="tns:allocation" minOccurs="0"/>
-<xs:element name="checkInDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="checkOutDate" type="tns:localDate" minOccurs="0"/>
-<xs:element name="isProcessed" type="xs:boolean" minOccurs="0"/>
-<xs:element name="occupant" type="tns:occupant" minOccurs="0"/>
-<xs:element name="rates" type="tns:rate" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-<xs:element name="reservationId" type="xs:long" minOccurs="0"/>
+<xs:element name="ReservationId" type="xs:long" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomType" minOccurs="0"/>
+<xs:element name="occupant" type="tns:occupant" minOccurs="0"/>
+<xs:element name="checkInDate" type="xs:string" minOccurs="0"/>
+<xs:element name="checkOutDate" type="xs:string" minOccurs="0"/>
+<xs:element name="isProcessed" type="xs:boolean" minOccurs="0"/>
+<xs:element name="rates" type="tns:rate" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="allocation" type="tns:allocation" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -123,16 +124,16 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="allocation">
-<xs:sequence/>
-</xs:complexType>
-
 <xs:complexType name="occupant">
 <xs:sequence>
 <xs:element name="allocations" type="tns:allocation" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 <xs:element name="name" type="xs:string" minOccurs="0"/>
 <xs:element name="passport" type="xs:string" minOccurs="0"/>
 </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="allocation">
+<xs:sequence/>
 </xs:complexType>
 
 <xs:complexType name="rate">
@@ -144,6 +145,10 @@
 <xs:element name="rateType" type="tns:rateType" minOccurs="0"/>
 <xs:element name="roomType" type="tns:roomType" minOccurs="0"/>
 </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="localDate" final="extension restriction">
+<xs:sequence/>
 </xs:complexType>
 
 <xs:complexType name="PartnerNotFoundException">
@@ -218,13 +223,6 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:simpleType name="clientType">
-<xs:restriction base="xs:string">
-<xs:enumeration value="WALKIN"/>
-<xs:enumeration value="ONLINE"/>
-</xs:restriction>
-</xs:simpleType>
-
 <xs:simpleType name="bedSize">
 <xs:restriction base="xs:string">
 <xs:enumeration value="KING"/>
@@ -234,13 +232,10 @@
 </xs:restriction>
 </xs:simpleType>
 
-<xs:simpleType name="roomTypeConfig">
+<xs:simpleType name="clientType">
 <xs:restriction base="xs:string">
-<xs:enumeration value="DELUXE_ROOM"/>
-<xs:enumeration value="PREMIER_ROOM"/>
-<xs:enumeration value="FAMILY_ROOM"/>
-<xs:enumeration value="JUNIOR_SUIT"/>
-<xs:enumeration value="GRAND_SUIT"/>
+<xs:enumeration value="WALKIN"/>
+<xs:enumeration value="ONLINE"/>
 </xs:restriction>
 </xs:simpleType>
 
