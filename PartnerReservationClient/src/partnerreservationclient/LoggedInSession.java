@@ -72,9 +72,9 @@ public class LoggedInSession {
 
         try {
             System.out.print("Enter check in date (yyyy-MM-dd) > ");
-            LocalDate checkInDate = LocalDate.parse(sc.nextLine());
+            LocalDate checkInDate = LocalDate.parse(sc.nextLine().trim());
             System.out.print("Enter check out date (yyyy-MM-dd) > ");
-            LocalDate checkOutDate = LocalDate.parse(sc.nextLine());
+            LocalDate checkOutDate = LocalDate.parse(sc.nextLine().trim());
 
             List<ReservationSearchResult> results;
             results = port.partnerSearchRoom(checkInDate.toString(), checkOutDate.toString());
@@ -92,7 +92,7 @@ public class LoggedInSession {
             Integer response = 0;
             while (response < 1 || response > 2) {
                 System.out.print(" > ");
-                response = Integer.parseInt(sc.nextLine());
+                response = Integer.parseInt(sc.nextLine().trim());
 
                 if (response == 1) {
                     reserve(checkInDate.toString(), checkOutDate.toString());

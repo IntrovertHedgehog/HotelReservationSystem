@@ -81,9 +81,9 @@ public class MainApp {
         try {
             
             System.out.print("Enter check in date (yyyy-MM-dd) > ");
-            LocalDate checkInDate = LocalDate.parse(sc.nextLine());
+            LocalDate checkInDate = LocalDate.parse(sc.nextLine().trim());
             System.out.print("Enter check out date (yyyy-MM-dd) > ");
-            LocalDate checkOutDate = LocalDate.parse(sc.nextLine());
+            LocalDate checkOutDate = LocalDate.parse(sc.nextLine().trim());
 
             List<ReservationSearchResult> results;
             results = port.partnerSearchRoom(checkInDate.toString(), checkOutDate.toString());

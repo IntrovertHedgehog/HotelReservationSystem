@@ -223,16 +223,26 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     //Room status also updated using this method
     @Override
     public void updateRoom(Room room) throws RoomNotFoundException, UpdateRoomException {
-        if (room != null && room.getRoomId() != null) {
-            em.merge(room);
+        Room managedRoom = em.find(Room.class, room.getRoomId());
+        if (managedRoom != null) {
+            if (room.getStatus() == RoomStatus.AVAILABLE) {
+                managedRoom.setAvailable();
+            } else if (room.getStatus() == RoomStatus.UNAVAILABLE) {
+                managedRoom.setUnavailable();
+            }
+            RoomType roomType = em.find(RoomType.class, room.getRoomType().getRoomTypeId());
+            managedRoom.setRoomType(roomType);
         } else {
-            throw new RoomNotFoundException("Room ID not provided for room to be updated");
+            throw new RoomNotFoundException("This room id does not exist");
         }
     }
 
     @Override
     public void deleteRoom(RoomId roomId) throws RoomNotFoundException {
         Room room = retrieveRoomByRoomId(roomId);
+        if (room.getStatus() == RoomStatus.AVAILABLE) {
+            room.getRoomType().decrementQuantity();
+        }
         if (!room.isUsed()) {
             em.remove(room);
         } else {

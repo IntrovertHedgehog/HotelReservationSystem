@@ -63,7 +63,7 @@ public class Room implements Serializable {
     public Long getRoomNumber() {
         return roomNumber;
     }
-    
+
     public RoomId getRoomId() {
         return new RoomId(floorNumber, roomNumber);
     }
@@ -79,6 +79,11 @@ public class Room implements Serializable {
      * @param roomType the roomType to set
      */
     public void setRoomType(RoomType roomType) {
+        if (status == RoomStatus.AVAILABLE) {
+            this.roomType.decrementQuantity();
+            roomType.incrementQuantity();
+        }
+        
         this.roomType = roomType;
     }
 
@@ -88,17 +93,18 @@ public class Room implements Serializable {
     public RoomStatus getStatus() {
         return status;
     }
-    
+
     public void setAvailable() {
         if (this.status != RoomStatus.AVAILABLE) {
             this.roomType.incrementQuantity();
+            System.out.println("New room type quantity: " + roomType.getQuantityAvailable());
         }
         this.status = RoomStatus.AVAILABLE;
     }
 
     public void setUnavailable() {
         if (this.status == RoomStatus.AVAILABLE) {
-            this.roomType.incrementQuantity();
+            this.roomType.decrementQuantity();
         }
         this.status = RoomStatus.UNAVAILABLE;
     }
@@ -109,11 +115,11 @@ public class Room implements Serializable {
         }
         this.status = RoomStatus.DISABLE;
     }
-    
+
     public Boolean isUsed() {
         return isUsed;
     }
-    
+
     public void use() {
         this.isUsed = true;
         this.roomType.setUsed();

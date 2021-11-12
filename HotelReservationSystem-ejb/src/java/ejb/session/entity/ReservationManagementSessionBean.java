@@ -79,8 +79,8 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                 + "FROM roomType rt LEFT JOIN \n"
                 + "(SELECT * FROM Reservation r \n"
                 + "    WHERE r.checkInDate < ? \n"
-                + "    AND r.checkOutDate > ?) r\n"
-                + "ON r.ROOMTYPE_ROOMTYPEID = rt.ROOMTYPEID\n"
+                + "    AND r.checkOutDate > ?) r \n"
+                + "ON r.ROOMTYPE_ROOMTYPEID = rt.ROOMTYPEID \n"
                 + "GROUP BY rt.roomTypeId")
                 .setParameter(2, checkInDate)
                 .setParameter(1, checkOutDate)
