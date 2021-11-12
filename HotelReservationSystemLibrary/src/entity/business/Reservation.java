@@ -20,11 +20,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import util.supplement.LocalDateAdapter;
 
 /**
  *
  * @author Winter
  */
+@XmlRootElement(name="Reservation")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Reservation implements Serializable {
@@ -40,8 +47,10 @@ public abstract class Reservation implements Serializable {
     @JoinColumn(nullable = false, updatable = false)
     private Occupant occupant;
     @Column(nullable = false, updatable = false)
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate checkInDate;
     @Column(nullable = false, updatable = false)
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate checkOutDate;
     @Column(nullable = false)
     private Boolean isProcessed;
