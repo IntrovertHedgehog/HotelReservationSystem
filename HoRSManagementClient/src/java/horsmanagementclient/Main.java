@@ -10,6 +10,7 @@ import ejb.session.entity.ExceptionReportManagementSessionBeanRemote;
 import ejb.session.entity.OccupantManagementSessionBeanRemote;
 import ejb.session.entity.ReservationManagementSessionBeanRemote;
 import ejb.session.entity.RoomManagementSessionBeanRemote;
+import ejb.session.task.AllocationBotSessionBeanRemote;
 import ejb.session.task.WalkInSessionBeanRemote;
 import javax.ejb.EJB;
 
@@ -20,7 +21,8 @@ import javax.ejb.EJB;
 public class Main {
 
     @EJB
-    private static OccupantManagementSessionBeanRemote occupantManagementSessionBean;
+    private static AllocationBotSessionBeanRemote allocatingBotSessionBean;
+
 
     @EJB
     private static WalkInSessionBeanRemote walkInSessionBeanRemote;
@@ -42,7 +44,7 @@ public class Main {
 
     public static void main(String[] args) {
         
-        MainApp mainApp = new MainApp(walkInSessionBeanRemote, roomManagementSessionBeanRemote,
+        MainApp mainApp = new MainApp(allocatingBotSessionBean, walkInSessionBeanRemote, roomManagementSessionBeanRemote,
                 reservationManagementSessionBeanRemote, occupantManagementSessionBeanRemote,
                         exceptionReportManagementSessionBeanRemote, accountManagementSessionBeanRemote);
         mainApp.run();  

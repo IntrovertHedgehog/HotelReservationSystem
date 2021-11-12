@@ -5,6 +5,8 @@
  */
 package ejb.session.entity;
 
+import entity.business.ExceptionReport;
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +15,5 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface ExceptionReportManagementSessionBeanRemote {
-    
+    public List<ExceptionReport> getAllReports();
 }

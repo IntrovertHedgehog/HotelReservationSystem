@@ -145,7 +145,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                     break;
                 }
             }
-            
+
             Occupant occupantInDb = em.find(Occupant.class, occupant.getPassport());
 
             if (occupantInDb == null) {
@@ -188,11 +188,21 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                 }
             }
 
-            if (em.contains(occupant)) {
-                occupant = em.merge(occupant);
+            Occupant occupantInDb = em.find(Occupant.class, occupant.getPassport());
+
+            if (occupantInDb == null) {
+                try {
+                    em.persist(occupant);
+                    em.flush();
+                } catch (ConstraintViolationException ex) {
+                    System.out.println("Violated constraints! " + ex.getMessage());
+                }
+                System.out.println("This occupant is not here before!");
             } else {
-                em.persist(occupant);
+                occupant = em.merge(occupant);
+                System.out.println("This occupant existed!");
             }
+            em.flush();
 
             em.flush();
             PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);

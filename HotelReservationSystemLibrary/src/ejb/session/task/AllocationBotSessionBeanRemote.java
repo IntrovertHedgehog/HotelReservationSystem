@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package enumeration;
+package ejb.session.task;
+
+import java.time.LocalDate;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Winter
  */
-public enum RoomTypeConfig {
-    DELUXE_ROOM, PREMIER_ROOM, FAMILY_ROOM, JUNIOR_SUIT, GRAND_SUIT
+@Remote
+public interface AllocationBotSessionBeanRemote {
+    public void manualAllocate();
 }

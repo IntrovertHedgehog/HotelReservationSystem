@@ -11,10 +11,11 @@ import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
-import enumeration.RoomTypeConfig;
 import enumeration.RoomTypeStatus;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -96,9 +97,9 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     }
 
     @Override
-    public Long createNewRoomType(String name, String description, BigDecimal size, BedSize bedSize, Long capacity, String amenities, RoomTypeConfig roomTypeConfig) {
+    public Long createNewRoomType(RoomType nextRoomType, String name, String description, BigDecimal size, BedSize bedSize, Long capacity, String amenities) {
         
-        RoomType newRoomType = new RoomType(name, description, size, bedSize, capacity, amenities, roomTypeConfig);
+        RoomType newRoomType = new RoomType(nextRoomType, name, description, size, bedSize, capacity, amenities);
         
         em.persist(newRoomType);
         
@@ -140,6 +141,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     @Override
     public void deleteRoomType(RoomType roomType) throws DeleteRoomTypeException {
+        roomType = em.merge(roomType);
         
         if (!roomType.getRates().isEmpty())
         {
@@ -147,6 +149,20 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
             for(Rate rate : rates) {
                 em.remove(rate);
             }
+            
+            List<Room> rooms = em.createQuery("SELECT r FROM Room r WHERE r.roomType = :roomType")
+                    .setParameter("roomType", roomType)
+                    .getResultList();
+            
+            rooms.forEach(
+                    r -> {
+                try {
+                    deleteRoom(r.getRoomId());
+                } catch (RoomNotFoundException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+            );
         }
         
         if(roomType.getStatus() == RoomTypeStatus.UNUSED)
@@ -185,7 +201,7 @@ public class RoomManagementSessionBean implements RoomManagementSessionBeanRemot
     
     @Override
     public List<RoomType> retrieveAllRoomTypes() {
-        Query query = em.createQuery("SELECT r FROM RoomType r");
+        Query query = em.createQuery("SELECT r FROM RoomType r WHERE");
         return query.getResultList();
     }
     

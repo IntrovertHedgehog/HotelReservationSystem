@@ -9,7 +9,6 @@ import entity.business.Room;
 import entity.business.RoomType;
 import enumeration.BedSize;
 import enumeration.RoomStatus;
-import enumeration.RoomTypeConfig;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Remote;
@@ -28,7 +27,7 @@ import util.exception.UpdateRoomTypeException;
 @Remote
 public interface RoomManagementSessionBeanRemote {
 
-    public Long createNewRoomType(String name, String description, BigDecimal size, BedSize bedSize, Long capacity, String amenities, RoomTypeConfig roomTypeConfig);
+    public Long createNewRoomType(RoomType nextRoomType, String name, String description, BigDecimal size, BedSize bedSize, Long capacity, String amenities);
 
     public RoomType viewRoomTypeDetails(Long roomTypeId);
 
