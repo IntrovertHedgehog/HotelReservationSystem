@@ -101,6 +101,8 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
         if (partner == null) {
             throw new PartnerNotFoundException("Partner not found of this id");
         }
+        
+        partner.getPartnerReservations().forEach(r -> r.getReservationId());
 
         em.detach(partner);
         partner.softNullify();
@@ -119,6 +121,8 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
 
         if (reservation == null) {
             throw new ReservationNotVisibleException("Reservation of this id is not found");
+        } else if (reservation.getPartner() == null) {
+            System.out.println("Some how this returns null");
         } else if (!reservation.getPartner().equals(partner)) {
             throw new ReservationNotVisibleException("Reservation does not belong to this partner");
         }

@@ -204,7 +204,6 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             }
             em.flush();
 
-            em.flush();
             PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);
             em.persist(partnerReservation);
             em.flush();

@@ -89,11 +89,11 @@ public class MainApp {
             results = port.partnerSearchRoom(checkInDate.toString(), checkOutDate.toString());
 
             System.out.println("*** HoRS Partner Client :: Search Rooms ***\n");
-            System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
+            System.out.printf("%8s%25s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
             Integer counter = 0;
             for (ReservationSearchResult r : results) {
-                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
+                System.out.printf("%8s%25s%20s%20s%20s%20s%20s\n", counter, r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
                 counter++;
             }
         } catch (DateTimeParseException ex) {

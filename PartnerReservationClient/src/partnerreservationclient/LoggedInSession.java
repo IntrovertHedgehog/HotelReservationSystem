@@ -80,10 +80,10 @@ public class LoggedInSession {
             results = port.partnerSearchRoom(checkInDate.toString(), checkOutDate.toString());
 
             System.out.println("*** HoRS Management Client :: Guest Relation Officer Operation :: Search Rooms ***\n");
-            System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
+            System.out.printf("%8s%25s%20s%20s%20s%20s%20s\n", "Index ID", "Room Type Name", "Quantity", "Check In Date", "Check Out Date", "Prevailing Rate", "Client Type");
 
             for (ReservationSearchResult r : results) {
-                System.out.printf("%8s%20s%20s%20s%20s%20s%20s\n", r.getRoomType().getRoomTypeId(), r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
+                System.out.printf("%8s%25s%20s%20s%20s%20s%20s\n", r.getRoomType().getRoomTypeId(), r.getRoomType().getName(), r.getQuantity(), r.getCheckInDate(), r.getCheckOutDate(), r.getPrevailRate(), r.getClientType());
             }
 
             System.out.println("=====================================");
