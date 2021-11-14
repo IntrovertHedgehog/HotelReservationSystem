@@ -79,7 +79,7 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
                     } else {
                         str += " (this room has been checked in)";
                     }
-                    
+
                     if (isOccupied(checkInDate, a.getRoom())) {
                         str += " (Previous occupant has not checked out - checking in proceeds!)";
                     }
@@ -108,21 +108,26 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
             LocalTime checkOutTime = checkOutDateTime.toLocalTime();
 
             for (Allocation a : occupant.getAllocations()) {
-                
+
                 if (checkOutDate.equals(a.getCheckOutDate())
                         && a.getCheckInDate() != null) {
                     String str = a.getRoom().getRoomId().toString();
 
                     if (a.getCheckOutTime() == null) {
-                        if (isBooked(checkOutDate, a.getRoom())) {
-                            str += ": this room is booked for today, please pay late checkout fee";
+
+                        if (checkOutTime.isAfter(LocalTime.of(12, 0))) {
+                            if (isBooked(checkOutDate, a.getRoom())) {
+                                str += ": late checkout! this room is booked for today. Please pay late checkout fee.";
+                            } else {
+                                str += ": late checkout! This room is not booked for today. No compensation. ";
+                            }
                         }
-                        
+
                         a.checkOut(checkOutTime);
                     } else {
                         str += " (This room has been checked out)";
                     }
-                    
+
                     rooms.add(str);
                 }
 
@@ -130,8 +135,7 @@ public class WalkInSessionBean implements WalkInSessionBeanRemote {
         } else {
             rooms.add("This occupant is not found");
         }
-        
-        
+
         return rooms;
     }
 
