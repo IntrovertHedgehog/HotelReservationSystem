@@ -29,7 +29,7 @@ public class Occupant implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Size(min = 4, max = 16)
+    @Size(min = 3, max = 16)
     @Column(length = 16)
     private String passport;
     @Size(min = 1, max = 32)

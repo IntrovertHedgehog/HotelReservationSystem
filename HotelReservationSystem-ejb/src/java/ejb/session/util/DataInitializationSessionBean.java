@@ -12,6 +12,7 @@ import entity.business.Rate;
 import entity.business.Room;
 import entity.business.RoomType;
 import entity.user.Employee;
+import entity.user.Partner;
 import enumeration.BedSize;
 import enumeration.EmployeeType;
 import enumeration.RateType;
@@ -19,6 +20,8 @@ import enumeration.RoomStatus;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -36,9 +39,6 @@ import util.exception.UsedUsernameException;
 @LocalBean
 @Startup
 public class DataInitializationSessionBean {
-
-    @EJB
-    private ReservationManagementSessionBeanLocal reservationManagementSessionBean;
 
     @EJB
     private RoomManagementSessionBeanLocal roomManagementSessionBean;

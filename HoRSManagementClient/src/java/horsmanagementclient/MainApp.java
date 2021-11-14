@@ -52,7 +52,7 @@ public class MainApp {
     public MainApp(AllocationBotSessionBeanRemote allocatingBotSessionBean, WalkInSessionBeanRemote walkInSessionBeanRemote, RoomManagementSessionBeanRemote roomManagementSessionBeanRemote,
             ReservationManagementSessionBeanRemote reservationManagementSessionBeanRemote, OccupantManagementSessionBeanRemote occupantManagementSessionBeanRemote,
             ExceptionReportManagementSessionBeanRemote exceptionReportManagementSessionBeanRemote, AccountManagementSessionBeanRemote accountManagementSessionBeanRemote) {
-this.allocatingBotSessionBean = allocatingBotSessionBean;
+        this.allocatingBotSessionBean = allocatingBotSessionBean;
         this.walkInSessionBeanRemote = walkInSessionBeanRemote;
         this.roomManagementSessionBeanRemote = roomManagementSessionBeanRemote;
         this.occupantManagementSessionBeanRemote = occupantManagementSessionBeanRemote;
@@ -71,13 +71,15 @@ this.allocatingBotSessionBean = allocatingBotSessionBean;
             System.out.println("1. Employee Login");
             System.out.println("2. Exit \n");
             response = 0;
-            
+
             while (response < 1 || response > 2) {
-                System.out.print("> ");
-                response = Integer.parseInt(sc.nextLine());
-                
-                switch (response) {
-                    case 1:
+
+                try {
+                    System.out.print("> ");
+                    response = Integer.parseInt(sc.nextLine());
+
+                    switch (response) {
+                        case 1:
                         
                         try {
                             this.currentLoggedInEmployee = login();
@@ -88,10 +90,13 @@ this.allocatingBotSessionBean = allocatingBotSessionBean;
 
                         }
                         break;
-                    case 2:
-                        break OUTER;
-                    default:
-                        System.out.println("Invalid option, please try again!\\n");
+                        case 2:
+                            break OUTER;
+                        default:
+                            System.out.println("Invalid option, please try again!\\n");
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.println("Invalid input");
                 }
             }
         }

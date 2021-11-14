@@ -111,6 +111,7 @@
 <xs:element name="checkOutDate" type="xs:string" minOccurs="0"/>
 <xs:element name="isProcessed" type="xs:boolean" minOccurs="0"/>
 <xs:element name="rates" type="tns:rate" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="fee" type="xs:decimal" minOccurs="0"/>
 <xs:element name="allocation" type="tns:allocation" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
@@ -175,6 +176,25 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="loginPartner">
+<xs:sequence>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="loginPartnerResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:partner" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="InvalidLoginCredentialsException">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="partnerReserve">
 <xs:sequence>
 <xs:element name="partnerId" type="xs:long" minOccurs="0"/>
@@ -199,25 +219,6 @@
 </xs:complexType>
 
 <xs:complexType name="RoomTypeNotFoundException">
-<xs:sequence>
-<xs:element name="message" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="loginPartner">
-<xs:sequence>
-<xs:element name="username" type="xs:string" minOccurs="0"/>
-<xs:element name="password" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="loginPartnerResponse">
-<xs:sequence>
-<xs:element name="return" type="tns:partner" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="InvalidLoginCredentialsException">
 <xs:sequence>
 <xs:element name="message" type="xs:string" minOccurs="0"/>
 </xs:sequence>

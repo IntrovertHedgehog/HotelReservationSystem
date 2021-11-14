@@ -10,6 +10,7 @@ import ejb.session.entity.ReservationManagementSessionBeanLocal;
 import entity.business.RoomType;
 import entity.user.Guest;
 import enumeration.ClientType;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.EJB;
@@ -56,7 +57,9 @@ public class OnlineReservationSessionBean implements OnlineReservationSessionBea
         RoomType roomType = target.getRoomType();
         LocalDate checkInDate = target.getCheckInDate();
         LocalDate checkOutDate = target.getCheckOutDate();
-        return reservationManagementSessionBean.createOnlineReservation(roomType, checkInDate, checkOutDate, guest);
+        BigDecimal fee = target.getPrevailRate();
+        
+        return reservationManagementSessionBean.createOnlineReservation(roomType, checkInDate, checkOutDate, guest, fee);
     }
 
     @Override

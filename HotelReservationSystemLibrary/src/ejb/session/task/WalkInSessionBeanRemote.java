@@ -27,6 +27,6 @@ public interface WalkInSessionBeanRemote {
 
     public List<String> checkInGuest(LocalDateTime checkInDateTime, String passport);
     
-    public void checkOutGuest(LocalDateTime checkOutDateTime, String passport);
+    public List<String> checkOutGuest(LocalDateTime checkOutDateTime, String passport);
     
 }

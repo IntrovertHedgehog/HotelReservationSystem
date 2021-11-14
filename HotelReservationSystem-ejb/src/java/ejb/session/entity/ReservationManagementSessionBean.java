@@ -15,6 +15,7 @@ import entity.user.Guest;
 import entity.user.Occupant;
 import entity.user.Partner;
 import enumeration.ClientType;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     }
 
     @Override
-    public Long createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest) throws NoMoreRoomException {
+    public Long createOnlineReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Guest guest, BigDecimal fee) throws NoMoreRoomException {
         try {
             List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
 
@@ -120,7 +121,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
                 }
             }
             guest = em.find(Guest.class, guest.getPassport());
-            OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate);
+            OnlineReservation onlineReservation = new OnlineReservation(roomType, guest, roomType.getRates(), checkInDate, checkOutDate, fee);
             em.persist(onlineReservation);
             em.flush();
             guest.addOnlineReservation(onlineReservation);
@@ -132,7 +133,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     }
 
     @Override
-    public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant) throws NoMoreRoomException {
+    public Long createWalkInReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Occupant occupant, BigDecimal fee) throws NoMoreRoomException {
         try {
             List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
 
@@ -162,7 +163,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             }
             em.flush();
 
-            WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate);
+            WalkInReservation walkInReservation = new WalkInReservation(roomType, occupant, roomType.getRates(), checkInDate, checkOutDate, fee);
             em.persist(walkInReservation);
             em.flush();
             occupant.addReservation(walkInReservation);
@@ -174,7 +175,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
     }
 
     @Override
-    public Long createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant) throws NoMoreRoomException {
+    public Long createPartnerReservation(RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, Partner partner, Occupant occupant, BigDecimal fee) throws NoMoreRoomException {
         try {
             List<ReservationSearchResult> results = searchReservation(checkInDate, checkOutDate, ClientType.ONLINE);
 
@@ -204,7 +205,7 @@ public class ReservationManagementSessionBean implements ReservationManagementSe
             }
             em.flush();
 
-            PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate);
+            PartnerReservation partnerReservation = new PartnerReservation(roomType, occupant, partner, roomType.getRates(), checkInDate, checkOutDate, fee);
             em.persist(partnerReservation);
             em.flush();
             partner.addReservation(partnerReservation);

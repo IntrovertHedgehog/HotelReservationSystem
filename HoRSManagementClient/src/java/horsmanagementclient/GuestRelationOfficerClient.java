@@ -131,7 +131,7 @@ public class GuestRelationOfficerClient {
 
     public void walkInReserveRoom() {
 
-        System.out.print("Enter occupant passport > ");
+        System.out.print("Enter occupant passport (min.lenth = 3) > ");
         String passport = sc.nextLine().trim();
         Occupant o = null;
         try {
@@ -223,8 +223,11 @@ public class GuestRelationOfficerClient {
 
             System.out.print("Enter occupant passport > ");
             String passport = sc.nextLine().trim();
-            walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);
-            System.out.println("Check out successful");
+            
+            List<String> str = walkInSessionBeanRemote.checkOutGuest(dateEnd, passport);
+            
+            System.out.println("Room checked out for today: ");
+            str.forEach(System.out::println);
         } catch (DateTimeParseException ex) {
             System.out.println("Invalid datetime format");
         }

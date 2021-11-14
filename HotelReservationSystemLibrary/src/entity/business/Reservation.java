@@ -7,6 +7,8 @@ package entity.business;
 
 import entity.user.Occupant;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Column;
@@ -30,7 +32,7 @@ import util.supplement.LocalDateAdapter;
  *
  * @author Winter
  */
-@XmlRootElement(name="Reservation")
+@XmlRootElement(name = "Reservation")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -58,28 +60,40 @@ public abstract class Reservation implements Serializable {
     @ManyToMany
     @JoinColumn(nullable = false)
     private List<Rate> rates;
-    
+
+    @Column(nullable = false, updatable = false, precision = 38, scale = 0x2)
+    private BigDecimal fee;
+
     @OneToOne(mappedBy = "reservation")
     @JoinColumn
     private Allocation allocation;
-    
+
     public Reservation() {
     }
 
-    public Reservation(RoomType roomType, Occupant occupant, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
+//    public Reservation(RoomType roomType, Occupant occupant, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
+//        this.roomType = roomType;
+//        this.checkInDate = checkInDate;
+//        this.checkOutDate = checkOutDate;
+//        this.occupant = occupant;
+//        this.rates = rates;
+//        this.isProcessed = false;
+//    }
+
+    public Reservation(RoomType roomType, Occupant occupant, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal fee) {
         this.roomType = roomType;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.occupant = occupant;
         this.rates = rates;
         this.isProcessed = false;
+        this.fee = fee.setScale(2, RoundingMode.FLOOR);
     }
-
 
     public Long getReservationId() {
         return reservationId;
     }
-    
+
     public List<Rate> getRates() {
         return rates;
     }
@@ -136,7 +150,21 @@ public abstract class Reservation implements Serializable {
     public Boolean getIsProcessed() {
         return isProcessed;
     }
-    
+
+    /**
+     * @return the fee
+     */
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    /**
+     * @param fee the fee to set
+     */
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
+
     public void setIsProcessed(Boolean isProcessed) {
         this.isProcessed = isProcessed;
     }
@@ -182,7 +210,7 @@ public abstract class Reservation implements Serializable {
     public void setRates(List<Rate> rates) {
         this.rates = rates;
     }
-    
+
     public void nullify() {
         this.occupant.nullify();
     }
@@ -206,5 +234,5 @@ public abstract class Reservation implements Serializable {
         }
         return true;
     }
-    
+
 }

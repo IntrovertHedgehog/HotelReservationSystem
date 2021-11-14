@@ -171,7 +171,7 @@ public class MainApp {
         System.out.print("Enter Guest Password > ");
         String password = sc.nextLine().trim();
 
-        System.out.print("Enter Guest Passport > ");
+        System.out.print("Enter Guest Passport (min.lenth = 3) > ");
         String passport = sc.nextLine().trim();
 
         System.out.print("Enter Guest Name > ");
@@ -320,7 +320,7 @@ public class MainApp {
 
     public void viewMyReservationDetails() throws NoReservationFoundException {
 
-        System.out.print("Enter the S/N of reservation > ");
+        System.out.print("Enter the S/N of reservation (not reservation id)> ");
         Integer serialNum;
         try {
             serialNum = Integer.parseInt(sc.nextLine());
@@ -341,8 +341,8 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservation Detail ***\n");
-        System.out.printf("%20s%35s%30s%30s\n", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date");
-        System.out.printf("%20s%35s%30s%30s\n", r.getReservationId(), r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+        System.out.printf("%20s%35s%30s%30s%8s\n", "Rerservation ID", "Room Type Name", "Check In Date", "Check Out Date", "Fee");
+        System.out.printf("%20s%35s%30s%30s%8.2f\n", r.getReservationId(), r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString(), r.getFee());
         System.out.println();
     }
 
@@ -356,11 +356,11 @@ public class MainApp {
         }
 
         System.out.println("*** HoRS Management Client :: Online Reservation :: View My Reservations ***\n");
-        System.out.printf("%8s%45s%30s%30s\n", "S/N", "Room Type Name", "Check In Date", "Check Out Date");
+        System.out.printf("%8s%45s%30s%30s%8s\n", "S/N", "Room Type Name", "Check In Date", "Check Out Date", "Fee");
 
         Integer counter = 0;
         for (OnlineReservation r : onlineReservations) {
-            System.out.printf("%8s%45s%30s%30s\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString());
+            System.out.printf("%8s%45s%30s%30s%8.2f\n", counter, r.getRoomType().getName(), r.getCheckInDate().toString(), r.getCheckOutDate().toString(), r.getFee());
             counter++;
         }
         System.out.println();

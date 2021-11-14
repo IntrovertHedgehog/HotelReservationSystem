@@ -36,31 +36,35 @@ public class LoggedInSession {
     public void start() {
         OUTER:
         while (true) {
-            System.out.println("****** Hotel Reservation Partner Client");
-            System.out.println("1. Search reservation");
-            System.out.println("2. View all reservation");
-            System.out.println("3. View reservation details");
-            System.out.println("4. Log out");
-            int input = 0;
-            while (input < 1 || input > 4) {
-                System.out.print(" > ");
-                input = Integer.parseInt(sc.nextLine().trim());
-                switch (input) {
-                    case 1:
-                        searchReservation();
-                        break;
-                    case 2:
-                        viewAllReservation();
-                        break;
-                    case 3:
-                        viewReservationDetails();
-                        break;
-                    case 4:
-                        break OUTER;
-                    default:
-                        System.out.println("Invalid input");
-                        break;
+            try {
+                System.out.println("****** Hotel Reservation Partner Client");
+                System.out.println("1. Search reservation");
+                System.out.println("2. View all reservation");
+                System.out.println("3. View reservation details");
+                System.out.println("4. Log out");
+                int input = 0;
+                while (input < 1 || input > 4) {
+                    System.out.print(" > ");
+                    input = Integer.parseInt(sc.nextLine().trim());
+                    switch (input) {
+                        case 1:
+                            searchReservation();
+                            break;
+                        case 2:
+                            viewAllReservation();
+                            break;
+                        case 3:
+                            viewReservationDetails();
+                            break;
+                        case 4:
+                            break OUTER;
+                        default:
+                            System.out.println("Invalid input");
+                            break;
+                    }
                 }
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid input");
             }
         }
 
@@ -115,14 +119,14 @@ public class LoggedInSession {
             PartnerReservationService_Service service = new PartnerReservationService_Service();
             PartnerReservationService port = service.getPartnerReservationServicePort();
 
-            System.out.print("Occupant passport > ");
+            System.out.print("Occupant passport (min.lenth = 3) > ");
             String passport = sc.nextLine().trim();
             System.out.print("Occupant Name> ");
             String name = sc.nextLine().trim();
 
             System.out.print("Room Type Id > ");
             Long roomTypeId = Long.parseLong(sc.nextLine().trim());
-            
+
             Long reservationId = null;
 
             try {
@@ -154,10 +158,10 @@ public class LoggedInSession {
             List<PartnerReservation> reservations = port.viewAllReservations(partner.getPartnerId());
 
             System.out.println("***** All reservation booked by this partner");
-            System.out.printf("%15s%15s%15s%25s\n", "Reservation ID", "Checkin date", "Checkout date", "Occupant Passport");
+            System.out.printf("%15s%15s%15s%25s%8s\n", "Reservation ID", "Checkin date", "Checkout date", "Occupant Passport", "Fee");
 
             reservations.forEach(
-                    r -> System.out.printf("%15s%15s%15s%25s\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport()));
+                    r -> System.out.printf("%15s%15s%15s%25s%8.2f\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport(), r.getFee()));
         } catch (PartnerNotFoundException_Exception ex) {
             System.out.println("Partner not found");
         }
@@ -173,12 +177,13 @@ public class LoggedInSession {
 
         try {
             PartnerReservation r = port.reservationDetails(partner.getPartnerId(), reservationId);
-            System.out.printf("%15s%15s%15s%25s\n", "Reservation ID", "Checkin date", "Checkout date", "Occupant Passport");
-            System.out.printf("%15s%15s%15s%25s\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport());
+            System.out.println("");
+            System.out.printf("%15s%15s%15s%25s%8s\n", "Reservation ID", "Checkin date", "Checkout date", "Occupant Passport", "Fee");
+            System.out.printf("%15s%15s%15s%25s%8.2f\n", r.getReservationId(), r.getCheckInDate(), r.getCheckOutDate(), r.getOccupant().getPassport(), r.getFee());
         } catch (PartnerNotFoundException_Exception ex) {
             System.out.println("Partner not found");
         } catch (ReservationNotVisibleException_Exception ex) {
-            System.out.println("This reservation is not managed by you");
+            System.out.println(ex.getMessage());
         }
     }
 

@@ -7,6 +7,7 @@ package entity.business;
 
 import entity.user.Guest;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
@@ -28,8 +29,8 @@ public class OnlineReservation extends Reservation implements Serializable {
         super();
     }
 
-    public OnlineReservation(RoomType roomType, Guest guest, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
-        super(roomType, guest, rates, checkInDate, checkOutDate);
+    public OnlineReservation(RoomType roomType, Guest guest, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal fee) {
+        super(roomType, guest, rates, checkInDate, checkOutDate, fee);
         this.guest = guest;
     }
     

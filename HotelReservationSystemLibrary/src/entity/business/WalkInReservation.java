@@ -7,6 +7,7 @@ package entity.business;
 
 import entity.user.Occupant;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
@@ -24,8 +25,8 @@ public class WalkInReservation extends Reservation implements Serializable {
         super();
     }
 
-    public WalkInReservation(RoomType roomType, Occupant occupant, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
-        super(roomType, occupant, rates, checkInDate, checkOutDate);
+    public WalkInReservation(RoomType roomType, Occupant occupant, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal fee) {
+        super(roomType, occupant, rates, checkInDate, checkOutDate, fee);
     }
     
     @Override

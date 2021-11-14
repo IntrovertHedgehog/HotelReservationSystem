@@ -11,6 +11,7 @@ import entity.business.RoomType;
 import entity.user.Occupant;
 import entity.user.Partner;
 import enumeration.ClientType;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.EJB;
@@ -82,6 +83,8 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
         if (roomType == null) {
             throw new RoomTypeNotFoundException("This room type does not exist");
         }
+        
+        BigDecimal fee = roomType.calculateOnlineRate(checkInDate, checkOutDate);
 
         Occupant occupant = em.find(Occupant.class, passport);
 
@@ -91,7 +94,7 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
             em.flush();
         }
 
-        return reservationManagementSessionBean.createPartnerReservation(roomType, checkInDate, checkOutDate, partner, occupant);
+        return reservationManagementSessionBean.createPartnerReservation(roomType, checkInDate, checkOutDate, partner, occupant, fee);
     }
 
     @Override
@@ -105,6 +108,9 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
         partner.getPartnerReservations().forEach(r -> r.getReservationId());
 
         em.detach(partner);
+        
+        partner.getPartnerReservations().forEach(r -> em.detach(r));
+        
         partner.softNullify();
         return partner.getPartnerReservations();
     }
@@ -120,9 +126,7 @@ public class PartnerClientSessionBean implements PartnerClientSessionBeanLocal {
         PartnerReservation reservation = em.find(PartnerReservation.class, reservationId);
 
         if (reservation == null) {
-            throw new ReservationNotVisibleException("Reservation of this id is not found");
-        } else if (reservation.getPartner() == null) {
-            System.out.println("Some how this returns null");
+            throw new ReservationNotVisibleException("Reservation of this id is not found or not made by Partners");
         } else if (!reservation.getPartner().equals(partner)) {
             throw new ReservationNotVisibleException("Reservation does not belong to this partner");
         }

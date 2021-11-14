@@ -8,6 +8,7 @@ package entity.business;
 import entity.user.Occupant;
 import entity.user.Partner;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Entity;
@@ -30,8 +31,8 @@ public class PartnerReservation extends Reservation implements Serializable {
         super();
     }
 
-    public PartnerReservation(RoomType roomType, Occupant occupant, Partner partner, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate) {
-        super(roomType, occupant, rates, checkInDate, checkOutDate);
+    public PartnerReservation(RoomType roomType, Occupant occupant, Partner partner, List<Rate> rates, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal fee) {
+        super(roomType, occupant, rates, checkInDate, checkOutDate, fee);
         this.partner = partner;
     }
 
@@ -43,6 +44,7 @@ public class PartnerReservation extends Reservation implements Serializable {
     }
     
     public void setPartner(Partner partner) {
+        this.partner = partner;
     }
     
     public void nullify() {
